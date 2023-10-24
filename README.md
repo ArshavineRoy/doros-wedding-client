@@ -1,72 +1,84 @@
-# doros-wedding-client
+# Doro's Wedding - Client
 
-## Getting Started with Create React App
+Doro's Wedding enables couples to plan their weddings seamlessly by providing a set of tools to help with budgeting, task lists, vendor selection, and program creation. The app offers both free and paid features, with paid users gaining access to the complete set of planning tools.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## MVP Features
 
-## Available Scripts
+A user of Doro's Wedding can expect the following features:
 
-In the project directory, you can run:
+1. Landing Page
 
-### `npm start`
+   View a landing page with information about Doro's Wedding and how to contact them.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Create an Event
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+   Create and manage your wedding event within the platform.
 
-### `npm test`
+1. View Wedding Planning Tools
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   Access a list of wedding planning tools provided by Doro's Wedding.
 
-### `npm run build`
+1. Paywall for Premium Tools
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   Access to certain planning tools is restricted by a paywall.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Paid User Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   Paid users can access premium planning tools, including the ability to:
 
-### `npm run eject`
+   - Create a budget for their wedding.
+   - Create and manage a task list.
+   - Select vendors for their wedding.
+   - Create a program for the wedding day.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Wedding Day Run Sheet
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   After planning, receive a wedding day run sheet that contains all the details of your wedding plan.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 1. Clone the repository
 
-## Learn More
+```txt
+git clone https://github.com/ArshavineRoy/doros-wedding-client
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. Navigate to the project's directory
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```txt
+cd doros-wedding-client
+```
 
-### Code Splitting
+### 3. Install dependencies using npm
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```sh
+npm install
+```
 
-### Analyzing the Bundle Size
+### 4. Start the React development server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```sh
+npm start
+```
 
-### Making a Progressive Web App
+> The frontend development server should be accessible at [`localhost:3000`](http://localhost:3000).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Acknowledgements
 
-### Advanced Configuration
+We would like to express our gratitude to the open-source community and all the developers whose libraries and tools have made this project possible.🚀
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Authors & License
 
-### Deployment
+Authored by:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+[Arshavine Waema](https://github.com/ArshavineRoy)
 
-### `npm run build` fails to minify
+[Grace Makena](https://github.com/njagiiii)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Dennis Kimaita](https://github.com/kiMIGHTa)
+
+[Chepkoech Faith](https://github.com/fay-simotwo)
+
+[Moses Chengo](https://github.com/mochengo29)
+
+Licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
