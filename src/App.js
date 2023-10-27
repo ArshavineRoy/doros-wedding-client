@@ -2,10 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import homepage from "./pages.jsx/home";
-import Checklist from "./pages.jsx/Checklist";
-import MyWedding from "./pages.jsx/MyWedding";
-import 
+import Checklist from "./pages/Checklist";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +19,7 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<homepage />}></Route>
+          <Route path="/" element={<Checklist />}></Route>
         </Routes>
       </BrowserRouter>
 
