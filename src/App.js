@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Checklist from "./pages/Checklist";
+import AppLayout from "./ui/AppLayout";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +20,9 @@ function App() {
 
       <BrowserRouter>
         <Routes>
+          <Route element={<AppLayout/>}>
           <Route path="/" element={<Checklist />}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
 

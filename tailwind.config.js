@@ -7,9 +7,7 @@ module.exports = {
       clicker: ['Clicker Script', 'cursive'],
 
     },
-    colors: {
-      primary: "#73332D",
-    },
+   
     extend: {},
   },
   plugins: [],
