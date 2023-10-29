@@ -4,8 +4,8 @@ import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Checklist from "./pages/Checklist";
 import Vendors from "./pages/Vendors";
+import Dashboard from "./pages/Dashboard";
 import Dashboardlayout from "./ui/Dashboardlayout";
-import Dashboard from "./ui/Dashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {

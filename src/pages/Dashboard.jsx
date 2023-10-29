@@ -20,8 +20,8 @@ function Dashboard() {
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
-      <div className=" px-32">
-        <div className="grid grid-cols-4 gap-10 py-16 w-full">
+      <div>
+        <div className="flex justify-evenly items-center gap-10 py-16 w-full">
           <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
             <RiMoneyDollarBoxLine size={30} />
             <div className="flex flex-col text-center">
@@ -57,51 +57,59 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-[#e7c3a6] w-full grid pb-12 pt-4 mt-6">
-          <h1 className="text-center pt-4 pb-8 text-[28px] font-semibold">
-            Manage Venders
-          </h1>
-
-          <div className="grid grid-cols-3 px-20 py-4 gap-20 place-items-center">
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={venues} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">Events</span>
-              </div>
+        <div className="px-28">
+          <div className="bg-[#e7c3a6] w-full grid pb-12 pt-4 mt-6">
+            <div className="">
+              <h1 className="text-center pt-4 pb-8 text-[28px] font-semibold">
+                Manage Venders
+              </h1>
             </div>
 
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={banquet} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">Events</span>
+            <div className="grid grid-cols-3 px-20 py-4 gap-20 place-items-center">
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={venues} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Events</span>
+                </div>
               </div>
-            </div>
 
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={weddingarch} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">Events</span>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={banquet} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Events</span>
+                </div>
               </div>
-            </div>
 
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={camera} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">Photographer</span>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={weddingarch}
+                  alt=""
+                  className="width-[60px] h-[60px]"
+                />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Events</span>
+                </div>
               </div>
-            </div>
 
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={video} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">Videographer</span>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={camera} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Photographer</span>
+                </div>
               </div>
-            </div>
 
-            <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <img src={vinyl} alt="" className="width-[60px] h-[60px]" />
-              <div className="flex flex-col text-center">
-                <span className="font-bold">DJ</span>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={video} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Videographer</span>
+                </div>
+              </div>
+
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={vinyl} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">DJ</span>
+                </div>
               </div>
             </div>
           </div>
@@ -115,7 +123,7 @@ function Dashboard() {
       </div>
 
       <div>
-        <div className="flex px-32 py-12 gap-[90px] w-full">
+        <div className="flex justify-even px-32 py-12 gap-[90px] w-full">
           <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
             <img src={venues} alt="" className="h-[30px]" />
             <div>

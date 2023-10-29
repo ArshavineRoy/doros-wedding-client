@@ -1,8 +1,8 @@
-import { FiEdit, FiFile, fiFiEdit } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 
 function DashboardHero() {
   return (
-    <div className="w-full flex h-[800px] px-36 pt-20 mb-0 pb-0 h-[500px] ">
+    <div className="w-full flex h-[800px] px-36 pt-20 mb-[] pb-0 h-[505px] ">
       <div className="text-[90px] italic basis-3/4 flex flex-row gap-6 space-y-0 font-curly">
         <span className="">Victor</span>
         <span className="py-[60px]">+</span>
@@ -14,7 +14,7 @@ function DashboardHero() {
           alt=""
           className=" object-contain w-[300px] h-[350px] rotate-12 basis-1/4"
         />
-        <FiEdit size={20} />
+        <FiEdit size={20} className="cursor-pointer" />
       </div>
     </div>
   );
