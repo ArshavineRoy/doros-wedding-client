@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleMenu } from "./Actions"; // Import your action
 import Logo from "./Logo";
-
 const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const menuOpen = useSelector((state) => state.menuOpen);
+  const dispatch = useDispatch();
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const handleToggleMenu = () => {
+    dispatch(toggleMenu()); // Dispatch the action to toggle the menu state
   };
 
   return (
@@ -13,6 +15,7 @@ const NavBar = () => {
       <nav className="flex items-center justify-between p-6 lg:px-8 bg-black h-20" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5 mb-2">
+            {/* Your Logo component */}
             <Logo/>
           </a>
         </div>
@@ -20,7 +23,7 @@ const NavBar = () => {
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-            onClick={toggleMenu}
+            onClick={handleToggleMenu} // Call the handleToggleMenu function when the button is clicked
             id="openMenuButton"
           >
             <span className="sr-only">Open main menu</span>
@@ -44,15 +47,12 @@ const NavBar = () => {
         <div className={`lg:flex lg:gap-x-12 ${menuOpen ? 'hidden' : 'block'}`}>
           <a href="/" className="text-base font leading-6 text-white hover:text-pink-900">Planning Tools</a>
           <a href="/E-vite" className="text-base font leading-6 text-white hover:text-pink-900">E-vite</a>
-          <a href="/gusetlist" className="text-base font leading-6 text-white hover:text-pink-900">Guest-List</a>
+          <a href="/guestlist" className="text-base font leading-6 text-white hover:text-pink-900">Guest-List</a>
           <a href="/registry" className="text-base font leading-6 text-white hover:text-pink-900">Registry</a>
           <a href="/vendors" className="text-base font leading-6 text-white hover:text-pink-900">Vendors</a>
-          <button className="bg-pink-950 text-white text-base font-semibold leading-6 p-2 rounded hover:bg-pink-900">
-  <a href="/login" className="text-white">Login</a>
-</button>
-
-
-
+          <button className="bg-pink-950 text-white text-base font-semibold leading-6 p-2 rounded hover-bg-pink-900">
+            <a href="/login" className="text-white">Login</a>
+          </button>
         </div>
       </nav>
       {/* Mobile menu */}
@@ -62,12 +62,12 @@ const NavBar = () => {
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Easel Emporium</span>
-              <Logo/>
+              {/* Your Logo component */}
             </a>
             <button
               type="button"
               className="-m-2.5 rounded-md p-2.5 text-gray-700"
-              onClick={toggleMenu}
+              onClick={handleToggleMenu}
               id="closeMenuButton"
             >
               <span className="sr-only">Close menu</span>
@@ -86,17 +86,15 @@ const NavBar = () => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950">Planning Tools</a>
-                <a href="/E-vite" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950">E-vite</a>
-                <a href="/guestlist" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950">Guest-List</a>
-                <a href="/registry" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950">Registry</a>
-                <a href="/vendors" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950">Vendors</a>
-                <button className="bg-blue-500 text-white text-base font-semibold leading-6 p-2 rounded hover:bg-blue-600">
-  <a href="/login" className="text-white">Login</a>
-</button>
-
+                <a href="/" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover-bg-pink-950">Planning Tools</a>
+                <a href="/E-vite" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover-bg-pink-950">E-vite</a>
+                <a href="/guestlist" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover-bg-pink-950">Guest-List</a>
+                <a href="/registry" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover-bg-pink-950">Registry</a>
+                <a href="/vendors" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover-bg-pink-950">Vendors</a>
+                <button className="bg-blue-500 text-white text-base font-semibold leading-6 p-2 rounded hover-bg-blue-600">
+                  <a href="/login" className="text-white">Login</a>
+                </button>
               </div>
-          
             </div>
           </div>
         </div>
