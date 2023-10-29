@@ -4,9 +4,10 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: "Poppins",
-      curly: "Merienda",
     },
-    // primary: "#73332D",
+    colors: {
+      primary: "#73332D",
+    },
     extend: {},
   },
   plugins: [],
