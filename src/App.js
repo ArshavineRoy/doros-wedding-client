@@ -3,6 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Checklist from "./pages/Checklist";
+import Vendors from "./pages/Vendors";
+import Dashboardlayout from "./ui/Dashboardlayout";
+import Dashboard from "./ui/Dashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +22,11 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Checklist />}></Route>
+          <Route element={<Dashboardlayout />}>
+            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path="/dashboard/checklist" element={<Checklist />}></Route>
+            <Route path="dashboard/vendors" element={<Vendors />}></Route>
+          </Route>
         </Routes>
       </BrowserRouter>
 
