@@ -4,6 +4,8 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: "Poppins",
+      clicker: ['Clicker Script', 'cursive'],
+
     },
     colors: {
       primary: "#73332D",
