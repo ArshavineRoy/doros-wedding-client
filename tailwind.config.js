@@ -3,11 +3,10 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
+      curly: "Merienda",
       sans: "Poppins",
-      clicker: ['Clicker Script', 'cursive'],
-
     },
-   
+    // primary: "#73332D",
     extend: {},
   },
   plugins: [],

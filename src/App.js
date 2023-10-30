@@ -2,10 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Provider } from "react-redux"; // Import Provider from react-redux
-import store from './ui/store'; // Import your Redux store
+import { Provider } from "react-redux"; 
+import store from './ui/store'; 
 import Checklist from "./pages/Checklist";
 import AppLayout from "./ui/AppLayout";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,10 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<AppLayout />}>
-              <Route path="/" element={<Checklist />} />
+            <Route path="/" element={<Home/>} />
+            <Route path="/checklist" element={<Checklist />} />
+             
+
             </Route>
           </Routes>
         </BrowserRouter>
