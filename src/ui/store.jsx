@@ -1,4 +1,3 @@
-// store.jsx
 import { createStore, combineReducers } from 'redux';
 import yourReducer from './yourReducer';
 const rootReducer = combineReducers({

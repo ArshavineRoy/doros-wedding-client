@@ -7,6 +7,8 @@ import store from './ui/store';
 import Checklist from "./pages/Checklist";
 import AppLayout from "./ui/AppLayout";
 import Home from "./pages/Home";
+import EventProgram from "./pages/EventProgram";
+import Create from "./pages/Create";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +20,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <Provider store={store}>
+    <Provider store={store}  >
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
 
@@ -27,6 +29,10 @@ function App() {
             <Route element={<AppLayout />}>
             <Route path="/" element={<Home/>} />
             <Route path="/checklist" element={<Checklist />} />
+            <Route path="/guestlist" element={<EventProgram />} />
+            <Route path="/create" element={<Create />} />
+
+
              
 
             </Route>
@@ -34,25 +40,25 @@ function App() {
         </BrowserRouter>
 
         <Toaster
-          position="top-center"
-          containerStyle={{ margin: "8px" }}
-          gutter={12}
-          toastOptions={{
-            success: {
-              duration: 3000,
-            },
-            error: {
-              duration: 5000,
-            },
-            style: {
-              fontSize: "16px",
-              maxWidth: "500px",
-              padding: "16px 24px",
-              backgroundColor: "var(--color-grey-0)",
-              color: "var(--color-grey-700)",
-            },
-          }}
-        />
+        position="top-center"
+        containerStyle={{ margin: "8px" }}
+        gutter={12}
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+          style: {
+            fontSize: "16px",
+            maxWidth: "500px",
+            padding: "16px 24px",
+            backgroundColor: "white",
+            color: "black",
+          },
+        }}
+      />
       </QueryClientProvider>
     </Provider>
   );

@@ -63,7 +63,8 @@ const Home = () => {
             <p className="text-4xl font-semibold font-poppins">
               Let’s Plan Your<br /> Perfect{' '}
               <span className="text-[#73332D] font-merienda">Wedding</span> With Us
-            </p>
+            </p><br/><br/>
+            
             <button className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full">Create Event</button>
           </div>
         </Slide>
