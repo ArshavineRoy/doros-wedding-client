@@ -5,9 +5,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Checklist from "./pages/Checklist";
 import AppLayout from "./ui/AppLayout";
 import Home from "./pages/Home";
-import EventProgram from "./pages/EventProgram";
-import Create from "./pages/Create";
-import Update from "./pages/Update"; // Remove the dot before "pages/Update"
+import Program from './ui/Program';
+import AddItem from './ui/AddItem';
+import Edit from './ui/Edit';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,9 +28,10 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/checklist" element={<Checklist />} />
-            <Route path="/planning-tools" element={<EventProgram />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/edit" element={<Update />} /> 
+            <Route path="/vendors" element={<Program />} />
+            <Route path="/create" element={<AddItem />} />
+            <Route path="/edit" element={<Edit />} />
+           
           </Route>
         </Routes>
       </BrowserRouter>
