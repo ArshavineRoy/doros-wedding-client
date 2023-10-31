@@ -26,7 +26,7 @@ const AddItem = () => {
     Data.push(newItem);
 
     // Redirect back to the main program page
-    history('/vendors');
+    history('/planning-tools');
   };
 
   return (
@@ -41,7 +41,7 @@ const AddItem = () => {
             value={time}
             onChange={(e) => setTime(e.target.value)}
             required
-            className="w-full px-3 py-2 border rounded focus:border-blue-500"
+            className="w-full px-3 py-2 border rounded focus:border-[#73332D]"
             />
         </div>
 
@@ -69,11 +69,11 @@ const AddItem = () => {
           />
         </div>
 
-        <button className="bg-pink-950 text-white text-sm font-semibold p-2 rounded mt-4 flex items-center">
+        <button className="bg-[#73332D] text-white text-sm font-semibold p-2 rounded mt-4 flex items-center">
   <MdAddCircleOutline className="text-xl mr-2" /> <span>Add Item</span>
   </button>
       </form>
-      <Link to="/vendors" className="block text-center mt-4 text-blue-500">Back to Program</Link>
+      <Link to="/planning-tools" className="block text-center mt-4 text-[#73332D]">Back to Program</Link>
     </div>
   );
 };

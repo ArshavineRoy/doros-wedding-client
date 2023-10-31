@@ -28,7 +28,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/checklist" element={<Checklist />} />
-            <Route path="/vendors" element={<Program />} />
+            <Route path="/planning-tools" element={<Program />} />
             <Route path="/create" element={<AddItem />} />
             <Route path="/edit" element={<Edit />} />
            

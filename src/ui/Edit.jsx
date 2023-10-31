@@ -24,7 +24,7 @@ const Edit = () => {
 
     // Update the data and redirect back to the main program page
     updateData(updatedData);
-    history('/vendors');
+    history('/planning-tools');
   };
 
   const updateData = (updatedData) => {
@@ -85,12 +85,12 @@ const Edit = () => {
           />
         </div>
 
-        <button type="submit" className="bg-green-500 text-white text-sm font-semibold p-2 rounded mt-4 flex items-center">
+        <button type="submit" className="bg-[#73332D] text-white text-sm font-semibold p-2 rounded mt-4 flex items-center">
   <MdBrowserUpdated className="text-xl mr-2" /> Update
 </button>
 
       </form>
-      <Link to="/vendors" className="block text-center mt-4 text-pink-950">Back to Program</Link>
+      <Link to="/planning-tools" className="block text-center mt-4 text-[#73332D]">Back to Program</Link>
     </div>
   );
 };

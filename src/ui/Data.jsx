@@ -1,8 +1,8 @@
 const Data = [
     {
         id: 1,
-        Time: "5:00am",
-        ProgramItem: "Program",
+        Time: "04:00",
+        ProgramItem: "Brides in shift 1 wake up and shower",
         Duration: "1 hour"
     },
     {
