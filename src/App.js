@@ -2,13 +2,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Provider } from "react-redux"; 
-import store from './ui/store'; 
 import Checklist from "./pages/Checklist";
 import AppLayout from "./ui/AppLayout";
 import Home from "./pages/Home";
 import EventProgram from "./pages/EventProgram";
 import Create from "./pages/Create";
+import Update from "./pages/Update"; // Remove the dot before "pages/Update"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,26 +19,22 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <Provider store={store}  >
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
 
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-            <Route path="/" element={<Home/>} />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Home />} />
             <Route path="/checklist" element={<Checklist />} />
-            <Route path="/guestlist" element={<EventProgram />} />
+            <Route path="/planning-tools" element={<EventProgram />} />
             <Route path="/create" element={<Create />} />
+            <Route path="/edit" element={<Update />} /> 
+          </Route>
+        </Routes>
+      </BrowserRouter>
 
-
-             
-
-            </Route>
-          </Routes>
-        </BrowserRouter>
-
-        <Toaster
+      <Toaster
         position="top-center"
         containerStyle={{ margin: "8px" }}
         gutter={12}
@@ -59,8 +54,7 @@ function App() {
           },
         }}
       />
-      </QueryClientProvider>
-    </Provider>
+    </QueryClientProvider>
   );
 }
 
