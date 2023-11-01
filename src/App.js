@@ -6,8 +6,7 @@ import Checklist from "./pages/Checklist";
 import AppLayout from "./ui/AppLayout";
 import Home from "./pages/Home";
 import Program from './ui/Program';
-import AddItem from './ui/AddItem';
-import Edit from './ui/Edit';
+
 
 
 const queryClient = new QueryClient({
@@ -29,8 +28,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/checklist" element={<Checklist />} />
             <Route path="/planning-tools" element={<Program />} />
-            <Route path="/create" element={<AddItem />} />
-            <Route path="/edit" element={<Edit />} />
+            
            
           </Route>
         </Routes>

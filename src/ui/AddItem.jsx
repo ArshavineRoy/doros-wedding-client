@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import Data from './Data';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdAddCircleOutline } from 'react-icons/md';
+import Modal from './Modal';
 
 
-const AddItem = () => {
+const AddItem = ({close}) => {
   const [time, setTime] = useState("");
   const [programItem, setProgramItem] = useState("");
   const [duration, setDuration] = useState("");
@@ -30,6 +31,7 @@ const AddItem = () => {
   };
 
   return (
+    <Modal close={close}>
     <div className="container mx-auto p-4 mt-20">
       <h1 className="text-3xl font-bold text-center mb-4">Add Program Item</h1>
       <form onSubmit={handleSubmit} className="max-w-sm mx-auto bg-white p-4 rounded shadow-lg">
@@ -75,6 +77,7 @@ const AddItem = () => {
       </form>
       <Link to="/planning-tools" className="block text-center mt-4 text-[#73332D]">Back to Program</Link>
     </div>
+    </Modal>
   );
 };
 

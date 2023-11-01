@@ -42,9 +42,9 @@ const Home = () => {
           }}
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
-            <p className="text-4xl font-semibold font-poppins">
+            <p className="text-4xl font-semibold font-curly">
               Let’s Plan Your<br /> Perfect{' '}
-              <span className="text-[#73332D] font-merienda">Wedding</span> With Us
+              <span className="text-[#73332D] font-curly">Wedding</span> With Us<br/><br/>
             </p>
             <button className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full">Create Event</button>
           </div>
@@ -60,9 +60,9 @@ const Home = () => {
           }}
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
-            <p className="text-4xl font-semibold font-poppins">
+            <p className="text-4xl font-semibold font-curly">
               Let’s Plan Your<br /> Perfect{' '}
-              <span className="text-[#73332D] font-merienda">Wedding</span> With Us
+              <span className="text-[#73332D] font-curly">Wedding</span> With Us
             </p><br/><br/>
             
             <button className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full">Create Event</button>
@@ -79,10 +79,11 @@ const Home = () => {
           }}
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
-            <p className="text-4xl font-bold font-merienda">
-              Happily Ever After!!!...
-            </p>
-            <button className="bg-[#73332D] text-white font-merienda text- px-6 py-2 mt-4 rounded-full">Create Event</button>
+          <p className="text-4xl font-bold font-curly animate-ping" style={{ animationDuration: '2s' }}>
+  Happily Ever After!!!...
+</p>
+<br/><br/>
+            <button className="bg-[#73332D] text-white font-poppins text- px-6 py-2 mt-4 rounded-full">Create Event</button>
           </div>
         </Slide>
       </HeroSlider>

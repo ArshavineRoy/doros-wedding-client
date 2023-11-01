@@ -7,26 +7,27 @@ const Data = [
     },
     {
         id: 2,
-        Time: "5:00am",
-        ProgramItem: "Program",
-        Duration: "1 hour"
+        Time: "05:00",
+        ProgramItem: "Breakfast",
+        Duration: "40 minutes"
     },
     {
         id: 3,
-        Time: "5:00am",
-        ProgramItem: "Program",
+        Time: "06:00",
+        ProgramItem: "MakeUp",
         Duration: "1 hour"
+       
     },
     {
         id: 4,
-        Time: "5:00am",
-        ProgramItem: "Program",
+        Time: "07:00",
+        ProgramItem: "MakeUp",
         Duration: "1 hour"
     },
     {
         id: 5,
-        Time: "5:00am",
-        ProgramItem: "Program",
+        Time: "07:00",
+        ProgramItem: "MakeUp",
         Duration: "1 hour"
     }
 ];
