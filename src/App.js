@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import Checklist from "./pages/Checklist";
 import Vendors from "./pages/Vendors";
 import Dashboard from "./pages/Dashboard";
