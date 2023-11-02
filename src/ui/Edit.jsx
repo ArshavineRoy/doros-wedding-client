@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Data from './Data';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Modal from './Modal';
 
 const Edit = ({ close }) => {

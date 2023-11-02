@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Data from './Data';
-import { Link, useNavigate } from 'react-router-dom';
-import { MdAddCircleOutline } from 'react-icons/md';
-import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 
 const AddItem = ({ close }) => {
@@ -61,11 +59,11 @@ const AddItem = ({ close }) => {
     className="w-full border-b border-gray-300 py-2 focus:outline-none"
   >
     <option value="" disabled></option>
-    <option value="Option 1">BRIDE & BRIDESMAIDS' PREPARATION</option>
-    <option value="Option 2">BRIDE & BRIDESMAIDS' BREAKFAST & PHOTO SHOOT</option>
-    <option value="Option 3">GROOM AND GROOMSMEN'S PREPARATION</option>
-    <option value="Option 4">WEDDING CEREMONY</option>
-    <option value="Option 5">WEDDING RECEPTION</option>
+    <option value="BRIDE & BRIDESMAIDS' PREPARATION">BRIDE & BRIDESMAIDS' PREPARATION</option>
+    <option value="BRIDE & BRIDESMAIDS' BREAKFAST & PHOTO SHOOT">BRIDE & BRIDESMAIDS' BREAKFAST & PHOTO SHOOT</option>
+    <option value="GROOM AND GROOMSMEN'S PREPARATION">GROOM AND GROOMSMEN'S PREPARATION</option>
+    <option value="WEDDING CEREMONY">WEDDING CEREMONY</option>
+    <option value="WEDDING RECEPTION">WEDDING RECEPTION</option>
   </select>
 </div>
 

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import Data from './Data';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { AiOutlineEdit } from 'react-icons/ai';
