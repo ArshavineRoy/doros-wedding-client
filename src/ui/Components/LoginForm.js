@@ -42,16 +42,17 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const userData = await login({ email: useremail, pwd: pwd });
+      const userData = await login({ email: useremail, password: pwd });
       const { email, accessToken, refreshToken } = userData;
 
       // set token in cookies
-      setTokensInCookies(userData.accessToken, userData.refreshToken);
+      setTokensInCookies(userData.data['access-token'],userData.data['refresh-token']);
+    //   setTokensInCookies(userData.accessToken, userData.refreshToken);
 
       dispatch(setCredentials({ email, accessToken, refreshToken }));
       setEmail("");
       setPwd("");
-      navigate("/events");
+      navigate("/dashboard");
     } catch (err) {
       if (!err?.originalStatus) {
         // isLoading: true until timeout occurs
@@ -159,12 +160,11 @@ const Login = () => {
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="flex items-start"></div>
-                    <a
-                      href="#"
+                    <Link to="/forgot-password"
                       className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                     >
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
                   <button
                     type="submit"

@@ -27,7 +27,7 @@ const AddItem = ({ close }) => {
     Data.push(newItem);
 
     // Redirect back to the main program page
-    history('/planning-tools');
+    history('/dashboard/program');
   };
 
   return (
