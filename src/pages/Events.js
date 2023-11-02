@@ -3,9 +3,9 @@ import React from 'react'
 const Events = () => {
   return (
     <div>
-      <h1>lorem ipsum</h1>
+        <h1>welcome</h1>
     </div>
   )
 }
 
-export default Events;
+export default Events

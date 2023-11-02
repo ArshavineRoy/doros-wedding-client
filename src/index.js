@@ -6,7 +6,7 @@ import App from "./App";
 // import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
-import { store } from './ui/app/store';
+import { store } from "./store";
 import { Provider } from 'react-redux';
 
 // const queryClient = new QueryClient({

@@ -1,19 +1,16 @@
 import React from 'react'
-import Events from './ui/Components/Events'
-import RegistrationForm from './ui/Components/RegistrationForm'
-import LoginForm from './ui/Components/LoginForm'
 import {Routes,Route} from 'react-router-dom'
-
+import Events from './pages/Events'
+import Login from './pages/Login'
 const App = () => {
   return (
     <div>
       <Routes>
-        <Route path='/register' element={<RegistrationForm />} />
-        <Route path='/login' element={<LoginForm />} />
+        <Route path='/login' element={<Login />} />
         <Route path='/events' element={<Events />} />
       </Routes>
     </div>
   )
 }
 
-export default App
+export default App;
