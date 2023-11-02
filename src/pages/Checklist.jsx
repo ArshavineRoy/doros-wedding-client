@@ -6,6 +6,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import AddTask from "../features/Checklist/AddTask";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditTask from "../features/Checklist/EditTask";
+import { dateCalculator } from "../utilities/datecalc";
 
 const fake_tasks = [
   {
@@ -15,7 +16,7 @@ const fake_tasks = [
     role: "Overall Coordinator",
     completed_status: true,
     contact: "7893810",
-    time_left: "4 Weeks",
+    duration: "2 Weeks",
     due_date: "Dec 7th",
   },
   {
@@ -25,7 +26,7 @@ const fake_tasks = [
     role: "Overall Coordinator",
     completed_status: true,
     contact: "222",
-    time_left: "4 Weeks",
+    duration: "4 Weeks",
     due_date: "Dec 7th",
   },
   {
@@ -35,7 +36,7 @@ const fake_tasks = [
     role: "Aesthetics Coordinator",
     completed_status: false,
     contact: "1111",
-    time_left: "8 Weeks",
+    duration: "9 Weeks",
     due_date: "Jan 6",
   },
   {
@@ -45,7 +46,7 @@ const fake_tasks = [
     role: "Secretary & Treasurer",
     completed_status: false,
     contact: "1111",
-    time_left: "8 Weeks",
+    duration: "10 days",
     due_date: "Jan 6",
   },
 ];
@@ -92,6 +93,12 @@ function Checklist() {
   const renderTable = (role) => {
     const roleTasks = tasks.filter((task) => task.role === role);
 
+    function timeLeft(duration) {
+      const { timeToAccomplish } = dateCalculator("2023-11-11", duration);
+
+      return timeToAccomplish;
+    }
+
     return (
       <div className="mt-6 px-32">
         <h1 className="text-2xl font-bold text-gray-800 mb-3">{role}</h1>
@@ -124,8 +131,12 @@ function Checklist() {
                 key={task.id}
                 className={
                   task.completed_status
-                    ? "line-through bg-green-200"
-                    : "bg-red-200"
+                    ? "bg-green-200"
+                    : timeLeft(task.duration).includes("ago")
+                    ? "bg-red-200"
+                    : timeLeft(task.duration).includes("left")
+                    ? "bg-yellow-100"
+                    : ""
                 }
               >
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -136,11 +147,19 @@ function Checklist() {
                     className="form-checkbox h-5 w-5 text-blue-600"
                   />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">{task.item}</td>
+                <td
+                  className={
+                    task.completed_status
+                      ? "line-through px-6 py-4 whitespace-nowrap"
+                      : "px-6 py-4 whitespace-nowrap"
+                  }
+                >
+                  {task.item}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.person}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.contact}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {task.time_left}
+                  {task.completed_status ? "Done" : timeLeft(task.duration)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2 text-gray-600">

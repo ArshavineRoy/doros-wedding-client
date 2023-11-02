@@ -4,6 +4,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { VendorsList } from "../features/Vendors/VendorsList";
 import AddVendor from "../features/Vendors/AddVendor";
+import { dateCalculator } from "../utilities/datecalc";
 
 export const vendor_categories = [
   { name: "Photographers" },

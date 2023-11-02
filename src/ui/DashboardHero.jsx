@@ -2,7 +2,7 @@ import { FiEdit } from "react-icons/fi";
 
 function DashboardHero() {
   return (
-    <div className="w-full flex px-36 pt-40 mb-[] pb-20 h-[600px] ">
+    <div className="w-full flex px-36 pt-40 mb-[] pb-20 h-[550px] ">
       <div className="text-[90px] italic basis-3/4 flex flex-row gap-6 space-y-0 font-curly">
         <span className="">Victor</span>
         <span className="py-[60px]">+</span>
