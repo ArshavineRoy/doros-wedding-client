@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import Program from './ui/Program';
 
 
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
