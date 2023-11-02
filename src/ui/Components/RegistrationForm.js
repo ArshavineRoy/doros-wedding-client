@@ -20,11 +20,10 @@ const RegistrationForm = () => {
   const [register] = useSignupMutation();
 
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    // username:'',
+    first_name: "",
+    last_name: "",
     email: "",
-    phonenumber: "",
+    phone: "",
     password: "",
   });
 
@@ -37,9 +36,9 @@ const RegistrationForm = () => {
     const passwordpattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     return passwordpattern.test(password);
   };
-  const validatePhonenumber = (phonenumber) => {
-    const phonenumberpattern = /^(?:\+254|0)[17]\d{8}$/;
-    return phonenumberpattern.test(phonenumber);
+  const validatePhonenumber = (phone) => {
+    const phonenumberpattern = /^(?:254|0)[17]\d{8}$/;
+    return phonenumberpattern.test(phone);
   };
 
   const handleSubmit = async (e) => {
@@ -48,16 +47,17 @@ const RegistrationForm = () => {
     setErrMsg("");
 
     if (
-      !formData.firstname ||
-      !formData.lastname ||
+      !formData.first_name ||
+      !formData.last_name ||
       !formData.email ||
-      !formData.phonenumber ||
+      !formData.phone ||
       !formData.password
     ) {
       setErrMsg("Please fill in all the fields");
       dispatch(signupFailure("Please fill in the required fields"));
     } else if (
-      !/^[A-Z][a-zA-Z]*$/.test(formData.firstname || formData.lastname)
+      // !/^[A-Z][a-zA-Z]*$/.test(formData.first_name || formData.last_name)
+      !/^[a-zA-Z]*$/.test(formData.first_name || formData.last_name)
     ) {
       setErrMsg("Name must Start with a capital letter");
       dispatch(signupFailure("Name must start with a capital letter"));
@@ -67,19 +67,22 @@ const RegistrationForm = () => {
     } else if (!validatePassword(formData.password)) {
       setErrMsg("Password should be atleast 8 characters");
       dispatch(signupFailure("Password should be atleast 8 characters"));
-    } else if (!validatePhonenumber(formData.phonenumber)) {
+    } else if (!validatePhonenumber(formData.phone)) {
       setErrMsg("Invalid Phone number");
       dispatch(signupFailure("Invalid Phone number"));
     } else {
       try {
         // make regestration request using signupMutation
+        console.log(`formData: `, formData);
         const result = await register(formData);
+        console.log(`Register result: `, result);
 
         // Registration was successful
         dispatch(signupSuccess());
         setRegistrationSuccess(true);
         setIsLoading(true);
         navigate("/login");
+
       } catch (error) {
         // Registration failed, handle errors
         dispatch(signupFailure(error.message));
@@ -95,17 +98,17 @@ const RegistrationForm = () => {
         <p className="text-red-500">{errorMessage}</p>
       )}
       {registrationSuccess && <p>Registration successful!</p>}
-      <section className="bg-gray-50 dark:bg-gray-900">
+      <section className="bg-gray-50 dark:bg-[#F7F2EE]">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           {/* <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
           Flowbite    
       </a> */}
 
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Create and account
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-[#592727] md:text-2xl">
+                Create an account
               </h1>
               <form
                 className="space-y-4 md:space-y-6"
@@ -120,7 +123,7 @@ const RegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="firstname"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]"
                   >
                     First name
                   </label>
@@ -128,11 +131,11 @@ const RegistrationForm = () => {
                     type="text"
                     name="firstname"
                     id="firstname"
-                    value={formData.firstname}
+                    value={formData.first_name}
                     onChange={(e) =>
-                      setFormData({ ...formData, firstname: e.target.value })
+                      setFormData({ ...formData, first_name: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="enter first name..."
                     required=""
                   />
@@ -140,7 +143,7 @@ const RegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="lastname"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-[#592727]"
                   >
                     Last name
                   </label>
@@ -148,11 +151,11 @@ const RegistrationForm = () => {
                     type="text"
                     name="lastname"
                     id="lastname"
-                    value={formData.lastname}
+                    value={formData.last_name}
                     onChange={(e) =>
-                      setFormData({ ...formData, lastname: e.target.value })
+                      setFormData({ ...formData, last_name: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 dark:text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="enter last name...."
                     required=""
                   />
@@ -160,7 +163,7 @@ const RegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-[#592727] "
                   >
                     Your email
                   </label>
@@ -172,35 +175,35 @@ const RegistrationForm = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 dark:text-gray-800 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
                     required=""
                   />
                 </div>
                 <div>
                   <label
-                    htmlFor="phonenumber"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    htmlFor="phone"
+                    className="block mb-2 text-sm font-medium text-[#592727] "
                   >
-                    PhoneNumber
+                    Phone Number
                   </label>
                   <input
                     type="number"
-                    name="phonenumber"
-                    id="phonenumber"
-                    value={formData.phonenumber}
+                    name="phone"
+                    id="phone"
+                    value={formData.phone}
                     onChange={(e) =>
-                      setFormData({ ...formData, phonenumber: e.target.value })
+                      setFormData({ ...formData, phone: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="0712345678"
+                    className="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="254712345678"
                     required=""
                   />
                 </div>
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-[#592727] "
                   >
                     Password
                   </label>
@@ -213,22 +216,22 @@ const RegistrationForm = () => {
                       setFormData({ ...formData, password: e.target.value })
                     }
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full text-white bg-yellow-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-white bg-[#73332D] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Create an account
+                  Sign Up
                 </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-light text-gray-800">
                   Already have an account?{" "}
                   <Link
                     to="/login"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    className="font-medium text-blue-600 hover:underline "
                   >
                     Login here
                   </Link>
