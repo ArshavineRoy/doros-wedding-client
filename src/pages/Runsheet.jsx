@@ -3,10 +3,9 @@ import { BiSolidPrinter } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlineDownload } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import AddTask from "../features/Checklist/AddTask";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import AddTask from "../features/Runsheet/AddTask";
 import EditTask from "../features/Checklist/EditTask";
-import { dateCalculator } from "../utilities/datecalc";
 
 const fake_tasks = [
   {
@@ -16,7 +15,7 @@ const fake_tasks = [
     role: "Overall Coordinator",
     completed_status: true,
     contact: "7893810",
-    duration: "2 Weeks",
+    time_left: "4 Weeks",
     due_date: "Dec 7th",
   },
   {
@@ -26,32 +25,45 @@ const fake_tasks = [
     role: "Overall Coordinator",
     completed_status: true,
     contact: "222",
-    duration: "4 Weeks",
+    time_left: "4 Weeks",
     due_date: "Dec 7th",
   },
   {
     id: 3,
     item: "Book a wedding venue",
     person: "Martin",
-    role: "Aesthetics Coordinator",
+    role: "Secretary & Treasurer",
     completed_status: false,
     contact: "1111",
-    duration: "9 Weeks",
+    time_left: "8 Weeks",
     due_date: "Jan 6",
   },
   {
     id: 4,
     item: "Book a photography vendor",
     person: "Test",
-    role: "Secretary & Treasurer",
+    role: "Bridesmaid's Coordinator",
     completed_status: false,
     contact: "1111",
-    duration: "10 days",
+    time_left: "8 Weeks",
     due_date: "Jan 6",
   },
 ];
 
-function Checklist() {
+export const task_categories = [
+  { name: "Overall Coordinator" },
+  { name: "Secretary & Treasurer" },
+  { name: "Food & Beverage Coordinator" },
+  { name: "Aesthetics Coordinator" },
+  { name: "Experience Coordinator" },
+  { name: "Transport Coordinator" },
+  { name: "Groomsmen's Coordinator" },
+  { name: "Bridesmaid's Coordinator" },
+  { name: "Ushers & Gifts Personnel Coordinator" },
+  { name: "Security & Gift Movers Coordinator" },
+];
+
+function Runsheet() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [tasks, setTasks] = useState(fake_tasks);
@@ -93,12 +105,6 @@ function Checklist() {
   const renderTable = (role) => {
     const roleTasks = tasks.filter((task) => task.role === role);
 
-    function timeLeft(duration) {
-      const { timeToAccomplish } = dateCalculator("2023-11-11", duration);
-
-      return timeToAccomplish;
-    }
-
     return (
       <div className="mt-6 px-32">
         <h1 className="text-2xl font-bold text-gray-800 mb-3">{role}</h1>
@@ -118,9 +124,6 @@ function Checklist() {
                 Contact Info
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Time Left
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
               </th>
             </tr>
@@ -131,12 +134,8 @@ function Checklist() {
                 key={task.id}
                 className={
                   task.completed_status
-                    ? "bg-green-200"
-                    : timeLeft(task.duration).includes("ago")
-                    ? "bg-red-200"
-                    : timeLeft(task.duration).includes("left")
-                    ? "bg-yellow-100"
-                    : ""
+                    ? "line-through bg-green-200"
+                    : "bg-red-200"
                 }
               >
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -147,20 +146,10 @@ function Checklist() {
                     className="form-checkbox h-5 w-5 text-blue-600"
                   />
                 </td>
-                <td
-                  className={
-                    task.completed_status
-                      ? "line-through px-6 py-4 whitespace-nowrap"
-                      : "px-6 py-4 whitespace-nowrap"
-                  }
-                >
-                  {task.item}
-                </td>
+                <td className="px-6 py-4 whitespace-nowrap">{task.item}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.person}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.contact}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {task.completed_status ? "Done" : timeLeft(task.duration)}
-                </td>
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2 text-gray-600">
                     <AiOutlineEdit
@@ -186,7 +175,7 @@ function Checklist() {
     <div className="py-20">
       <div className="flex items-center">
         <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Event Checklist</div>
+        <div className="px-4 font-bold text-[30px] ">Wedding Day Run sheet</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
@@ -235,4 +224,4 @@ function Checklist() {
   );
 }
 
-export default Checklist;
+export default Runsheet;
