@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Logo from "./Logo";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,7 +16,7 @@ const NavBar = () => {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <a href="/" className="-m-1.5 p-1.5 mb-2">
+          <a href="/" className="-m-1.5 p-1.5">
             <Logo />
           </a>
         </div>
@@ -45,34 +45,39 @@ const NavBar = () => {
           </button>
         </div>
 
-        <div className={`lg:flex lg:gap-x-12 ${menuOpen ? "hidden" : "block"}`}>
-          <NavLink to="dashboard">
-            <a
-              href="/"
-              className="text-base font leading-6 text-white hover:text-pink-950"
+        <ul className="lg:flex lg:gap-x-8 mt-2 hidden">
+          <li>
+            <Link
+              to="/dashboard"
+              className="text-base font leading-6 text-white hover:text-[#73332D]"
             >
               Planning Tools
-            </a>
-          </NavLink>
-          <a href="/E-vite" className="text-base font leading-6 text-white">
+            </Link>
+          </li>
+
+          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             E-vite
-          </a>
-          <a href="/gusetlist" className="text-base font leading-6 text-white">
+          </li>
+          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             Guest-List
-          </a>
-          <a href="/registry" className="text-base font leading-6 text-white">
+          </li>
+
+          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             Registry
-          </a>
-          <a href="/vendors" className="text-base font leading-6 text-white">
+          </li>
+
+          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             Vendors
-          </a>
-          <button className="bg-blue-500 text-white text-base font-semibold leading-6 p-2 rounded hover:bg-blue-600">
-            <a href="/login" className="text-white">
-              Login
+          </li>
+
+          <button className="bg-white text-black text-base font-semibold leading-6 p-0.5 w-20 mb-1 rounded hover:bg-[#73332D]">
+            <a href="/login" className="text-black">
+              LOGIN
             </a>
           </button>
-        </div>
+        </ul>
       </nav>
+
       {/* Mobile menu */}
       <div
         className={menuOpen ? "lg:hidden block" : "hidden"}
@@ -114,37 +119,37 @@ const NavBar = () => {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 <a
-                  href="/"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950"
+                  href="/planning-tools"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-[#73332D]"
                 >
                   Planning Tools
                 </a>
                 <a
                   href="/E-vite"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-[#73332D]"
                 >
                   E-vite
                 </a>
                 <a
                   href="/guestlist"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-[#73332D]"
                 >
                   Guest-List
                 </a>
                 <a
                   href="/registry"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-[#73332D]"
                 >
                   Registry
                 </a>
                 <a
                   href="/vendors"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-pink-950"
+                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-[#73332D]"
                 >
                   Vendors
                 </a>
-                <button className="bg-blue-500 text-white text-base font-semibold leading-6 p-2 rounded hover:bg-blue-600">
-                  <a href="/login" className="text-white">
+                <button className="bg-white text-white text-base font-semibold leading-6 p-2 rounded hover:bg-[#73332D]">
+                  <a href="/login" className="text-black">
                     Login
                   </a>
                 </button>

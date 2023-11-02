@@ -72,13 +72,15 @@ function Dashboard() {
             </div>
           </Link>
 
-          <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
-            <BsFileEarmarkSpreadsheet size={30} />
-            <div className="flex flex-col text-center">
-              <span>Event</span>
-              <span>Program</span>
+          <Link to="/dashboard/program">
+            <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
+              <BsFileEarmarkSpreadsheet size={30} />
+              <div className="flex flex-col text-center">
+                <span>Event</span>
+                <span>Program</span>
+              </div>
             </div>
-          </div>
+          </Link>
 
           <Link to="/dashboard/runsheet">
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
