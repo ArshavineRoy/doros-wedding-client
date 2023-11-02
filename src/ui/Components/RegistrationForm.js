@@ -89,7 +89,7 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div>
+    <div className="pt-20">
       {signUpData.isLoading && <p>Signing up...</p>}
       {signUpData.errorMessage && (
         <p className="text-red-500">{errorMessage}</p>
@@ -226,7 +226,8 @@ const RegistrationForm = () => {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{" "}
-                  <Link to='/login'
+                  <Link
+                    to="/login"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Login here
