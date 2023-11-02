@@ -1,9 +1,9 @@
-import logo from "../assests/doros-white-logo.png";
+import logo from "../assests/doros-no-background.png";
 
 function Logo() {
   return (
     <div>
-      <img src={logo} alt="logo" className="h-40 w-40" />
+      <img src={logo} alt="logo" className=" w-40" />
     </div>
   );
 }

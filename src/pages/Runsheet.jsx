@@ -3,8 +3,8 @@ import { BiSolidPrinter } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlineDownload } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import AddTask from "../features/Checklist/AddTask";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import AddTask from "../features/Runsheet/AddTask";
 import EditTask from "../features/Checklist/EditTask";
 
 const fake_tasks = [
@@ -32,7 +32,7 @@ const fake_tasks = [
     id: 3,
     item: "Book a wedding venue",
     person: "Martin",
-    role: "Aesthetics Coordinator",
+    role: "Secretary & Treasurer",
     completed_status: false,
     contact: "1111",
     time_left: "8 Weeks",
@@ -42,7 +42,7 @@ const fake_tasks = [
     id: 4,
     item: "Book a photography vendor",
     person: "Test",
-    role: "Secretary & Treasurer",
+    role: "Bridesmaid's Coordinator",
     completed_status: false,
     contact: "1111",
     time_left: "8 Weeks",
@@ -50,7 +50,20 @@ const fake_tasks = [
   },
 ];
 
-function Checklist() {
+export const task_categories = [
+  { name: "Overall Coordinator" },
+  { name: "Secretary & Treasurer" },
+  { name: "Food & Beverage Coordinator" },
+  { name: "Aesthetics Coordinator" },
+  { name: "Experience Coordinator" },
+  { name: "Transport Coordinator" },
+  { name: "Groomsmen's Coordinator" },
+  { name: "Bridesmaid's Coordinator" },
+  { name: "Ushers & Gifts Personnel Coordinator" },
+  { name: "Security & Gift Movers Coordinator" },
+];
+
+function Runsheet() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [tasks, setTasks] = useState(fake_tasks);
@@ -111,9 +124,6 @@ function Checklist() {
                 Contact Info
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Time Left
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
               </th>
             </tr>
@@ -139,9 +149,7 @@ function Checklist() {
                 <td className="px-6 py-4 whitespace-nowrap">{task.item}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.person}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{task.contact}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {task.time_left}
-                </td>
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2 text-gray-600">
                     <AiOutlineEdit
@@ -167,7 +175,7 @@ function Checklist() {
     <div className="py-20">
       <div className="flex items-center">
         <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Event Checklist</div>
+        <div className="px-4 font-bold text-[30px] ">Wedding Day Run sheet</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
@@ -216,4 +224,4 @@ function Checklist() {
   );
 }
 
-export default Checklist;
+export default Runsheet;
