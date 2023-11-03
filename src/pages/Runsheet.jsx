@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSolidPrinter } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlineDownload } from "react-icons/hi";
@@ -6,6 +6,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import AddTask from "../features/Runsheet/AddTask";
 import EditTask from "../features/Checklist/EditTask";
+import { getTokensInCookies } from "../ui/features/auth/authCookies";
 
 const fake_tasks = [
   {
@@ -66,8 +67,101 @@ export const task_categories = [
 function Runsheet() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [tasks, setTasks] = useState(fake_tasks);
+  const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const response = await fetch(
+          "https://doros-wedding-server.onrender.com/runsheets",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Data:", data);
+          setTasks(data);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDeleteTask = async (taskId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+
+    if (confirmDelete) {
+      try {
+        const { accessToken } = getTokensInCookies();
+
+        const response = await fetch(
+          `https://doros-wedding-server.onrender.com/runsheets/${taskId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const filteredTasks = tasks.filter((task) => task.id !== taskId);
+          setTasks(filteredTasks);
+          console.log("Task deleted successfully");
+        } else {
+          console.error("Failed to delete the task:", response.status);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  const addTaskBackend = async (newTask) => {
+    try {
+      const bearertoken = accessToken; // Replace this with your actual bearer token
+      const response = await fetch(
+        "https://doros-wedding-server.onrender.com/runsheets",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify(newTask),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setTasks([...tasks, data]); // Update state with the new task added
+      } else {
+        console.log("Failed to add task:", response.status);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const handleAddTask = (newTask) => {
+    addTaskBackend(newTask);
+    setShowAddModal(false); // Close the modal after adding the task
+  };
 
   const handleAddForm = () => {
     setShowAddModal(true);
@@ -160,6 +254,7 @@ function Runsheet() {
                     <RiDeleteBin6Line
                       size={22}
                       className="hover:text-black cursor-pointer"
+                      onClick={() => handleDeleteTask(task.id)}
                     />
                   </div>
                 </td>
@@ -200,7 +295,9 @@ function Runsheet() {
           </div>
         </div>
 
-        {showAddModal && <AddTask close={closeAddForm} />}
+        {showAddModal && (
+          <AddTask close={closeAddForm} addTask={handleAddTask} />
+        )}
         {showEditModal && selectedTask && (
           <EditTask
             taskData={selectedTask}

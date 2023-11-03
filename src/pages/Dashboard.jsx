@@ -13,6 +13,8 @@ import gift from "../assests/gift-box.png";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
+import { getDates } from "../services/dates";
+import { getTokensInCookies } from "../ui/features/auth/authCookies";
 
 const fake_dates = [
   { name: "Engagment Party", date: "December 25th, 2023" },
@@ -23,12 +25,36 @@ const fake_dates = [
 ];
 
 function Dashboard() {
-  const [dates, setDates] = useState([]);
+  const [data, setData] = useState([]);
+  const { accessToken, refreshToken } = getTokensInCookies();
 
   useEffect(() => {
-    fetch("https://doros-wedding-server.onrender.com//events/1")
-      .then((res) => res.json())
-      .then((data) => setDates(data));
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const response = await fetch(
+          "https://doros-wedding-server.onrender.com/events/1",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Data:", data);
+          setData(data);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -40,10 +66,10 @@ function Dashboard() {
       </div>
 
       <div className="px-32  grid grid-cols-3 gap-16 py-20">
-        <Dates date={dates.date} event={"Wedding Date"} />
-        <Dates date={dates.bachelorette_party} event={"Bachelorette Party"} />
-        <Dates date={dates.engagement_party} event={"Engagement Party"} />
-        <Dates date={dates.honeymoon} event={"Honeymoon"} />
+        <Dates date={data.date} event={"Wedding Date"} />
+        <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
+        <Dates date={data.engagement_party} event={"Engagement Party"} />
+        <Dates date={data.honeymoon} event={"Honeymoon"} />
       </div>
 
       <div className="flex items-center px-[110px]">

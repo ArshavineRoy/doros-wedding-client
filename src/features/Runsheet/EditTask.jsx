@@ -10,6 +10,7 @@ function EditTask({ taskData, close, onSubmit }) {
     role: "",
     completed_status: false,
     contact: "",
+    edit_id: 1,
   });
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function EditTask({ taskData, close, onSubmit }) {
         role: taskData.role,
         completed_status: taskData.completed_status,
         contact: taskData.contact,
+        edit_id: taskData.id, // Assuming 'id' is the identifier for the task
       });
     }
   }, [taskData]);
@@ -34,13 +36,34 @@ function EditTask({ taskData, close, onSubmit }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData) return;
 
-    onSubmit(formData);
-    toast.success("Task updated successfully!");
-    close();
+    try {
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/runsheets/${formData.edit_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        onSubmit(data); // Update the state with the updated task
+        toast.success("Task updated successfully!");
+        close();
+      } else {
+        toast.error("Failed to update the task");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while updating the task");
+    }
   };
 
   return (
