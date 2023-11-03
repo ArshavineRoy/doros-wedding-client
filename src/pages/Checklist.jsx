@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSolidPrinter } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { HiOutlineDownload } from "react-icons/hi";
@@ -7,6 +7,9 @@ import AddTask from "../features/Checklist/AddTask";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import EditTask from "../features/Checklist/EditTask";
 import { dateCalculator } from "../utilities/datecalc";
+import { useTasks } from "../features/Checklist/apiTasks";
+import { getTokensInCookies } from "../ui/features/auth/authCookies";
+import { toast } from "react-hot-toast";
 
 const fake_tasks = [
   {
@@ -54,8 +57,69 @@ const fake_tasks = [
 function Checklist() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [tasks, setTasks] = useState(fake_tasks);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [tasks, setTasks] = useState([]); // Assuming 'fake_tasks' is your initial data
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const response = await fetch(
+          "https://doros-wedding-server.onrender.com/tasks",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Data:", data);
+          setTasks(data);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const addTaskBackend = async (newTask) => {
+    try {
+      const bearertoken = accessToken; // Replace this with your actual bearer token
+      const response = await fetch(
+        "https://doros-wedding-server.onrender.com/tasks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify(newTask),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setTasks([...tasks, data]); // Update state with the new task added
+      } else {
+        console.log("Failed to add task:", response.status);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  const handleAddTask = (newTask) => {
+    addTaskBackend(newTask);
+    setShowAddModal(false); // Close the modal after adding the task
+  };
 
   const handleAddForm = () => {
     setShowAddModal(true);
@@ -88,6 +152,41 @@ function Checklist() {
       task.id === selectedTask.id ? { ...task, ...updatedTaskData } : task
     );
     setTasks(updatedTasks);
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      const bearertoken = accessToken; // Replace this with your actual bearer token
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/tasks/${taskId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setTasks(tasks.filter((task) => task.id !== taskId));
+        toast.success("Task deleted successfully!");
+      } else {
+        toast.error("Failed to delete task");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while deleting the task");
+    }
+  };
+
+  const handleDelete = (taskId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
+    if (confirmDelete) {
+      deleteTask(taskId);
+    }
   };
 
   const renderTable = (role) => {
@@ -171,6 +270,7 @@ function Checklist() {
                     <RiDeleteBin6Line
                       size={22}
                       className="hover:text-black cursor-pointer"
+                      onClick={() => handleDelete(task.id)}
                     />
                   </div>
                 </td>
@@ -211,7 +311,9 @@ function Checklist() {
           </div>
         </div>
 
-        {showAddModal && <AddTask close={closeAddForm} />}
+        {showAddModal && (
+          <AddTask close={closeAddForm} addTask={handleAddTask} />
+        )}
         {showEditModal && selectedTask && (
           <EditTask
             taskData={selectedTask}

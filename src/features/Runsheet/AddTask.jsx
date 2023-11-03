@@ -3,15 +3,14 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 
-// const categories = ["photographers", "videographer", "dj", "caterer", "venue", ];
-
-function AddTask({ close }) {
+function AddTask({ close, addTask }) {
   const [formData, setFormData] = useState({
     item: "",
     person: "",
     role: "",
     completed_status: false,
     contact: "",
+    event_id: 1,
   });
 
   const handleInputChange = (e) => {
@@ -24,12 +23,15 @@ function AddTask({ close }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     if (!formData) return;
-    toast.success("Added a runsheet item successfully!");
+
+    addTask(formData);
+    toast.success("Added a wedding task successfully!");
+    console.log(formData);
+
     close();
   };
 
@@ -100,7 +102,10 @@ function AddTask({ close }) {
         </div>
 
         <div className="flex justify-between">
-          <button className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white">
+          <button
+            type="submit" // This button submits the form
+            className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white"
+          >
             ADD ITEM
           </button>
 

@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { vendor_categories } from "../../pages/Vendors";
 
-function AddVendor({ close }) {
+function AddVendor({ close, onAddVendor }) {
   const [formData, setFormData] = useState({
     contact_person: "",
     company: "",
     instagram_username: "",
-    estimate_cost: "",
+    estimate_cost: 0,
     website: "",
     email: "",
     phone: "",
@@ -16,14 +16,17 @@ function AddVendor({ close }) {
     country: "",
     category: "",
   });
-
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
 
+    // Convert estimate_cost to a number if the field name matches
+    const numericValue =
+      name === "estimate_cost" ? parseInt(inputValue) : inputValue;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: inputValue,
+      [name]: numericValue,
     }));
   };
 
@@ -32,13 +35,14 @@ function AddVendor({ close }) {
     console.log(formData);
 
     if (!formData) return;
+    onAddVendor(formData);
     toast.success("Added your vendor successfully!");
     close();
   };
 
   return (
     <Modal close={close}>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 p-4">
+      <form onSubmit={handleSubmit} className="w-[400px] mx-auto mt-8 p-4">
         <div className="mb-6">
           <label htmlFor="contact_person" className="block font-bold mb-1">
             Contact Person

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { IoAddCircleOutline, IoWalletOutline } from "react-icons/io5";
-import { AiOutlineEdit } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { VendorsList } from "../features/Vendors/VendorsList";
 import AddVendor from "../features/Vendors/AddVendor";
-import { dateCalculator } from "../utilities/datecalc";
+import { getTokensInCookies } from "../ui/features/auth/authCookies";
 
 export const vendor_categories = [
   { name: "Photographers" },
@@ -60,6 +59,51 @@ export const fake_vendors = [
 function Vendors() {
   const [showWidget, setShowWidget] = useState(true);
   const [showAddVendor, setShowAddVendor] = useState(false);
+  const [myVendors, setMyVendors] = useState(fake_vendors);
+
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  const handleAddVendor = async (newVendorData) => {
+    try {
+      const bearertoken = accessToken; // Replace this with your actual bearer token
+      const response = await fetch(
+        "https://doros-wedding-server.onrender.com/vendors",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify({
+            category: newVendorData.category,
+            company: newVendorData.company,
+            instagram_username: newVendorData.instagram_username,
+            website: newVendorData.website,
+            contact_person: newVendorData.contact_person,
+            email: newVendorData.email,
+            phone: newVendorData.phone,
+            estimate_cost: parseInt(newVendorData.estimate_cost), // Assuming the backend expects a number
+            city: newVendorData.city,
+            country: newVendorData.country,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Only update the local state if the API response is successful (status code: 2xx)
+        const addedVendor = await response.json();
+        setMyVendors([...myVendors, addedVendor]); // Update the local state with the added vendor
+      } else {
+        console.log(
+          "Error adding vendor. Server responded with status:",
+          response.status
+        );
+        // Handle errors or other actions based on the response status
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
 
   function handleShowAddVendorForm() {
     setShowAddVendor(true);
@@ -78,7 +122,7 @@ function Vendors() {
   }
 
   return (
-    <div className="border border-gray-300 w-[1300px] h-[800px] mx-auto mb-20 p-8">
+    <div className="border border-gray-300 w-[1300px] mx-auto mb-20 p-4">
       <div className="w-full flex justify-between gap-8 mb-8">
         <di
           className={
@@ -102,15 +146,23 @@ function Vendors() {
         </div>
       </div>
 
-      {showWidget && <YourVendors onAddvendor={handleShowAddVendorForm} />}
+      {showWidget && (
+        <YourVendors
+          onAddvendor={handleShowAddVendorForm}
+          onAddVendor={handleAddVendor}
+          vendors={myVendors} // Pass myVendors state to YourVendors component
+        />
+      )}
       {!showWidget && <VendorsList />}
 
-      {showAddVendor && <AddVendor close={handleCloseAddVendor} />}
+      {showAddVendor && (
+        <AddVendor close={handleCloseAddVendor} onAddVendor={handleAddVendor} />
+      )}
     </div>
   );
 }
 
-function YourVendors({ onAddvendor }) {
+function YourVendors({ onAddvendor, onAddVendor, vendors }) {
   return (
     <div>
       <span className="text-2xl font-semibold">Your Wallet</span>
@@ -144,33 +196,36 @@ function YourVendors({ onAddvendor }) {
         </div>
       </div>
 
-      <MyVendorsTable onAddvendor={onAddvendor} />
+      <MyVendorsTable
+        onAddvendor={onAddvendor}
+        initialVendors={vendors}
+        onAddVendor={onAddVendor}
+      />
     </div>
   );
 }
 
-function MyVendorsTable({ onAddvendor }) {
-  const [vendors, setVendors] = useState(fake_vendors);
-
+function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
+  const [myVendors, setMyVendors] = useState(initialVendors);
   const [selectAll, setSelectAll] = useState(false);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    const updatedVendors = vendors.map((vendor) => ({
+    const updatedVendors = myVendors.map((vendor) => ({
       ...vendor,
       checked: !selectAll,
     }));
-    setVendors(updatedVendors);
+    setMyVendors(updatedVendors);
   };
 
   const handleSingleSelect = (id) => {
-    const updatedVendors = vendors.map((vendor) => {
+    const updatedVendors = myVendors.map((vendor) => {
       if (vendor.id === id) {
         return { ...vendor, checked: !vendor.checked };
       }
       return vendor;
     });
-    setVendors(updatedVendors);
+    setMyVendors(updatedVendors);
   };
 
   return (
@@ -218,7 +273,7 @@ function MyVendorsTable({ onAddvendor }) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {vendors.map((vendor) => (
+          {myVendors.map((vendor) => (
             <tr key={vendor.id}>
               <td className="px-2 py-2 whitespace-nowrap">
                 <input
