@@ -18,10 +18,17 @@ export const authMutations = apiSlice.injectEndpoints({
                 body:userData
             })
         }),
+        event:builder.mutation({
+            query:(eventData) => ({
+                url: '/events',
+                method:'POST',
+                body:eventData
+            })
+        }),
 
     })
 })
 
 export const {
-    useLoginMutation, useSignupMutation
+    useLoginMutation, useSignupMutation, useEventMutation
 } = authMutations

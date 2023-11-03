@@ -59,7 +59,7 @@ function Dashboard() {
 
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex items-center px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Important Dates</div>
         <div className="flex-1 border-b-2 border-black"></div>
@@ -72,14 +72,14 @@ function Dashboard() {
         <Dates date={data.honeymoon} event={"Honeymoon"} />
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Planner</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
       <div>
-        <div className="flex justify-evenly items-center gap-10 py-16 w-full">
+        <div className="flex justify-between items-center px-[110px] py-16 w-full">
           <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
             <RiMoneyDollarBoxLine size={30} />
             <div className="flex flex-col text-center">
@@ -185,14 +185,14 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="flex items-center  mt-14">
+      <div className="flex items-center mt-14 px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Guests & RSVP</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
       <div>
-        <div className="flex justify-even px-32 py-12 gap-[90px] w-full">
+        <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
           <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
             <img src={venues} alt="" className="h-[30px]" />
             <div>
@@ -231,7 +231,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="flex items-center  mt-14">
+      <div className="flex items-center mt-14 px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Registry</div>
         <div className="flex-1 border-b-2 border-black"></div>

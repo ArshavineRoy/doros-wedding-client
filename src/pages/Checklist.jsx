@@ -284,7 +284,7 @@ function Checklist() {
 
   return (
     <div className="py-20">
-      <div className="flex items-center">
+      <div className="flex items-center px-[126px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Event Checklist</div>
         <div className="flex-1 border-b-2 border-black"></div>

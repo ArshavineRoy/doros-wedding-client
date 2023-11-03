@@ -43,7 +43,7 @@ const Program = () => {
   return (
     <>
       <div>
-        <div className="flex items-center mt-20">
+        <div className="flex items-center mt-20 px-[200px]">
           <div className="flex-1 border-b-2 border-black"></div>
           <div className="px-4 font-bold text-[30px] ">Program</div>
           <div className="flex-1 border-b-2 border-black"></div>
