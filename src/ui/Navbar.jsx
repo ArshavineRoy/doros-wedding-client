@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
-import { getTokensInCookies } from './features/auth/authCookies'
+import { getTokensInCookies } from "./features/auth/authCookies";
 import Cookies from "js-cookie";
 // import { set } from "date-fns";
 
 const NavBar = () => {
-
   const [menuOpen, setMenuOpen] = useState(false);
-  const[isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -26,15 +25,14 @@ const NavBar = () => {
     navigate("/");
   };
 
-
-  useEffect(()=>{
+  useEffect(() => {
     if (getTokensInCookies().refreshToken !== undefined) {
       setIsLoggedIn(true);
     }
-  },[])
- 
+  }, []);
+
   // const isLoggedIn = Cookies.get("refresh_token");
-  
+
   return (
     <header className="absolute inset-x-0 top-0 z-50">
       <nav
@@ -58,7 +56,7 @@ const NavBar = () => {
               className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               aria-hidden="true"
             >
@@ -140,7 +138,7 @@ const NavBar = () => {
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 aria-hidden="true"
               >

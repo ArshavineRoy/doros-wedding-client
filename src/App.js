@@ -1,12 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Route, Routes } from "react-router-dom";
+// import { Toaster } from "react-hot-toast";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Checklist from "./pages/Checklist";
 import Vendors from "./pages/Vendors";
 import Dashboard from "./pages/Dashboard";
 import Dashboardlayout from "./ui/Dashboardlayout";
 import Runsheet from "./pages/Runsheet";
-import Events from "./ui/Components/Events";
+import EventForm from "./ui/Components/Events";
 import RegistrationForm from "./ui/Components/RegistrationForm";
 import LoginForm from "./ui/Components/LoginForm";
 import AppLayout from "./ui/AppLayout";
@@ -20,7 +20,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/events" element={<Events />} />
+        <Route path="/events" element={<EventForm />} />
       </Route>
       <Route element={<Dashboardlayout />}>
         <Route path="/dashboard" element={<Dashboard />}></Route>
