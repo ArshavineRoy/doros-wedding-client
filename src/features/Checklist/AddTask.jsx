@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 
-function AddTask({ close }) {
+function AddTask({ close, addTask }) {
   const [formData, setFormData] = useState({
     item: "",
     person: "",
@@ -49,11 +49,15 @@ function AddTask({ close }) {
       completed_status,
       contact,
       duration,
+      event_id: 1,
+      time_left: "2 days",
     };
 
     console.log(updatedFormData);
 
     toast.success("Added a wedding task successfully!");
+    addTask(updatedFormData);
+
     close();
   };
 

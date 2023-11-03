@@ -1,14 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { BsFilter } from "react-icons/bs";
 import { fake_vendors, vendor_categories } from "../../pages/Vendors";
 import { AiOutlineClose } from "react-icons/ai";
 import logo from "../../assests/doros.png";
+import { getTokensInCookies } from "../../ui/features/auth/authCookies";
 
 export function VendorsList() {
-  const [vendors, setVendors] = useState(fake_vendors);
+  const [vendors, setVendors] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showCategoryFilters, setCategoryFilters] = useState(false);
+  const [allVendors, setAllVendors] = useState([]);
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const response = await fetch(
+          "https://doros-wedding-server.onrender.com/vendors",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Data:", data);
+          setVendors(data);
+          setAllVendors(data);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleCategoryChange = (category) => {
     let updatedCategories;
@@ -17,13 +50,12 @@ export function VendorsList() {
     } else {
       updatedCategories = [...selectedCategories, category];
     }
-
     setSelectedCategories(updatedCategories);
 
     if (updatedCategories.length === 0) {
-      setVendors(fake_vendors);
+      setVendors(allVendors); // Reset vendors to the original list
     } else {
-      const filteredVendors = fake_vendors.filter((vendor) =>
+      const filteredVendors = allVendors.filter((vendor) =>
         updatedCategories.includes(vendor.category)
       );
       setVendors(filteredVendors);
@@ -50,14 +82,11 @@ export function VendorsList() {
             <span>Filter</span>
           </button>
         </div>
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full  divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Company
-              </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Contact Person
               </th>
               <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Phone
@@ -71,15 +100,9 @@ export function VendorsList() {
               <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Website
               </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Estimated Cost
-              </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                City
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -88,13 +111,10 @@ export function VendorsList() {
                 <td className="px-2 py-2 whitespace-nowrap">
                   {vendor.company}
                 </td>
-                <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.contactPerson}
-                </td>
                 <td className="px-2 py-2 whitespace-nowrap">{vendor.phone}</td>
                 <td className="px-2 py-2 whitespace-nowrap">{vendor.email}</td>
                 <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.instagram_account}
+                  {vendor.instagram_username}
                 </td>
                 <td className="px-2 py-2 whitespace-nowrap">
                   {vendor.website}
@@ -102,15 +122,14 @@ export function VendorsList() {
                 <td className="px-2 py-2 whitespace-nowrap">
                   {vendor.estimatedCost}
                 </td>
-                <td className="px-2 py-2 whitespace-nowrap">{vendor.city}</td>
-                <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
+                {/* <td className="px-6 py-2 whitespace-nowrap ">
                   <div className="flex gap-2 text-gray-600">
                     <IoAddCircleOutline
                       size={22}
                       className="hover:text-black cursor-pointer"
                     />
                   </div>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
