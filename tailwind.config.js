@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: "Poppins",
+      curly: "Merienda",
     },
     extend: {},
   },
