@@ -1,6 +1,40 @@
+import { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
+import { getTokensInCookies } from "./features/auth/authCookies";
 
 function DashboardHero() {
+  const [data, setData] = useState([]);
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const bearertoken = accessToken; // Replace this with your actual bearer token
+  //       const response = await fetch(
+  //         "https://doros-wedding-server.onrender.com/events/1",
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+  //           },
+  //         }
+  //       );
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         console.log("Data:", data);
+  //         setData(data);
+  //       } else {
+  //         console.log("Response not OK:", response.status);
+  //       }
+  //     } catch (err) {
+  //       console.log("Error:", err);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   return (
     <div className="w-full flex px-36 pt-40 mb-[] pb-20 h-[550px] ">
       <div className="text-[90px] italic basis-3/4 flex flex-row gap-6 space-y-0 font-curly">
@@ -10,7 +44,7 @@ function DashboardHero() {
       </div>
       <div>
         <img
-          src="https://images.unsplash.com/photo-1525328302834-764f32276842?auto=format&fit=crop&q=80&w=1374&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src=""
           alt=""
           className=" object-contain w-[300px] h-[350px] rotate-12 basis-1/4"
         />
