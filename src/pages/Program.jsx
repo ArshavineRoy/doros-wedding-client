@@ -1,132 +1,223 @@
-import React, { Fragment, useState } from "react";
-import Data from "../ui/Data";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { AiOutlineEdit } from "react-icons/ai";
-import { MdAddCircleOutline } from "react-icons/md";
-import Edit from "../ui/Edit";
-import AddItem from "../ui/AddItem";
+import React, { useState, useEffect } from 'react';
+import AddProgram from '../ui/Components/AddProgram';
+import EditProgram from '../ui/Components/EditProgram';
+import { getTokensInCookies } from '../ui/features/auth/authCookies';
+import { toast } from 'react-hot-toast';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { BiSolidPrinter } from 'react-icons/bi';
+import { HiOutlineDownload } from 'react-icons/hi';
 
-const Program = () => {
-  const [items, setItems] = useState(Data);
-  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
-  const [isAddFormVisible, setIsAddFormVisible] = useState(false);
+function Program() {
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedProgramItem, setSelectedProgramItem] = useState(null);
+  const [programItems, setProgramItems] = useState([]); // Provide an initial empty array
+  const { accessToken, refreshToken } = getTokensInCookies();
 
-  function handleShowEditForm() {
-    setIsEditFormVisible(true);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken; 
+        const response = await fetch('https://doros-wedding-server.onrender.com/programItems', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${bearertoken}`,
+          },
+        });
 
-  function handleCloseEditForm() {
-    setIsEditFormVisible(false);
-  }
+        if (response.ok) {
+          const data = await response.json();
+          setProgramItems(data);
+        } else {
+          console.log('Response not OK:', response.status);
+        }
+      } catch (err) {
+        console.log('Error:', err);
+      }
+    };
 
-  function handleShowAddForm() {
-    setIsAddFormVisible(true);
-  }
+    fetchData();
+  }, []);
 
-  function handleCloseAddForm() {
-    setIsAddFormVisible(false);
-  }
+  const addProgramItem = async (newProgramItem) => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch('https://doros-wedding-server.onrender.com/programItems', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${bearertoken}`,
+        },
+        body: JSON.stringify(newProgramItem),
+      });
 
-  const handleEdit = (id, time, programItem, duration) => {
-    localStorage.setItem("Time", time);
-    localStorage.setItem("ProgramItem", programItem);
-    localStorage.setItem("Duration", duration);
-    localStorage.setItem("Id", id);
+      if (response.ok) {
+        const data = await response.json();
+        setProgramItems([...programItems, data]);
+      } else {
+        console.log('Failed to add program item:', response.status);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
   };
 
-  const handleDeleteClick = (index) => {
-    const updatedItems = [...items];
-    updatedItems.splice(index, 1);
-    setItems(updatedItems);
+  const handleAddProgramItem = (newProgramItem) => {
+    addProgramItem(newProgramItem);
+    setShowAddModal(false);
   };
 
-  return (
-    <>
-      <div>
-        <div className="flex items-center mt-20 px-[200px]">
+  const handleAddForm = () => {
+    setShowAddModal(true);
+  };
+
+  const handleEditForm = (programItem) => {
+    setSelectedProgramItem(programItem);
+    setShowEditModal(true);
+  };
+
+  const closeAddForm = () => {
+    setShowAddModal(false);
+  };
+
+  const closeEditForm = () => {
+    setShowEditModal(false);
+  };
+
+  const handleProgramItemUpdate = (updatedProgramItemData) => {
+    const updatedProgramItems = programItems.map((item) =>
+      item.id === selectedProgramItem.id ? { ...item, ...updatedProgramItemData } : item
+    );
+    setProgramItems(updatedProgramItems);
+  };
+
+  const deleteProgramItem = async (programItemId) => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/programItems/${programItemId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${bearertoken}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setProgramItems(programItems.filter((item) => item.id !== programItemId));
+        toast.success('Program item deleted successfully!');
+      } else {
+        toast.error('Failed to delete program item');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('An error occurred while deleting the program item');
+    }
+  };
+
+  const handleDeleteProgramItem = (programItemId) => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this program item?');
+    if (confirmDelete) {
+      deleteProgramItem(programItemId);
+    }
+  };
+
+    return (
+      <div className="py-20">
+        <div className="flex items-center px-[126px]">
           <div className="flex-1 border-b-2 border-black"></div>
-          <div className="px-4 font-bold text-[30px] ">Program</div>
+          <div className="px-4 font-bold text-[30px] ">Event Program</div>
           <div className="flex-1 border-b-2 border-black"></div>
         </div>
-        <div className="container mx-auto p-4 mt-8">
-          <br />
-          <div className="overflow-x-auto">
-            <table className="w-full border border-collapse">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="p-2 border border-gray-300">Time</th>
-                  <th className="p-2 border border-gray-300">Program Item</th>
-                  <th className="p-2 border border-gray-300">Duration</th>
-                  <th className="p-2 border border-gray-300">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items && items.length > 0 ? (
-                  items.map((item, index) => (
-                    <tr key={index} className="border-t border-gray-300">
-                      <td className="p-2 border border-gray-300 text-center">
-                        {item.Time}
-                      </td>
-                      <td className="p-2 border border-gray-300 text-center">
-                        {item.ProgramItem}
-                      </td>
-                      <td className="p-2 border border-gray-300 text-center">
-                        {item.Duration}
-                      </td>
-                      <td className="p-2 border border-gray-300">
-                        <div className="flex items-center justify-center">
-                          <button
-                            className="bg-[#73332D] text-white text-sm font-semibold p-2 rounded mr-2"
-                            onClick={handleShowEditForm}
-                          >
-                            <AiOutlineEdit />
-                          </button>
-                          <button
-                            className="bg-[#73332D] text-white text-sm font-semibold p-2 rounded"
-                            onClick={() => handleDeleteClick(index)}
-                          >
-                            <RiDeleteBinLine />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      className="p-2 border border-gray-300 text-center"
-                    >
-                      No data available
+  
+        <div>
+          <div className="flex justify-between items-center px-32 py-8">
+            <button
+              className="flex items-center justify-center gap-2 px-8 py-2 cursor-pointer border-2 border-gray-400 text-[20px] hover:bg-black transition-all hover:text-white"
+              onClick={handleAddForm}
+            >
+              <IoMdAddCircleOutline />
+              Add Item
+            </button>
+           <div className="flex gap-2">
+            <BiSolidPrinter
+              size={25}
+              className="cursor-pointer text-stone-700 hover-text-black"
+            />
+            <HiOutlineDownload
+              size={25}
+              className="cursor-pointer text-stone-700 hover-text-black"
+            />
+          </div>
+          </div>
+  
+          {showAddModal && programItems && (
+  <AddProgram close={closeAddForm} addProgramItem={handleAddProgramItem} />
+)}
+
+          {showEditModal && selectedProgramItem && (
+            <EditProgram
+              programItemData={selectedProgramItem}
+              close={closeEditForm}
+              onSubmit={handleProgramItemUpdate}
+            />
+          )}
+  
+          <div className="px-32 mt-6">
+            <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+  <tr className="flex justify-between">
+    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+      Time
+    </th>
+    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+      Category
+    </th>
+    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+      Program Item
+    </th>
+    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+      Duration
+    </th>
+    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+      Actions
+    </th>
+  </tr>
+</thead>
+
+              <tbody className="bg-white divide-y divide-gray-200">
+                {programItems.map((programItem) => (
+                  <tr key={programItem.id}>
+                    <td className="px-6 py-4">{programItem.time}</td>
+                    <td className="px-6 py-4">{programItem.category}</td>
+                    <td className="px-6 py-4">{programItem.program_item}</td>
+                    <td className="px-6 py-4">{programItem.duration}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2 text-gray-600">
+                        <AiOutlineEdit
+                          size={22}
+                          className="hover:text-black cursor-pointer"
+                          onClick={() => handleEditForm(programItem)}
+                        />
+                        <RiDeleteBin6Line
+                          size={22}
+                          className="hover:text-black cursor-pointer"
+                          onClick={() => handleDeleteProgramItem(programItem.id)}
+                        />
+                      </div>
                     </td>
                   </tr>
-                )}
-
-                {/* Add Item Button at the start of the row */}
-                <tr>
-                  <td
-                    colSpan="1"
-                    className="p-2 border border-gray-300 text-center"
-                  >
-                    <button
-                      className="bg-[#73332D] text-white text-sm font-semibold p-2 rounded w-32 flex items-center justify-center"
-                      onClick={handleShowAddForm}
-                    >
-                      <MdAddCircleOutline className="text-xl" />{" "}
-                      <span>Add Item</span>
-                    </button>
-                  </td>
-                </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-
-      {isEditFormVisible && <Edit close={handleCloseEditForm} />}
-      {isAddFormVisible && <AddItem close={handleCloseAddForm} />}
-    </>
   );
-};
+}
 
 export default Program;

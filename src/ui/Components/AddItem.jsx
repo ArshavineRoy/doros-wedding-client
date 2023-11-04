@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Data from './Data';
+import Data from '../Data';
 import { useNavigate } from 'react-router-dom';
-import Modal from './Modal';
+import Modal from '../Modal';
 
 const AddItem = ({ close }) => {
   const [time, setTime] = useState("");
