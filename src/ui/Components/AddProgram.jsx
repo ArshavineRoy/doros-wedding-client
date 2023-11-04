@@ -5,7 +5,8 @@ import { toast } from "react-hot-toast";
 function AddProgram({ close, addProgram, programCategories }) {
   const [formData, setFormData] = useState({
     time: "",
-    program_item: programCategories?.[0] || "", // Initialize with the first category or an empty string
+    category: programCategories[0] || "", // Initialize with the first category or an empty string
+    program_item: "",
     duration: "",
   });
 
@@ -16,6 +17,48 @@ function AddProgram({ close, addProgram, programCategories }) {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const getProgramItemsForCategory = (category) => {
+    switch (category) {
+      case "Brides & Bridesmaids' Preparation":
+        return [
+          "Bridal Makeup",
+          "Bridesmaids' Hairstyling",
+          "Wedding Dress Fitting",
+          "Accessories Selection",
+        ];
+      case "Bride & Bridesmaids' Breakfast & Photoshoot":
+        return [
+          "Breakfast at a Cafe",
+          "Outdoor Photoshoot",
+          "Indoor Photoshoot",
+          "Dressing Up",
+        ];
+      case "Groom & Groomsmen's Preparation":
+        return [
+          "Groom's Suiting",
+          "Groomsmen's Ties",
+          "Haircut & Shaving",
+          "Final Suit Fitting",
+        ];
+      case "Wedding Ceremony":
+        return [
+          "Walk Down the Aisle",
+          "Exchanging Vows",
+          "Ring Exchange",
+          "Unity Ceremony",
+        ];
+      case "Wedding Reception":
+        return [
+          "Welcome Drinks",
+          "Dinner Buffet",
+          "Cake Cutting",
+          "First Dance",
+        ];
+      default:
+        return [];
+    }
   };
 
   const handleSubmit = (e) => {
@@ -43,8 +86,28 @@ function AddProgram({ close, addProgram, programCategories }) {
             name="time"
             value={formData.time}
             onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-full border-b border-gray-400 p-2 focus:outline-none"
           />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="category" className="block font-bold mb-1">
+            Category
+          </label>
+          <select
+            required
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleInputChange}
+            className="w-full border rounded-md p-2"
+          >
+            {programCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-6">
@@ -59,9 +122,9 @@ function AddProgram({ close, addProgram, programCategories }) {
             onChange={handleInputChange}
             className="w-full border rounded-md p-2"
           >
-            {programCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {getProgramItemsForCategory(formData.category).map((item) => (
+              <option key={item} value={item}>
+                {item}
               </option>
             ))}
           </select>
@@ -78,7 +141,7 @@ function AddProgram({ close, addProgram, programCategories }) {
             name="duration"
             value={formData.duration}
             onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-full border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
 
