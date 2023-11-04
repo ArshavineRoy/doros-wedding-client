@@ -2,10 +2,10 @@ import Modal from "../../ui/Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
-function AddProgram({ close, addProgram, programCategories }) { // Pass programCategories as a prop
+function AddProgram({ close, addProgram, programCategories }) {
   const [formData, setFormData] = useState({
     time: "",
-    program_item: "",
+    program_item: programCategories?.[0] || "", // Initialize with the first category or an empty string
     duration: "",
   });
 
@@ -59,7 +59,7 @@ function AddProgram({ close, addProgram, programCategories }) { // Pass programC
             onChange={handleInputChange}
             className="w-full border rounded-md p-2"
           >
-            {programCategories.map((category) => ( // Use programCategories prop
+            {programCategories.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
@@ -85,13 +85,13 @@ function AddProgram({ close, addProgram, programCategories }) { // Pass programC
         <div className="flex justify-between">
           <button
             type="submit"
-            className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover-bg-[#49120d] transition-all hover:text-white"
+            className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white"
           >
             ADD PROGRAM
           </button>
 
           <button
-            className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover-bg-[#49120d] transition-all hover:text-white"
+            className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white"
             onClick={close}
           >
             CANCEL
