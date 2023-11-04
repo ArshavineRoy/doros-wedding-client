@@ -126,6 +126,14 @@ function Program() {
     }
   };
 
+  const categories = [
+    "Brides & Bridesmaids' Preparation",
+    "Bride & Bridesmaids' Breakfast & Photoshoot",
+    "Groom & Groomsmen's Preparation",
+    "Wedding Ceremony",
+    "Wedding Reception",
+  ];
+  
   return (
     <div className="py-20">
       <div className="flex items-center px-[126px]">
@@ -168,52 +176,35 @@ function Program() {
         )}
 
         <div className="px-32 mt-6">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr className="flex justify-between">
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Time
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Category
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Program Item
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Duration
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="bg-white divide-y divide-gray-200">
-              {programItems.map((programItem) => (
-                <tr key={programItem.id}>
-                  <td className="px-6 py-4">{programItem.time}</td>
-                  <td className="px-6 py-4">{programItem.category}</td>
-                  <td className="px-6 py-4">{programItem.program_item}</td>
-                  <td className="px-6 py-4">{programItem.duration}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2 text-gray-600">
-                      <AiOutlineEdit
-                        size={22}
-                        className="hover-text-black cursor-pointer"
-                        onClick={() => handleEditForm(programItem)}
-                      />
-                      <RiDeleteBin6Line
-                        size={22}
-                        className="hover-text-black cursor-pointer"
-                        onClick={() => handleDeleteProgramItem(programItem.id)}
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {categories.map((category, index) => (
+            <div key={index}>
+              <h2 className="text-xl font-semibold my-2">{category}</h2>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr className="flex justify-between">
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Time
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Category
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Program Item
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Duration
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {/* Render your empty table rows here */}
+                </tbody>
+              </table>
+            </div>
+          ))}
         </div>
       </div>
     </div>
