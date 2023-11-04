@@ -20,7 +20,7 @@ function Program() {
     const fetchData = async () => {
       try {
         const bearertoken = accessToken; 
-        const response = await fetch('https://doros-wedding-server.onrender.com/programItems', {
+        const response = await fetch('https://doros-wedding-server.onrender.com/programs', {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${bearertoken}`,
@@ -44,7 +44,7 @@ function Program() {
   const addProgramItem = async (newProgramItem) => {
     try {
       const bearertoken = accessToken;
-      const response = await fetch('https://doros-wedding-server.onrender.com/programItems', {
+      const response = await fetch('https://doros-wedding-server.onrender.com/programs', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,11 +93,11 @@ function Program() {
     setProgramItems(updatedProgramItems);
   };
 
-  const deleteProgramItem = async (programItemId) => {
+  const deleteProgramItem = async (programId) => {
     try {
       const bearertoken = accessToken;
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/programItems/${programItemId}`,
+        `https://doros-wedding-server.onrender.com/programs/${programId}`,
         {
           method: 'DELETE',
           headers: {
@@ -108,7 +108,7 @@ function Program() {
       );
 
       if (response.ok) {
-        setProgramItems(programItems.filter((item) => item.id !== programItemId));
+        setProgramItems(programItems.filter((item) => item.id !== programId));
         toast.success('Program item deleted successfully!');
       } else {
         toast.error('Failed to delete program item');
@@ -119,31 +119,31 @@ function Program() {
     }
   };
 
-  const handleDeleteProgramItem = (programItemId) => {
+  const handleDeleteProgramItem = (programId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this program item?');
     if (confirmDelete) {
-      deleteProgramItem(programItemId);
+      deleteProgramItem(programId);
     }
   };
 
-    return (
-      <div className="py-20">
-        <div className="flex items-center px-[126px]">
-          <div className="flex-1 border-b-2 border-black"></div>
-          <div className="px-4 font-bold text-[30px] ">Event Program</div>
-          <div className="flex-1 border-b-2 border-black"></div>
-        </div>
-  
-        <div>
-          <div className="flex justify-between items-center px-32 py-8">
-            <button
-              className="flex items-center justify-center gap-2 px-8 py-2 cursor-pointer border-2 border-gray-400 text-[20px] hover:bg-black transition-all hover:text-white"
-              onClick={handleAddForm}
-            >
-              <IoMdAddCircleOutline />
-              Add Item
-            </button>
-           <div className="flex gap-2">
+  return (
+    <div className="py-20">
+      <div className="flex items-center px-[126px]">
+        <div className="flex-1 border-b-2 border-black"></div>
+        <div className="px-4 font-bold text-[30px] ">Event Program</div>
+        <div className="flex-1 border-b-2 border-black"></div>
+      </div>
+
+      <div>
+        <div className="flex justify-between items-center px-32 py-8">
+          <button
+            className="flex items-center justify-center gap-2 px-8 py-2 cursor-pointer border-2 border-gray-400 text-[20px] hover-bg-black hover-text-white"
+            onClick={handleAddForm}
+          >
+            <IoMdAddCircleOutline />
+            Add Item
+          </button>
+          <div className="flex gap-2">
             <BiSolidPrinter
               size={25}
               className="cursor-pointer text-stone-700 hover-text-black"
@@ -153,70 +153,70 @@ function Program() {
               className="cursor-pointer text-stone-700 hover-text-black"
             />
           </div>
-          </div>
-  
-          {showAddModal && programItems && (
-  <AddProgram close={closeAddForm} addProgramItem={handleAddProgramItem} />
-)}
+        </div>
 
-          {showEditModal && selectedProgramItem && (
-            <EditProgram
-              programItemData={selectedProgramItem}
-              close={closeEditForm}
-              onSubmit={handleProgramItemUpdate}
-            />
-          )}
-  
-          <div className="px-32 mt-6">
-            <table className="min-w-full divide-y divide-gray-200">
+        {showAddModal && programItems && (
+          <AddProgram close={closeAddForm} addProgramItem={handleAddProgramItem} />
+        )}
+
+        {showEditModal && selectedProgramItem && (
+          <EditProgram
+            programItemData={selectedProgramItem}
+            close={closeEditForm}
+            onSubmit={handleProgramItemUpdate}
+          />
+        )}
+
+        <div className="px-32 mt-6">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
-  <tr className="flex justify-between">
-    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-      Time
-    </th>
-    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-      Category
-    </th>
-    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-      Program Item
-    </th>
-    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-      Duration
-    </th>
-    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-      Actions
-    </th>
-  </tr>
-</thead>
+              <tr className="flex justify-between">
+                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                  Time
+                </th>
+                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                  Category
+                </th>
+                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                  Program Item
+                </th>
+                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                  Duration
+                </th>
+                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                  Actions
+                </th>
+              </tr>
+            </thead>
 
-              <tbody className="bg-white divide-y divide-gray-200">
-                {programItems.map((programItem) => (
-                  <tr key={programItem.id}>
-                    <td className="px-6 py-4">{programItem.time}</td>
-                    <td className="px-6 py-4">{programItem.category}</td>
-                    <td className="px-6 py-4">{programItem.program_item}</td>
-                    <td className="px-6 py-4">{programItem.duration}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2 text-gray-600">
-                        <AiOutlineEdit
-                          size={22}
-                          className="hover:text-black cursor-pointer"
-                          onClick={() => handleEditForm(programItem)}
-                        />
-                        <RiDeleteBin6Line
-                          size={22}
-                          className="hover:text-black cursor-pointer"
-                          onClick={() => handleDeleteProgramItem(programItem.id)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {programItems.map((programItem) => (
+                <tr key={programItem.id}>
+                  <td className="px-6 py-4">{programItem.time}</td>
+                  <td className="px-6 py-4">{programItem.category}</td>
+                  <td className="px-6 py-4">{programItem.program_item}</td>
+                  <td className="px-6 py-4">{programItem.duration}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex gap-2 text-gray-600">
+                      <AiOutlineEdit
+                        size={22}
+                        className="hover-text-black cursor-pointer"
+                        onClick={() => handleEditForm(programItem)}
+                      />
+                      <RiDeleteBin6Line
+                        size={22}
+                        className="hover-text-black cursor-pointer"
+                        onClick={() => handleDeleteProgramItem(programItem.id)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+    </div>
   );
 }
 
