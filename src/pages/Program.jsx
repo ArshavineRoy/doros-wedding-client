@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { toast } from 'react-hot-toast';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { IoMdAddCircleOutline } from 'react-icons/io';
-import { AiOutlineEdit } from 'react-icons/ai';
-import { BiSolidPrinter } from 'react-icons/bi';
-import { HiOutlineDownload } from 'react-icons/hi';
-import AddProgram from '../ui/Components/AddProgram';
-import EditProgram from '../ui/Components/EditProgram';
+import { toast } from "react-hot-toast";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { AiOutlineEdit } from "react-icons/ai";
+import { BiSolidPrinter } from "react-icons/bi";
+import { HiOutlineDownload } from "react-icons/hi";
+import AddProgram from "../ui/Components/AddProgram";
+import EditProgram from "../ui/Components/EditProgram";
 
 function Program() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
   const [programItems, setProgramItems] = useState({});
-  
+
   const fakeProgramData = {
     "Brides & Bridesmaids' Preparation": [
       {
@@ -47,11 +47,8 @@ function Program() {
         duration: "2 hours",
       },
     ],
-    "Groom & Groomsmen's Preparation": [],
-    "Wedding Ceremony": [],
-    "Wedding Reception": [],
   };
-  
+
   useEffect(() => {
     // Initialize with fake data
     setProgramItems(fakeProgramData);
@@ -60,7 +57,10 @@ function Program() {
   const addProgramItem = (newProgramItem) => {
     const updatedProgramItems = { ...programItems };
     if (updatedProgramItems[newProgramItem.category]) {
-      const newId = Math.max(...updatedProgramItems[newProgramItem.category].map(item => item.id)) + 1;
+      const newId =
+        Math.max(
+          ...updatedProgramItems[newProgramItem.category].map((item) => item.id)
+        ) + 1;
       newProgramItem.id = newId;
       updatedProgramItems[newProgramItem.category].push(newProgramItem);
     } else {
@@ -86,11 +86,15 @@ function Program() {
 
   const handleProgramItemUpdate = (updatedProgramItemData) => {
     const updatedProgramItems = { ...programItems };
-    const programItemsForCategory = updatedProgramItems[selectedProgramItem.category];
+    const programItemsForCategory =
+      updatedProgramItems[selectedProgramItem.category];
 
     if (programItemsForCategory) {
-      const updatedProgramItemsForCategory = programItemsForCategory.map((item) =>
-        item.id === selectedProgramItem.id ? { ...item, ...updatedProgramItemData } : item
+      const updatedProgramItemsForCategory = programItemsForCategory.map(
+        (item) =>
+          item.id === selectedProgramItem.id
+            ? { ...item, ...updatedProgramItemData }
+            : item
       );
 
       updatedProgramItems[selectedProgramItem.category] = updatedProgramItemsForCategory;
@@ -102,14 +106,18 @@ function Program() {
   const deleteProgramItem = (programId) => {
     const updatedProgramItems = { ...programItems };
     Object.keys(updatedProgramItems).forEach((category) => {
-      updatedProgramItems[category] = updatedProgramItems[category].filter((item) => item.id !== programId);
+      updatedProgramItems[category] = updatedProgramItems[category].filter(
+        (item) => item.id !== programId
+      );
     });
     setProgramItems(updatedProgramItems);
-    toast.success('Program item deleted successfully!');
+    toast.success("Program item deleted successfully!");
   };
 
   const handleDeleteProgramItem = (programId) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this program item?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this program item?"
+    );
     if (confirmDelete) {
       deleteProgramItem(programId);
     }
@@ -153,18 +161,21 @@ function Program() {
         </div>
 
         {showAddModal && (
-          <AddProgram close={() => setShowAddModal(false)} addProgram={handleAddProgramItem} programCategories={categories} />
+          <AddProgram
+            close={() => setShowAddModal(false)}
+            addProgram={handleAddProgramItem}
+            programCategories={categories}
+          />
         )}
 
-{showEditModal && selectedProgramItem && (
-  <EditProgram
-    close={closeEditForm}
-    editProgram={handleProgramItemUpdate}
-    programToEdit={selectedProgramItem}
-  />
-)}
+        {showEditModal && selectedProgramItem && (
+          <EditProgram
+            close={closeEditForm}
+            editProgram={handleProgramItemUpdate}
+            programToEdit={selectedProgramItem}
+          />
+        )}
 
-        
         {categories.map((category) => (
           <div key={category}>
             <h2 className="text-lg font-semibold">{category}</h2>
@@ -206,7 +217,9 @@ function Program() {
                         <RiDeleteBin6Line
                           size={22}
                           className="hover-text-black cursor-pointer"
-                          onClick={() => handleDeleteProgramItem(programItem.id)}
+                          onClick={() =>
+                            handleDeleteProgramItem(programItem.id)
+                          }
                         />
                       </div>
                     </td>

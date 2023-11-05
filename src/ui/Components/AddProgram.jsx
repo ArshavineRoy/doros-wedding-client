@@ -19,48 +19,6 @@ function AddProgram({ close, addProgram, programCategories }) {
     }));
   };
 
-  const getProgramItemsForCategory = (category) => {
-    switch (category) {
-      case "Brides & Bridesmaids' Preparation":
-        return [
-          "Bridal Makeup",
-          "Bridesmaids' Hairstyling",
-          "Wedding Dress Fitting",
-          "Accessories Selection",
-        ];
-      case "Bride & Bridesmaids' Breakfast & Photoshoot":
-        return [
-          "Breakfast at a Cafe",
-          "Outdoor Photoshoot",
-          "Indoor Photoshoot",
-          "Dressing Up",
-        ];
-      case "Groom & Groomsmen's Preparation":
-        return [
-          "Groom's Suiting",
-          "Groomsmen's Ties",
-          "Haircut & Shaving",
-          "Final Suit Fitting",
-        ];
-      case "Wedding Ceremony":
-        return [
-          "Walk Down the Aisle",
-          "Exchanging Vows",
-          "Ring Exchange",
-          "Unity Ceremony",
-        ];
-      case "Wedding Reception":
-        return [
-          "Welcome Drinks",
-          "Dinner Buffet",
-          "Cake Cutting",
-          "First Dance",
-        ];
-      default:
-        return [];
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -114,20 +72,15 @@ function AddProgram({ close, addProgram, programCategories }) {
           <label htmlFor="program_item" className="block font-bold mb-1">
             Program Item
           </label>
-          <select
+          <input
             required
+            type="text"
             id="program_item"
             name="program_item"
             value={formData.program_item}
             onChange={handleInputChange}
-            className="w-full border rounded-md p-2"
-          >
-            {getProgramItemsForCategory(formData.category).map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+            className="w-full border-b border-gray-400 p-2 focus:outline-none"
+          />
         </div>
 
         <div className="mb-6">
