@@ -1,429 +1,307 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  startEvent,
-  eventSuccess,
-  eventFailure,
-} from "../features/auth/authSlicerEvent";
-import { useDispatch, useSelector } from "react-redux";
-import { selectEvent } from "../features/auth/authSlicerEvent";
-import { useEventMutation } from "../features/auth/authMutations";
+import axios from "axios";
+import { getTokensInCookies } from "../features/auth/authCookies";
+import { useNavigate } from "react-router-dom";
 
-const EventForm = () => {
-  const [eventSuccess, setEeventSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const eventData = useSelector(selectEvent);
+const CreateEventForm = () => {
+  const preset_key = "el8jsv3r";
+  const cloud_name = "dcqgeggij";
+  const [errorMessage, setErrorMessage] = useState("");
+  const { accessToken } = getTokensInCookies();
   const navigate = useNavigate();
-  const [errorMessage, setErrMsg] = useState("");
 
-  const [events] = useEventMutation();
+  const [image_url, setImageUrl] = useState("");
 
-  // {
-  //   "name": "string",
-  //   "type": "string",
-  //   "date": "string",
-  //   "location": "string",
-  //   "guests": 0,
-  //   "budget": "string",
-  //   "spouse_first_name": "string",
-  //   "spouse_last_name": "string",
-  //   "bachelorette_party": "string",
-  //   "engagement_party": "string",
-  //   "honeymoon": "string",
-  //   "image_url": "string"
-  // }
-  
+  const handleFile = (e) => {
+    const file = e.target.files[0];
+    const imageData = new FormData();
+    imageData.append("file", file);
+    imageData.append("upload_preset", preset_key);
 
-  const [formData, setFormData] = useState({
+    axios
+      .post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        imageData
+      )
+      .then((res) => setImageUrl(res.data.secure_url))
+      .catch((error) => console.log(error));
+  };
+
+  // form data
+
+  const [eventData, setEventData] = useState({
     name: "",
     type: "",
     date: "",
     location: "",
     guests: "",
     budget: "",
-    guspouse_first_name: "",
+    spouse_first_name: "",
     spouse_last_name: "",
-    image_url: "https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    image_url: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(startEvent()); // Dispatch the first action of the user which is to enter details
-    setErrMsg("");
 
-    if (
+    // post request
+    try {
+      const bearertoken = accessToken;
+      const response = await axios.post(
+        "https://doros-wedding-server.onrender.com/events",
+        eventData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+        }
+      );
 
-      !formData.name ||
-      !formData.type ||
-      !formData.date ||
-      !formData.location ||
-      !formData.guests ||
-      !formData.budget ||
-      !formData.guspouse_first_name ||
-      !formData.spouse_last_name ||
-      !formData.bachelorette_party ||
-      !formData.engagement_party ||
-      !formData.honeymoon ||
-      !formData.image_url
-    ) {
-      setErrMsg("Please fill in all the fields");
-      dispatch(eventFailure("Please fill in the required fields"));
-    // } else if (
-    //   // !/^[A-Z][a-zA-Z]*$/.test(formData.name || formData.name)
-    //   !/^[a-zA-Z]*$/.test(formData.name || formData.name)
-    // ) {
-    //   setErrMsg("Name must Start with a capital letter");
-    //   dispatch(eventFailure("Name must start with a capital letter"));
-    // } else if (!validateEmail(formData.email)) {
-    //   setErrMsg("Invalid Email Format");
-    //   dispatch(eventFailure("Invalid Email Format"));
-    // } else if (!validatePassword(formData.password)) {
-    //   setErrMsg("Password should be atleast 8 characters");
-    //   dispatch(eventFailure("Password should be atleast 8 characters"));
-    // } else if (!validatePhonenumber(formData.phone)) {
-    //   setErrMsg("Invalid Phone number");
-    //   dispatch(eventFailure("Invalid Phone number"));
-    } else {
-      try {
-        // make regestration request using signupMutation
-        console.log(`formData: `, formData);
-        const result = await events(formData);
-        console.log(`Events result: `, result);
+      if (response.status === 200) {
+        const data = response.data;
+        // console.log("Event created:", data);
 
-        // Registration was successful
-        dispatch(eventSuccess());
-        setEeventSuccess(true);
-        setIsLoading(true);
-        navigate("/dashboard"); //change this to appropriate route
-      } catch (error) {
-        // Registration failed, handle errors
-        dispatch(eventFailure(error.message));
-        setEeventSuccess(false);
+        setEventData({
+          name: "",
+          type: "",
+          date: "",
+          location: "",
+          guests: "",
+          budget: "",
+          spouse_first_name: "",
+          spouse_last_name: "",
+          image_url: "",
+        });
+        navigate("/dashboard");
+      } else {
+        throw new Error("Network response was not ok");
       }
+    } catch (error) {
+      console.error("Error creating event:", error);
+      setErrorMessage("Error creating event. Please try again.");
     }
   };
 
   return (
-    <div className="pt-20 dark:bg-[#F7F2EE]">
-      {/* {eventData.isLoading && <p>Loading...</p>}
-      {eventData.errorMessage && <p className="text-red-500">{errorMessage}</p>}
-      {eventSuccess && <p>Event created successful!</p>} */}
-      <section className="bg-gray-50 pt-8 pb-[20px] dark:bg-[#F7F2EE]">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          {/* <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-          <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
-          Flowbite    
-      </a> */}
+    <div className="flex flex-col sm:flex-row items-center justify-start h-3/4 mt-20 ">
+      <div className="w-full sm:w-1/2 p-4 mt-2">
+        <div className="mb-4">
+          <h2 className="text-2xl font-bold mb-10 text-[#73332d] ">
+            Create Event
+          </h2>
+          <div className="w-full">
+            <div className="full-width-hr"></div>{" "}
+          </div>
 
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-[#592727] md:text-2xl">
-                Create an event
-              </h1>
-              <form
-                className="space-y-4 md:space-y-6"
-                action="#"
-                onSubmit={handleSubmit}
-              >
+          <div className="border p-4 rounded-lg">
+            <form onSubmit={handleSubmit}>
+              <div class="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]"
+                    for="name"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Event name
                   </label>
                   <input
                     type="text"
-                    name="name"
                     id="name"
-                    value={formData.name}
+                    value={eventData.name}
                     onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
+                      setEventData({ ...eventData, name: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter first name..."
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="John & Doe"
+                    required
                   />
                 </div>
-
-                {/* type */} {/* REPLACE WITH YOUR 'TYPE' DROPDOWN*/}
-                {/* <div>
+                <div>
                   <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]"
+                    for="type"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Event Type
                   </label>
                   <input
                     type="text"
-                    name="name"
-                    id="name"
-                    value={formData.type}
+                    id="type"
+                    value={eventData.type}
                     onChange={(e) =>
-                      setFormData({ ...formData, type: e.target.value })
+                      setEventData({ ...eventData, type: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter first name..."
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="i.e. Wedding"
+                    required
                   />
-                </div> */}
-
-                {/* date */}
-
+                </div>
                 <div>
                   <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]"
+                    for="date"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Date
                   </label>
                   <input
                     type="date"
-                    name="name"
-                    id="name"
-                    value={formData.date}
+                    id="date"
+                    value={eventData.date}
                     onChange={(e) =>
-                      setFormData({ ...formData, date: e.target.value })
+                      setEventData({ ...eventData, date: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder=""
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="08-12-2023"
+                    required
                   />
                 </div>
-                {/* location */}
-
                 <div>
                   <label
-                    htmlFor="location"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]"
+                    for="location"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Location
                   </label>
                   <input
                     type="text"
-                    name="location"
                     id="location"
-                    value={formData.location}
+                    value={eventData.location}
                     onChange={(e) =>
-                      setFormData({ ...formData, location: e.target.value })
+                      setEventData({ ...eventData, location: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter event location..."
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="i.e. Nairobi"
+                    required
                   />
                 </div>
-
-                {/* guests */}
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]">
+                  <label
+                    for="guests"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
                     Guests
                   </label>
                   <input
                     type="number"
-                    name="guests"
                     id="guests"
-                    value={formData.guests}
+                    value={eventData.guests}
                     onChange={(e) =>
-                      setFormData({ ...formData, guests: e.target.value })
+                      setEventData({ ...eventData, guests: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter the expected number of guests..."
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="i.e. 20"
+                    required
                   />
                 </div>
-
-                {/* budget */}
-
                 <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]">
+                  <label
+                    for="budget"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
                     Budget
                   </label>
                   <input
-                    type="text"
-                    name="budget"
-                    id="budget"
-                    value={formData.budget}
-                    onChange={(e) =>
-                      setFormData({ ...formData, budget: e.target.value })
-                    }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter your total budget for the event..."
-                    required=""
-                  />
-                </div>
-
-                {/* spouse_first_name */}
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]">
-                    Spouse First Name
-                  </label>
-                  <input
-
-                    type="text"
-                    name="spouse_first_name"
-                    id="spouse_first_name"
-                    value={formData.spouse_first_name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, spouse_first_name: e.target.value })
-                    }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter the spouse first name..."
-                    required=""
-                  />
-                </div>
-
-                {/* spouse_last_name */}
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]">
-                    Spouse Last Name
-                  </label>
-                  <input
-
-                    type="text"
-                    name="spouse_last_name"
-                    id="spouse_last_name"
-                    value={formData.spouse_last_name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, spouse_last_name: e.target.value })
-                    }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter the spouse last name..."
-                    required=""
-                  />
-                </div>
-
-                {/* image_url */}
-                {/* <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-[#592727]">
-                    Image Url
-                  </label>
-                  <input
-                  type="text"
-                  name="image_url"
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image_url: e.target.value })
-                  }
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="enter an image url..."
-                  required=""
-                />
-                </div> */}
-
-                <button
-                  type="submit"
-                  className="w-full text-white bg-[#73332D] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  submit
-                </button>      
-
-
-
-                {/* <div>
-                  <label
-                    htmlFor="lastname"
-                    className="block mb-2 text-sm font-medium text-[#592727]"
-                  >
-                    Last name
-                  </label>
-                  <input
-                    type="text"
-                    name="lastname"
-                    id="lastname"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="bg-gray-50 border border-gray-300 dark:text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="enter last name...."
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-[#592727] "
-                  >
-                    Your email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="bg-gray-50 border border-gray-300 dark:text-gray-800 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block mb-2 text-sm font-medium text-[#592727] "
-                  >
-                    Phone Number
-                  </label>
-                  <input
                     type="number"
-                    name="phone"
-                    id="phone"
-                    value={formData.phone}
+                    id="budget"
+                    value={eventData.budget}
                     onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
+                      setEventData({ ...eventData, budget: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="254712345678"
-                    required=""
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="i.e.20000"
+                    required
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-[#592727] "
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full text-white bg-[#73332D] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              </div>
+              <div class="mb-6">
+                <label
+                  for="spouse_first_name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Sign Up
-                </button>
-                <p className="text-sm font-light text-gray-800">
-                  Already have an account?{" "}
-                  <Link
-                    to="/login"
-                    className="font-medium text-blue-600 hover:underline "
-                  >
-                    Login here
-                  </Link>
-                </p> */}
-              </form>
-            </div>
+                  Husband/Wife's First Name
+                </label>
+                <input
+                  type="text"
+                  id="spouse_first_name"
+                  value={eventData.spouse_first_name}
+                  onChange={(e) =>
+                    setEventData({
+                      ...eventData,
+                      spouse_first_name: e.target.value,
+                    })
+                  }
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="i.e.Johny/Mellisa"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label
+                  for="spouse_last_name"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Husband/Wife's Last Name
+                </label>
+                <input
+                  type="text"
+                  id="spouse_last_name"
+                  value={eventData.spouse_last_name}
+                  onChange={(e) =>
+                    setEventData({
+                      ...eventData,
+                      spouse_last_name: e.target.value,
+                    })
+                  }
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="i.e.Wort/May"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-[#73332d]  text-white font-bold py-2 px-4 rounded mt-6 "
+              >
+                Create Event
+              </button>
+
+              {errorMessage && (
+                <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
+              )}
+            </form>
           </div>
         </div>
-      </section>
+      </div>
+
+      {image_url ? (
+        <div className="mb-6">
+          <label
+            for="image_url"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          ></label>
+          <img
+            src={image_url}
+            alt="Uploaded Event Image"
+            className="max-w-full"
+          />
+        </div>
+      ) : (
+        <div className="mb-6">
+          <label
+            for="image_url"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Image Upload
+          </label>
+          <input
+            type="file"
+            id="image_url"
+            onChange={handleFile}
+            className="max-w-full h-auto max-h-48 max-w-96"
+            required
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export default EventForm;
+export default CreateEventForm;
