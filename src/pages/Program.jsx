@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -14,45 +14,45 @@ function Program() {
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
   const [programItems, setProgramItems] = useState({});
 
-  const fakeProgramData = {
-    "Brides & Bridesmaids' Preparation": [
-      {
-        id: 1,
-        time: "08:00 AM",
-        category: "Brides & Bridesmaids' Preparation",
-        program_item: "Makeup and Hair Styling",
-        duration: "1 hour",
-      },
-      {
-        id: 2,
-        time: "09:30 AM",
-        category: "Brides & Bridesmaids' Preparation",
-        program_item: "Getting Dressed",
-        duration: "30 minutes",
-      },
-    ],
-    "Bride & Bridesmaids' Breakfast & Photoshoot": [
-      {
-        id: 3,
-        time: "10:00 AM",
-        category: "Bride & Bridesmaids' Breakfast & Photoshoot",
-        program_item: "Breakfast",
-        duration: "1 hour",
-      },
-      {
-        id: 4,
-        time: "11:30 AM",
-        category: "Bride & Bridesmaids' Breakfast & Photoshoot",
-        program_item: "Photoshoot",
-        duration: "2 hours",
-      },
-    ],
-  };
+  // const fakeProgramData = {
+  //   "Brides & Bridesmaids' Preparation": [
+  //     {
+  //       id: 1,
+  //       time: "08:00 AM",
+  //       category: "Brides & Bridesmaids' Preparation",
+  //       program_item: "Makeup and Hair Styling",
+  //       duration: "1 hour",
+  //     },
+  //     {
+  //       id: 2,
+  //       time: "09:30 AM",
+  //       category: "Brides & Bridesmaids' Preparation",
+  //       program_item: "Getting Dressed",
+  //       duration: "30 minutes",
+  //     },
+  //   ],
+  //   "Bride & Bridesmaids' Breakfast & Photoshoot": [
+  //     {
+  //       id: 3,
+  //       time: "10:00 AM",
+  //       category: "Bride & Bridesmaids' Breakfast & Photoshoot",
+  //       program_item: "Breakfast",
+  //       duration: "1 hour",
+  //     },
+  //     {
+  //       id: 4,
+  //       time: "11:30 AM",
+  //       category: "Bride & Bridesmaids' Breakfast & Photoshoot",
+  //       program_item: "Photoshoot",
+  //       duration: "2 hours",
+  //     },
+  //   ],
+  // };
 
-  useEffect(() => {
-    // Initialize with fake data
-    setProgramItems(fakeProgramData);
-  }, []);
+  // useEffect(() => {
+  //   // Initialize with fake data
+  //   setProgramItems(fakeProgramData);
+  // }, []);
 
   const addProgramItem = (newProgramItem) => {
     const updatedProgramItems = { ...programItems };
