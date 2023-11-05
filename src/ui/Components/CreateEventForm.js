@@ -10,6 +10,21 @@ const CreateEventForm = () => {
   const { accessToken } = getTokensInCookies();
   const navigate = useNavigate();
 
+  const event_types = [
+    { name: "Wedding" },
+    // { name: "Birthday" },
+    // { name: "Anniversary" },
+    // { name: "Engagement" },
+    // { name: "Baby Shower" },
+    // { name: "Bridal Shower" },
+    // { name: "Bachelor Party" },
+    // { name: "Bachelorette Party" },
+    // { name: "Retirement Party" },
+    // { name: "Graduation Party" },
+    // { name: "Reunion" },
+    // { name: "Other" },
+  ]
+
   const [image_url, setImageUrl] = useState("");
 
   const handleFile = (e) => {
@@ -123,17 +138,21 @@ const CreateEventForm = () => {
                   >
                     Event Type
                   </label>
-                  <input
-                    type="text"
-                    id="type"
-                    value={eventData.type}
+                  <select
+                    name="role"
+                    id="role"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required
                     onChange={(e) =>
                       setEventData({ ...eventData, type: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="i.e. Wedding"
-                    required
-                  />
+                  >
+                    {event_types.map((event) => (
+                      <option key={event.name} value={event.name}>
+                        {event.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label
