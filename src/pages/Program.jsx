@@ -14,7 +14,7 @@ function Program() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
   const [programItems, setProgramItems] = useState({});
-  const { accessToken } = getTokensInCookies(); // Removed unused refreshToken variable
+  const { accessToken } = getTokensInCookies();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,64 +204,57 @@ function Program() {
         )}
 
         <div className="px-32 mt-6">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr className="flex justify-between">
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Time
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Category
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Program Item
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Duration
-                </th>
-                <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="bg-white divide-y divide-gray-200">
-              {categories.map((category) => (
-                <React.Fragment key={category}>
-                  <tr className="bg-gray-100">
-                    <td className="flex-1 px-6 py-3 text-left text-sm font-medium text-gray-900">
-                      {category}
-                    </td>
-                    <td className="flex-4 border-t border-gray-300">
-                      <div className="w-full">
-                        {programItems[category]?.map((programItem) => (
-                          <div className="flex" key={programItem.id}>
-                            <div className="flex-1 px-6 py-4">{programItem.time}</div>
-                            <div className="flex-1 px-6 py-4">{programItem.program_item}</div>
-                            <div className="flex-1 px-6 py-4">{programItem.duration}</div>
-                            <div className="flex-1 px-6 py-4">
-                              <div className="flex gap-2 text-gray-600">
-                                <AiOutlineEdit
-                                  size={22}
-                                  className="hover-text-black cursor-pointer"
-                                  onClick={() => handleEditForm(programItem)}
-                                />
-                                <RiDeleteBin6Line
-                                  size={22}
-                                  className="hover-text-black cursor-pointer"
-                                  onClick={() => handleDeleteProgramItem(programItem.id)}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </td>
+          {categories.map((category) => (
+            <div key={category}>
+              <h2 className="text-lg font-semibold">{category}</h2>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr className="flex justify-between">
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Time
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Category
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Program Item
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Duration
+                    </th>
+                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                      Actions
+                    </th>
                   </tr>
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
+                </thead>
+
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {programItems[category]?.map((programItem) => (
+                    <tr key={programItem.id}>
+                      <td className="px-6 py-4">{programItem.time}</td>
+                      <td className="px-6 py-4">{programItem.category}</td>
+                      <td className="px-6 py-4">{programItem.program_item}</td>
+                      <td className="px-6 py-4">{programItem.duration}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2 text-gray-600">
+                          <AiOutlineEdit
+                            size={22}
+                            className="hover-text-black cursor-pointer"
+                            onClick={() => handleEditForm(programItem)}
+                          />
+                          <RiDeleteBin6Line
+                            size={22}
+                            className="hover-text-black cursor-pointer"
+                            onClick={() => handleDeleteProgramItem(programItem.id)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
         </div>
       </div>
     </div>
