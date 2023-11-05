@@ -15,6 +15,8 @@ import Program from "./pages/Program";
 import Home from "./pages/Home";
 import MyEvents from "./ui/Components/MyEvents";
 import Budget from "./ui/Components/Budget";
+import Paywall from "./ui/Paywall";
+// import ForgotPassword from "./ui/Components/ForgotPassword";
 
 const App = () => {
   return (
@@ -27,6 +29,9 @@ const App = () => {
         <Route path="/events" element={<EventForm />} />
         <Route path="/budget" element={<Budget />} />
         <Route path="/important" element={<ImportantDatesForm />} /> {/*render in dashboard*/}
+        <Route path="/pay" element={<Paywall />} />
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+
       </Route>
       <Route element={<Dashboardlayout />}>
         <Route path="/dashboard" element={<Dashboard />}></Route>
