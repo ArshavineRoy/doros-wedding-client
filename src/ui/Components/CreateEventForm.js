@@ -84,7 +84,7 @@ const CreateEventForm = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-start h-3/4 mt-20 ">
+    <div className="flex flex-col sm:flex-row items-center justify-center h-3/4 mt-20 ">
       <div className="w-full sm:w-1/2 p-4 mt-2">
         <div className="mb-4">
           <h2 className="text-2xl font-bold mb-10 text-[#73332d] ">
@@ -100,7 +100,7 @@ const CreateEventForm = () => {
                 <div>
                   <label
                     for="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Event name
                   </label>
@@ -111,15 +111,15 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, name: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="John & Doe"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="your event name"
                     required
                   />
                 </div>
                 <div>
                   <label
                     for="type"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Event Type
                   </label>
@@ -130,7 +130,7 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, type: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="i.e. Wedding"
                     required
                   />
@@ -138,7 +138,7 @@ const CreateEventForm = () => {
                 <div>
                   <label
                     for="date"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Date
                   </label>
@@ -149,15 +149,15 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, date: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="08-12-2023"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                    placeholder="mm/dd/yyyy"
                     required
                   />
                 </div>
                 <div>
                   <label
                     for="location"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Location
                   </label>
@@ -168,15 +168,15 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, location: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="i.e. Nairobi"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="event location"
                     required
                   />
                 </div>
                 <div>
                   <label
                     for="guests"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Guests
                   </label>
@@ -187,15 +187,15 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, guests: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="i.e. 20"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="expected number of guests e.g., 100"
                     required
                   />
                 </div>
                 <div>
                   <label
                     for="budget"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Budget
                   </label>
@@ -206,56 +206,57 @@ const CreateEventForm = () => {
                     onChange={(e) =>
                       setEventData({ ...eventData, budget: e.target.value })
                     }
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="i.e.20000"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="planned total budget e.g., 1000000"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="spouse_first_name"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
+                  >
+                    Spouse First Name
+                  </label>
+                  <input
+                    type="text"
+                    id="spouse_first_name"
+                    value={eventData.spouse_first_name}
+                    onChange={(e) =>
+                      setEventData({
+                        ...eventData,
+                        spouse_first_name: e.target.value,
+                      })
+                    }
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="your spouse's first name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label
+                    for="spouse_last_name"
+                    className="block text-[#592727] mb-2 text-sm font-medium"
+                  >
+                    Spouse Last Name
+                  </label>
+                  <input
+                    type="text"
+                    id="spouse_last_name"
+                    value={eventData.spouse_last_name}
+                    onChange={(e) =>
+                      setEventData({
+                        ...eventData,
+                        spouse_last_name: e.target.value,
+                      })
+                    }
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="your spouse's last name"
                     required
                   />
                 </div>
               </div>
-              <div class="mb-6">
-                <label
-                  for="spouse_first_name"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Husband/Wife's First Name
-                </label>
-                <input
-                  type="text"
-                  id="spouse_first_name"
-                  value={eventData.spouse_first_name}
-                  onChange={(e) =>
-                    setEventData({
-                      ...eventData,
-                      spouse_first_name: e.target.value,
-                    })
-                  }
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="i.e.Johny/Mellisa"
-                  required
-                />
-              </div>
-              <div class="mb-6">
-                <label
-                  for="spouse_last_name"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Husband/Wife's Last Name
-                </label>
-                <input
-                  type="text"
-                  id="spouse_last_name"
-                  value={eventData.spouse_last_name}
-                  onChange={(e) =>
-                    setEventData({
-                      ...eventData,
-                      spouse_last_name: e.target.value,
-                    })
-                  }
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="i.e.Wort/May"
-                  required
-                />
-              </div>
+
               <button
                 type="submit"
                 className="bg-[#73332d]  text-white font-bold py-2 px-4 rounded mt-6 "
