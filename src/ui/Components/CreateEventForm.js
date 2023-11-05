@@ -1,52 +1,55 @@
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { getTokensInCookies } from "../features/auth/authCookies";
 import { useNavigate } from "react-router-dom";
 
 const CreateEventForm = () => {
-  const preset_key = "el8jsv3r";
-  const cloud_name = "dcqgeggij";
   const [errorMessage, setErrorMessage] = useState("");
   const { accessToken } = getTokensInCookies();
   const navigate = useNavigate();
 
+  // event types in case we want to add more: remove default "wedding" in eventData state
   const event_types = [
     { name: "Wedding" },
     // { name: "Birthday" },
     // { name: "Anniversary" },
-    // { name: "Engagement" },
-    // { name: "Baby Shower" },
-    // { name: "Bridal Shower" },
-    // { name: "Bachelor Party" },
-    // { name: "Bachelorette Party" },
-    // { name: "Retirement Party" },
-    // { name: "Graduation Party" },
-    // { name: "Reunion" },
+    // { name: "Graduation" },
     // { name: "Other" },
-  ]
+  ];
 
-  const [image_url, setImageUrl] = useState("");
+  //cloudinary
+  const cloudinryRef = useRef();
+  const widgetRef = useRef();
+  const [image_url, setImage_Url] = useState("");
 
-  const handleFile = (e) => {
-    const file = e.target.files[0];
-    const imageData = new FormData();
-    imageData.append("file", file);
-    imageData.append("upload_preset", preset_key);
+  useEffect(() => {
+    cloudinryRef.current = window.cloudinary;
 
-    axios
-      .post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        imageData
-      )
-      .then((res) => setImageUrl(res.data.secure_url))
-      .catch((error) => console.log(error));
-  };
+    widgetRef.current = cloudinryRef.current.createUploadWidget(
+      {
+        cloudName: "drbw0vvg7",
+        uploadPreset: "doros-test",
+      },
+      function (error, result) {
+        if (!error && result && result.event === "success") {
+          setImage_Url(result.info.secure_url);
 
-  // form data
+          // Update the image_url in the eventData state
+          setEventData({
+            ...eventData,
+            image_url: result.info.secure_url.toString(),
+          });
+        } else {
+          // console.log("Error uploading image:", error);
+        }
+      }
+    );
+  }, []);
+
 
   const [eventData, setEventData] = useState({
     name: "",
-    type: "",
+    type: "wedding",
     date: "",
     location: "",
     guests: "",
@@ -55,6 +58,17 @@ const CreateEventForm = () => {
     spouse_last_name: "",
     image_url: "",
   });
+
+  console.log(eventData);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setEventData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,10 +125,18 @@ const CreateEventForm = () => {
 
           <div className="border p-4 rounded-lg">
             <form onSubmit={handleSubmit}>
-              <div class="grid gap-6 mb-6 md:grid-cols-2">
+              <div className="mb-6">
+                <button
+                  onClick={() => widgetRef.current.open()}
+                  className="bg-blue-400 font-bold py-2 px-4 rounded"
+                >
+                  Upload Image
+                </button>
+              </div>
+              <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div>
                   <label
-                    for="name"
+                    htmlFor="name"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Event name
@@ -133,30 +155,28 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="type"
+                    htmlFor="type"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Event Type
                   </label>
                   <select
-                    name="role"
-                    id="role"
+                    name="type"
+                    id="type"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
-                    onChange={(e) =>
-                      setEventData({ ...eventData, type: e.target.value })
-                    }
+                    onChange={handleInputChange}
                   >
-                    {event_types.map((event) => (
-                      <option key={event.name} value={event.name}>
-                        {event.name}
+                    {event_types.map((e_t) => (
+                      <option key={e_t.name} value={e_t.name}>
+                        {e_t.name}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
                   <label
-                    for="date"
+                    htmlFor="date"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Date
@@ -175,7 +195,7 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="location"
+                    htmlFor="location"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Location
@@ -194,7 +214,7 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="guests"
+                    htmlFor="guests"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Guests
@@ -213,7 +233,7 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="budget"
+                    htmlFor="budget"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Budget
@@ -232,7 +252,7 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="spouse_first_name"
+                    htmlFor="spouse_first_name"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Spouse First Name
@@ -254,7 +274,7 @@ const CreateEventForm = () => {
                 </div>
                 <div>
                   <label
-                    for="spouse_last_name"
+                    htmlFor="spouse_last_name"
                     className="block text-[#592727] mb-2 text-sm font-medium"
                   >
                     Spouse Last Name
@@ -275,7 +295,6 @@ const CreateEventForm = () => {
                   />
                 </div>
               </div>
-
               <button
                 type="submit"
                 className="bg-[#73332d]  text-white font-bold py-2 px-4 rounded mt-6 "
@@ -290,36 +309,6 @@ const CreateEventForm = () => {
           </div>
         </div>
       </div>
-
-      {image_url ? (
-        <div className="mb-6">
-          <label
-            for="image_url"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          ></label>
-          <img
-            src={image_url}
-            alt="Uploaded Event Image"
-            className="max-w-full"
-          />
-        </div>
-      ) : (
-        <div className="mb-6">
-          <label
-            for="image_url"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Image Upload
-          </label>
-          <input
-            type="file"
-            id="image_url"
-            onChange={handleFile}
-            className="max-w-full h-auto max-h-48 max-w-96"
-            required
-          />
-        </div>
-      )}
     </div>
   );
 };
