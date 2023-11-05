@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
-import { getTokensInCookies } from "./features/auth/authCookies";
 import Cookies from "js-cookie";
-// import { set } from "date-fns";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -15,23 +12,13 @@ const NavBar = () => {
 
   const navigate = useNavigate();
 
-  // const handleLogout = () => {
-  //   deleteTokensInCookies();
-  // }
-
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
     navigate("/");
   };
 
-  useEffect(() => {
-    if (getTokensInCookies().refreshToken !== undefined) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  // const isLoggedIn = Cookies.get("refresh_token");
+  const isLoggedIn = Cookies.get("refresh_token");
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -90,8 +77,10 @@ const NavBar = () => {
             Registry
           </li>
 
-          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
+          <li> 
+            <Link to="/dashboard/vendors" className="text-base font leading-6 text-white hover:text-[#73332D]">
             Vendors
+            </Link>
           </li>
 
           {isLoggedIn ? (

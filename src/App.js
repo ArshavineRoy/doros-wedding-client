@@ -13,6 +13,8 @@ import LoginForm from "./ui/Components/LoginForm";
 import AppLayout from "./ui/AppLayout";
 import Program from "./pages/Program";
 import Home from "./pages/Home";
+import Paywall from "./ui/Paywall";
+// import ForgotPassword from "./ui/Components/ForgotPassword";
 
 const App = () => {
   return (
@@ -23,6 +25,9 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/events" element={<EventForm />} />
         <Route path="/important" element={<ImportantDatesForm />} /> {/*render in dashboard*/}
+        <Route path="/pay" element={<Paywall />} />
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+
       </Route>
       <Route element={<Dashboardlayout />}>
         <Route path="/dashboard" element={<Dashboard />}></Route>
