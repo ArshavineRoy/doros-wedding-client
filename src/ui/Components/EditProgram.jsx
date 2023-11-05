@@ -1,7 +1,6 @@
 import Modal from "../Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { task_categories } from "../../pages/Runsheet";
 
 function EditProgram({ close, editProgram, programToEdit }) {
   const [formData, setFormData] = useState({
@@ -11,6 +10,11 @@ function EditProgram({ close, editProgram, programToEdit }) {
     duration: programToEdit.duration,
     event_id: programToEdit.event_id,
   });
+
+  // Check if programToEdit is defined
+  if (!programToEdit) {
+    return null;
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,20 +58,15 @@ function EditProgram({ close, editProgram, programToEdit }) {
           <label htmlFor="program_item" className="block font-bold mb-1">
             Program Item
           </label>
-          <select
+          <input
             required
+            type="text"
             id="program_item"
             name="program_item"
             value={formData.program_item}
             onChange={handleInputChange}
-            className="w-full border rounded-md p-2"
-          >
-            {task_categories.map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-          </select>
+            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+          />
         </div>
 
         <div className="mb-6">

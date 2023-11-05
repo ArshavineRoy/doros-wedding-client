@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getTokensInCookies } from '../ui/features/auth/authCookies';
 import { toast } from 'react-hot-toast';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoMdAddCircleOutline } from 'react-icons/io';
@@ -14,88 +13,71 @@ function Program() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
   const [programItems, setProgramItems] = useState({});
-  const { accessToken } = getTokensInCookies();
-
+  
+  const fakeProgramData = {
+    "Brides & Bridesmaids' Preparation": [
+      {
+        id: 1,
+        time: "08:00 AM",
+        category: "Brides & Bridesmaids' Preparation",
+        program_item: "Makeup and Hair Styling",
+        duration: "1 hour",
+      },
+      {
+        id: 2,
+        time: "09:30 AM",
+        category: "Brides & Bridesmaids' Preparation",
+        program_item: "Getting Dressed",
+        duration: "30 minutes",
+      },
+    ],
+    "Bride & Bridesmaids' Breakfast & Photoshoot": [
+      {
+        id: 3,
+        time: "10:00 AM",
+        category: "Bride & Bridesmaids' Breakfast & Photoshoot",
+        program_item: "Breakfast",
+        duration: "1 hour",
+      },
+      {
+        id: 4,
+        time: "11:30 AM",
+        category: "Bride & Bridesmaids' Breakfast & Photoshoot",
+        program_item: "Photoshoot",
+        duration: "2 hours",
+      },
+    ],
+    "Groom & Groomsmen's Preparation": [],
+    "Wedding Ceremony": [],
+    "Wedding Reception": [],
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bearertoken = accessToken;
-        const response = await fetch('https://doros-wedding-server.onrender.com/programs', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${bearertoken}`,
-          },
-        });
+    // Initialize with fake data
+    setProgramItems(fakeProgramData);
+  }, []);
 
-        if (response.ok) {
-          const data = await response.json();
-          const categorizedProgramItems = {};
-
-          data.forEach((item) => {
-            if (categorizedProgramItems[item.category]) {
-              categorizedProgramItems[item.category].push(item);
-            } else {
-              categorizedProgramItems[item.category] = [item];
-            }
-          });
-
-          setProgramItems(categorizedProgramItems);
-        } else {
-          console.log('Response not OK:', response.status);
-        }
-      } catch (err) {
-        console.log('Error:', err);
-      }
-    };
-
-    fetchData();
-  }, [accessToken]);
-
-  const addProgramItem = async (newProgramItem) => {
-    try {
-      const bearertoken = accessToken;
-      const response = await fetch('https://doros-wedding-server.onrender.com/programs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${bearertoken}`,
-        },
-        body: JSON.stringify(newProgramItem),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const updatedProgramItems = { ...programItems };
-        if (updatedProgramItems[newProgramItem.category]) {
-          updatedProgramItems[newProgramItem.category].push(data);
-        } else {
-          updatedProgramItems[newProgramItem.category] = [data];
-        }
-        setProgramItems(updatedProgramItems);
-      } else {
-        console.log('Failed to add program item:', response.status);
-      }
-    } catch (error) {
-      console.log('Error:', error);
+  const addProgramItem = (newProgramItem) => {
+    const updatedProgramItems = { ...programItems };
+    if (updatedProgramItems[newProgramItem.category]) {
+      const newId = Math.max(...updatedProgramItems[newProgramItem.category].map(item => item.id)) + 1;
+      newProgramItem.id = newId;
+      updatedProgramItems[newProgramItem.category].push(newProgramItem);
+    } else {
+      newProgramItem.id = 1;
+      updatedProgramItems[newProgramItem.category] = [newProgramItem];
     }
-  }
+    setProgramItems(updatedProgramItems);
+  };
 
   const handleAddProgramItem = (newProgramItem) => {
     addProgramItem(newProgramItem);
     setShowAddModal(false);
   };
 
-  const handleAddForm = () => {
-    setShowAddModal(true);
-  };
-
   const handleEditForm = (programItem) => {
     setSelectedProgramItem(programItem);
     setShowEditModal(true);
-  };
-
-  const closeAddForm = () => {
-    setShowAddModal(false);
   };
 
   const closeEditForm = () => {
@@ -117,34 +99,13 @@ function Program() {
     setProgramItems(updatedProgramItems);
   };
 
-  const deleteProgramItem = async (programId) => {
-    try {
-      const bearertoken = accessToken;
-      const response = await fetch(
-        `https://doros-wedding-server.onrender.com/programs/${programId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${bearertoken}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const updatedProgramItems = { ...programItems };
-        Object.keys(updatedProgramItems).forEach((category) => {
-          updatedProgramItems[category] = updatedProgramItems[category].filter((item) => item.id !== programId);
-        });
-        setProgramItems(updatedProgramItems);
-        toast.success('Program item deleted successfully!');
-      } else {
-        toast.error('Failed to delete program item');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error('An error occurred while deleting the program item');
-    }
+  const deleteProgramItem = (programId) => {
+    const updatedProgramItems = { ...programItems };
+    Object.keys(updatedProgramItems).forEach((category) => {
+      updatedProgramItems[category] = updatedProgramItems[category].filter((item) => item.id !== programId);
+    });
+    setProgramItems(updatedProgramItems);
+    toast.success('Program item deleted successfully!');
   };
 
   const handleDeleteProgramItem = (programId) => {
@@ -174,7 +135,7 @@ function Program() {
         <div className="flex justify-between items-center px-32 py-8">
           <button
             className="flex items-center justify-center gap-2 px-8 py-2 cursor-pointer border-2 border-gray-400 text-[20px] hover-bg-black hover-text-white"
-            onClick={handleAddForm}
+            onClick={() => setShowAddModal(true)}
           >
             <IoMdAddCircleOutline />
             Add Item
@@ -192,70 +153,69 @@ function Program() {
         </div>
 
         {showAddModal && (
-          <AddProgram close={closeAddForm} addProgram={handleAddProgramItem} programCategories={categories} />
+          <AddProgram close={() => setShowAddModal(false)} addProgram={handleAddProgramItem} programCategories={categories} />
         )}
 
-        {showEditModal && selectedProgramItem && (
-          <EditProgram
-            programItemData={selectedProgramItem}
-            close={closeEditForm}
-            onSubmit={handleProgramItemUpdate}
-          />
-        )}
+{showEditModal && selectedProgramItem && (
+  <EditProgram
+    close={closeEditForm}
+    editProgram={handleProgramItemUpdate}
+    programToEdit={selectedProgramItem}
+  />
+)}
 
-        <div className="px-32 mt-6">
-          {categories.map((category) => (
-            <div key={category}>
-              <h2 className="text-lg font-semibold">{category}</h2>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr className="flex justify-between">
-                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                      Time
-                    </th>
-                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                      Category
-                    </th>
-                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                      Program Item
-                    </th>
-                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                      Duration
-                    </th>
-                    <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
-                      Actions
-                    </th>
+        
+        {categories.map((category) => (
+          <div key={category}>
+            <h2 className="text-lg font-semibold">{category}</h2>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr className="flex justify-between">
+                  <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                    Time
+                  </th>
+                  <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                    Category
+                  </th>
+                  <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                    Program Item
+                  </th>
+                  <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                    Duration
+                  </th>
+                  <th className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b border-gray-300">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="bg-white divide-y divide-gray-200">
+                {programItems[category]?.map((programItem) => (
+                  <tr key={programItem.id}>
+                    <td className="px-6 py-4">{programItem.time}</td>
+                    <td className="px-6 py-4">{programItem.category}</td>
+                    <td className="px-6 py-4">{programItem.program_item}</td>
+                    <td className="px-6 py-4">{programItem.duration}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2 text-gray-600">
+                        <AiOutlineEdit
+                          size={22}
+                          className="hover-text-black cursor-pointer"
+                          onClick={() => handleEditForm(programItem)}
+                        />
+                        <RiDeleteBin6Line
+                          size={22}
+                          className="hover-text-black cursor-pointer"
+                          onClick={() => handleDeleteProgramItem(programItem.id)}
+                        />
+                      </div>
+                    </td>
                   </tr>
-                </thead>
-
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {programItems[category]?.map((programItem) => (
-                    <tr key={programItem.id}>
-                      <td className="px-6 py-4">{programItem.time}</td>
-                      <td className="px-6 py-4">{programItem.category}</td>
-                      <td className="px-6 py-4">{programItem.program_item}</td>
-                      <td className="px-6 py-4">{programItem.duration}</td>
-                      <td className="px-6 py-4">
-                        <div className="flex gap-2 text-gray-600">
-                          <AiOutlineEdit
-                            size={22}
-                            className="hover-text-black cursor-pointer"
-                            onClick={() => handleEditForm(programItem)}
-                          />
-                          <RiDeleteBin6Line
-                            size={22}
-                            className="hover-text-black cursor-pointer"
-                            onClick={() => handleDeleteProgramItem(programItem.id)}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
       </div>
     </div>
   );
