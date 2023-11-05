@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import AddProgram from '../ui/Components/AddProgram';
-import EditProgram from '../ui/Components/EditProgram';
+import React, { useState, useEffect } from "react";
 import { getTokensInCookies } from '../ui/features/auth/authCookies';
 import { toast } from 'react-hot-toast';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -8,18 +6,20 @@ import { IoMdAddCircleOutline } from 'react-icons/io';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { BiSolidPrinter } from 'react-icons/bi';
 import { HiOutlineDownload } from 'react-icons/hi';
+import AddProgram from '../ui/Components/AddProgram';
+import EditProgram from '../ui/Components/EditProgram';
 
 function Program() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
-  const [programItems, setProgramItems] = useState([]); // Provide an initial empty array
-  const { accessToken, refreshToken } = getTokensInCookies();
+  const [programItems, setProgramItems] = useState({});
+  const { accessToken } = getTokensInCookies(); // Removed unused refreshToken variable
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bearertoken = accessToken; 
+        const bearertoken = accessToken;
         const response = await fetch('https://doros-wedding-server.onrender.com/programs', {
           headers: {
             'Content-Type': 'application/json',
@@ -29,7 +29,17 @@ function Program() {
 
         if (response.ok) {
           const data = await response.json();
-          setProgramItems(data);
+          const categorizedProgramItems = {};
+
+          data.forEach((item) => {
+            if (categorizedProgramItems[item.category]) {
+              categorizedProgramItems[item.category].push(item);
+            } else {
+              categorizedProgramItems[item.category] = [item];
+            }
+          });
+
+          setProgramItems(categorizedProgramItems);
         } else {
           console.log('Response not OK:', response.status);
         }
@@ -39,7 +49,7 @@ function Program() {
     };
 
     fetchData();
-  }, []);
+  }, [accessToken]);
 
   const addProgramItem = async (newProgramItem) => {
     try {
@@ -55,14 +65,20 @@ function Program() {
 
       if (response.ok) {
         const data = await response.json();
-        setProgramItems([...programItems, data]);
+        const updatedProgramItems = { ...programItems };
+        if (updatedProgramItems[newProgramItem.category]) {
+          updatedProgramItems[newProgramItem.category].push(data);
+        } else {
+          updatedProgramItems[newProgramItem.category] = [data];
+        }
+        setProgramItems(updatedProgramItems);
       } else {
         console.log('Failed to add program item:', response.status);
       }
     } catch (error) {
       console.log('Error:', error);
     }
-  };
+  }
 
   const handleAddProgramItem = (newProgramItem) => {
     addProgramItem(newProgramItem);
@@ -87,9 +103,17 @@ function Program() {
   };
 
   const handleProgramItemUpdate = (updatedProgramItemData) => {
-    const updatedProgramItems = programItems.map((item) =>
-      item.id === selectedProgramItem.id ? { ...item, ...updatedProgramItemData } : item
-    );
+    const updatedProgramItems = { ...programItems };
+    const programItemsForCategory = updatedProgramItems[selectedProgramItem.category];
+
+    if (programItemsForCategory) {
+      const updatedProgramItemsForCategory = programItemsForCategory.map((item) =>
+        item.id === selectedProgramItem.id ? { ...item, ...updatedProgramItemData } : item
+      );
+
+      updatedProgramItems[selectedProgramItem.category] = updatedProgramItemsForCategory;
+    }
+
     setProgramItems(updatedProgramItems);
   };
 
@@ -108,7 +132,11 @@ function Program() {
       );
 
       if (response.ok) {
-        setProgramItems(programItems.filter((item) => item.id !== programId));
+        const updatedProgramItems = { ...programItems };
+        Object.keys(updatedProgramItems).forEach((category) => {
+          updatedProgramItems[category] = updatedProgramItems[category].filter((item) => item.id !== programId);
+        });
+        setProgramItems(updatedProgramItems);
         toast.success('Program item deleted successfully!');
       } else {
         toast.error('Failed to delete program item');
@@ -133,7 +161,6 @@ function Program() {
     "Wedding Ceremony",
     "Wedding Reception",
   ];
-  
 
   return (
     <div className="py-20">
@@ -164,10 +191,9 @@ function Program() {
           </div>
         </div>
 
-        {showAddModal && programItems ? (
+        {showAddModal && (
           <AddProgram close={closeAddForm} addProgram={handleAddProgramItem} programCategories={categories} />
-      ) : null}
-
+        )}
 
         {showEditModal && selectedProgramItem && (
           <EditProgram
@@ -200,27 +226,39 @@ function Program() {
             </thead>
 
             <tbody className="bg-white divide-y divide-gray-200">
-              {programItems.map((programItem) => (
-                <tr key={programItem.id}>
-                  <td className="px-6 py-4">{programItem.time}</td>
-                  <td className="px-6 py-4">{programItem.category}</td>
-                  <td className="px-6 py-4">{programItem.program_item}</td>
-                  <td className="px-6 py-4">{programItem.duration}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2 text-gray-600">
-                      <AiOutlineEdit
-                        size={22}
-                        className="hover-text-black cursor-pointer"
-                        onClick={() => handleEditForm(programItem)}
-                      />
-                      <RiDeleteBin6Line
-                        size={22}
-                        className="hover-text-black cursor-pointer"
-                        onClick={() => handleDeleteProgramItem(programItem.id)}
-                      />
-                    </div>
-                  </td>
-                </tr>
+              {categories.map((category) => (
+                <React.Fragment key={category}>
+                  <tr className="bg-gray-100">
+                    <td className="flex-1 px-6 py-3 text-left text-sm font-medium text-gray-900">
+                      {category}
+                    </td>
+                    <td className="flex-4 border-t border-gray-300">
+                      <div className="w-full">
+                        {programItems[category]?.map((programItem) => (
+                          <div className="flex" key={programItem.id}>
+                            <div className="flex-1 px-6 py-4">{programItem.time}</div>
+                            <div className="flex-1 px-6 py-4">{programItem.program_item}</div>
+                            <div className="flex-1 px-6 py-4">{programItem.duration}</div>
+                            <div className="flex-1 px-6 py-4">
+                              <div className="flex gap-2 text-gray-600">
+                                <AiOutlineEdit
+                                  size={22}
+                                  className="hover-text-black cursor-pointer"
+                                  onClick={() => handleEditForm(programItem)}
+                                />
+                                <RiDeleteBin6Line
+                                  size={22}
+                                  className="hover-text-black cursor-pointer"
+                                  onClick={() => handleDeleteProgramItem(programItem.id)}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                </React.Fragment>
               ))}
             </tbody>
           </table>

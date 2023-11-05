@@ -1,4 +1,4 @@
-import Modal from "../../ui/Modal";
+import Modal from "../Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
