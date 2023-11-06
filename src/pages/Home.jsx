@@ -1,5 +1,8 @@
 import React from "react";
 import HeroSlider, { Slide } from "hero-slider";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+
 
 const wed1 =
   "https://images.pexels.com/photos/3585798/pexels-photo-3585798.jpeg?auto=compress&cs=tinysrgb&w=600";
@@ -7,6 +10,8 @@ const wed2 =
   "https://media.istockphoto.com/id/1334542509/photo/elopement-wedding.webp?b=1&s=170667a&w=0&k=20&c=NUvuNML13hhpyWrKsfuHbe1EKXc1sMtiqlcsEFvorc4=";
 
 const Home = () => {
+  const isLoggedIn = Cookies.get("refresh_token");
+
   return (
     <div className="h-screen relative">
       <HeroSlider
@@ -43,15 +48,27 @@ const Home = () => {
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
             <p className="text-4xl font-semibold font-curly">
-              Let’s Plan Your
+              Let's Plan Your
               <br /> Perfect{" "}
               <span className="text-[#73332D] font-curly">Wedding</span> With Us
               <br />
               <br />
             </p>
-            <button className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full">
+            {isLoggedIn ? (
+            <Link
+              to="/myevents"
+              className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full"
+            >
+              My Events
+            </Link>
+            ) : (
+            <Link
+              to="/login"
+              className="bg-[#73332D] text-white font-merienda text-lg px-6 py-2 mt-4 rounded-full"
+            >
               Create Event
-            </button>
+            </Link>
+            )}
           </div>
         </Slide>
         <Slide
