@@ -1,7 +1,7 @@
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import { GrTask } from "react-icons/gr";
 import { GiNotebook } from "react-icons/gi";
-import { BsFileEarmarkSpreadsheet, BsCalendarDate } from "react-icons/bs";
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 import venues from "../assests/gazebo.png";
 import banquet from "../assests/banquet.png";
 import camera from "../assests/camera.png";
@@ -49,7 +49,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, [eventId]);
+  }, [eventId, accessToken, refreshToken]);
 
   return (
     <>

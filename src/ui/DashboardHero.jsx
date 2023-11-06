@@ -36,7 +36,7 @@ function DashboardHero() {
     };
 
     fetchData();
-  }, [eventId]);
+  }, [eventId, accessToken, refreshToken]);
 
   return (
     <div className="w-full flex px-36 pt-40 mb-[] pb-20 h-[550px] ">

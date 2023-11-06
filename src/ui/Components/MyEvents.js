@@ -9,31 +9,32 @@ import favicon from "../../assests/favicon.png";
 const MyEvents = () => {
   const navigate = useNavigate();
   const [userEvents, setUserEvents] = useState([]);
-  const { accessToken } = getTokensInCookies();
+  const { accessToken, refreshToken } = getTokensInCookies();
+
 
   const handleNavigate = () => {
     navigate("/myevents");
   };
 
-  const bearertoken = accessToken;
-
-  // Authorization
-  const config = {
-    headers: {
-      Authorization: `Bearer ${bearertoken}`,
-    },
-  };
 
   useEffect(() => {
+    const bearertoken = accessToken;
     axios
-      .get("https://doros-wedding-server.onrender.com/events", config)
+      .get("https://doros-wedding-server.onrender.com/events",
+        {
+          headers: {
+            Authorization: `Bearer ${bearertoken}`,
+          }
+        }
+      )
       .then((response) => {
         setUserEvents(response.data);
       })
       .catch((error) => {
         console.error("Error fetching user events:", error);
       });
-  }, [config]);
+      
+  }, [accessToken, refreshToken]);
 
   return (
     <div>
@@ -114,7 +115,7 @@ const MyEvents = () => {
                 </g>
               </g>
             </svg>
-
+            {/* svg here */}
             <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               Uh-oh!
             </h1>
