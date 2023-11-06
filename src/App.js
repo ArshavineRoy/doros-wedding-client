@@ -13,6 +13,8 @@ import LoginForm from "./ui/Components/LoginForm";
 import AppLayout from "./ui/AppLayout";
 import Program from "./pages/Program";
 import Home from "./pages/Home";
+import MyEvents from "./ui/Components/MyEvents";
+import Budget from "./ui/Components/Budget";
 
 const App = () => {
   return (
@@ -21,7 +23,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/myevents" element={<MyEvents />} />
         <Route path="/events" element={<EventForm />} />
+        <Route path="/budget" element={<Budget />} />
         <Route path="/important" element={<ImportantDatesForm />} /> {/*render in dashboard*/}
       </Route>
       <Route element={<Dashboardlayout />}>

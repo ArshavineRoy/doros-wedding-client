@@ -52,7 +52,7 @@ const Login = () => {
       dispatch(setCredentials({ email, accessToken, refreshToken }));
       setEmail("");
       setPwd("");
-      navigate("/dashboard");
+      navigate("/myevents");
     } catch (err) {
       if (!err?.originalStatus) {
         // isLoading: true until timeout occurs
