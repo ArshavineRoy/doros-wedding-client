@@ -12,6 +12,11 @@ const MyEvents = () => {
     navigate('/events');
   };
 
+  const handleProceedToDashboard = () => {
+    // navigate user to dashboard if they have already created an event
+    navigate('/dashboard');
+  };
+
   const bearertoken = accessToken;
 
   // Authorization
@@ -22,7 +27,7 @@ const MyEvents = () => {
   };
 
   useEffect(() => {
-    // user's events
+    // Fetch user's events
     axios
       .get('https://doros-wedding-server.onrender.com/events', config)
       .then((response) => {
@@ -44,7 +49,14 @@ const MyEvents = () => {
           >
             Create Event
           </button>
-        ) : null}
+        ) : (
+          <button
+            className="rounded-lg ml-auto bg-[#73332d] text-white w-40 h-12 text-base"
+            onClick={handleProceedToDashboard}
+          >
+           Next
+          </button>
+        )}
       </div>
       <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
 
