@@ -23,9 +23,12 @@ const CreateEventForm = () => {
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         imageData
       )
-      .then((res) => setImageUrl(res.data.secure_url))
+      .then((res) => setEventData({ ...eventData, image_url: res.data.secure_url }))
+      
+      
       .catch((error) => console.log(error));
   };
+  console.log(image_url)
 
   // form data
 
@@ -43,7 +46,7 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  console.log(eventData)
     // post request
     try {
       const bearertoken = accessToken;
@@ -82,6 +85,7 @@ const CreateEventForm = () => {
       setErrorMessage("Error creating event. Please try again.");
     }
   };
+  // console.log(eventData)
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-start h-3/4 mt-20 ">

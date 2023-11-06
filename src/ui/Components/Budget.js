@@ -12,6 +12,14 @@ const Budget = () => {
   const [editItemId, setEditItemId] = useState(null);
   const { accessToken } = getTokensInCookies();
 
+  // Function to calculate the budget percentage
+const calculateBudgetPercentage = (item) => {
+  if (item.estimate_cost === 0) {
+    return 0; // Avoid division by zero
+  }
+  return ((item.amount_paid / item.estimate_cost) * 100).toFixed(2);
+};
+
   // Fetch data from an API
   const fetchData = async () => {
     try {
@@ -50,6 +58,9 @@ const Budget = () => {
   const handleUpdateItem = async () => {
     try {
       const bearertoken = accessToken;
+      const editedItemCopy = { ...editedItem };
+      //  convert to a boolean value
+    editedItemCopy.contract_signed = editedItemCopy.contract_signed === "yes";
       const response = await fetch(
         `https://doros-wedding-server.onrender.com/budgets/${editItemId}`,
         {
@@ -58,7 +69,7 @@ const Budget = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${bearertoken}`,
           },
-          body: JSON.stringify(editedItem),
+          body: JSON.stringify(editedItemCopy),
         }
       );
       if (!response.ok) {
@@ -106,6 +117,8 @@ const Budget = () => {
   const handleCreateItem = async (newItem) => {
     try {
       const bearertoken = accessToken;
+      newItem.event_id = 1;
+      newItem.contract_signed = newItem.contract_signed === "yes";
       const response = await fetch(
         "https://doros-wedding-server.onrender.com/budgets",
         {
@@ -135,8 +148,10 @@ const Budget = () => {
       item: event.target.item.value,
       person_in_charge: event.target.person_in_charge.value,
       estimate_cost: event.target.estimate_cost.value,
-      amount_paid: event.target.amount_paid.value,
-      contract_signed: event.target.contract_signed.value,
+      amount_paid: parseFloat(event.target.amount_paid.value),
+      contract_signed: event.target.contract_signed.value === "yes",
+      event_id:1,
+      notes: event.target.notes.value,
     };
     handleCreateItem(newItem);
   };
@@ -186,6 +201,7 @@ const Budget = () => {
                 <th className="px-4 py-2">Estimate Cost</th>
                 <th className="px-4 py-2">Amount Paid</th>
                 <th className="px-4 py-2">Signed Contract</th>
+                <th className="px-4 py-2">Notes</th>
                 <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
@@ -195,10 +211,11 @@ const Budget = () => {
                   <td className="border px-4 py-2">{item.priority}</td>
                   <td className="border px-4 py-2">{item.item}</td>
                   <td className="border px-4 py-2">{item.person_in_charge}</td>
-                  <td className="border px-4 py-2">{item.budget_percentage}</td>
+                  <td className="border px-4 py-2">{calculateBudgetPercentage(item)}%</td>
                   <td className="border px-4 py-2">{item.estimate_cost}</td>
                   <td className="border px-4 py-2">{item.amount_paid}</td>
                   <td className="border px-4 py-2">{item.signed_contract}</td>
+                  <td className="border px-4 py-2">{item.notes}</td>
                   <td className="border px-4 py-2">
                     <button onClick={() => handleDelete(item.id)}>
                       <FontAwesomeIcon icon={faTrash} />
@@ -258,8 +275,8 @@ const Budget = () => {
               name="contract_signed"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
-              <option value="yes">Yes</option>
-              <option value="No">No</option>
+              <option value="yes">yes</option>
+              <option value="no">no</option>
             </select>
             <div className="flex justify-start mt-4">
               <button
@@ -347,9 +364,13 @@ const Budget = () => {
                 name="contract_signed"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="yes">yes</option>
+                <option value="no">no</option>
               </select>
+
+<label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">Notes</label>
+<textarea id="notes" name="notes" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+
               {/* Fields Added */}
               <div className="flex justify-start mt-4">
                 <button
