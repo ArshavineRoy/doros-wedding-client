@@ -34,11 +34,11 @@ const App = () => {
 
       </Route>
       <Route element={<Dashboardlayout />}>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
-        <Route path="/dashboard/program" element={<Program />} />
-        <Route path="/dashboard/checklist" element={<Checklist />}></Route>
-        <Route path="/dashboard/vendors" element={<Vendors />}></Route>
-        <Route path="/dashboard/runsheet" element={<Runsheet />}></Route>
+        <Route path="/dashboard/:eventId" element={<Dashboard />}></Route>
+        <Route path="/dashboard/:eventId/program" element={<Program />} />
+        <Route path="/dashboard/:eventId/checklist" element={<Checklist />}></Route>
+        <Route path="/dashboard/:eventId/vendors" element={<Vendors />}></Route>
+        <Route path="/dashboard/:eventId/runsheet" element={<Runsheet />}></Route>
       </Route>
     </Routes>
   );
