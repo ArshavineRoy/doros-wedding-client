@@ -57,15 +57,16 @@ const NavBar = () => {
         </div>
 
         <ul className="lg:flex lg:gap-x-8 mt-2 hidden">
-          <li>
-            <Link
-              to="/dashboard"
-              className="text-base font leading-6 text-white hover:text-[#73332D]"
-            >
-              Planning Tools
-            </Link>
-          </li>
-
+          {isLoggedIn && (
+            <li>
+              <Link
+                to="/myevents"
+                className="text-base font leading-6 text-white hover:text-[#73332D]"
+              >
+                My Events
+              </Link>
+            </li>
+          )}
           <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             E-vite
           </li>
@@ -77,9 +78,12 @@ const NavBar = () => {
             Registry
           </li>
 
-          <li> 
-            <Link to="/dashboard/vendors" className="text-base font leading-6 text-white hover:text-[#73332D]">
-            Vendors
+          <li>
+            <Link
+              to="/dashboard/vendors"
+              className="text-base font leading-6 text-white hover:text-[#73332D]"
+            >
+              Vendors
             </Link>
           </li>
 
@@ -113,7 +117,6 @@ const NavBar = () => {
         <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-black px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
-              {/* <span className="sr-only">Easel Emporium</span> */}
               <Logo />
             </a>
             <button
@@ -172,12 +175,6 @@ const NavBar = () => {
                 >
                   Vendors
                 </a>
-                {/* <button className="bg-white text-white text-base font-semibold leading-6 p-2 rounded hover:bg-[#73332D]">
-                  <Link to="/login" className="text-black">
-                    Login
-                  </Link>
-                </button>
-                # -------- */}
                 {isLoggedIn ? (
                   <button
                     onClick={handleLogout}

@@ -48,7 +48,7 @@ const Home = () => {
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
             <p className="text-4xl font-semibold font-curly">
-              Let's Plan Your
+              Plan Your
               <br /> Perfect{" "}
               <span className="text-[#73332D] font-curly">Wedding</span> With Us
               <br />
@@ -83,7 +83,7 @@ const Home = () => {
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
             <p className="text-4xl font-semibold font-curly">
-              Let’s Plan Your
+              Plan Your
               <br /> Perfect{" "}
               <span className="text-[#73332D] font-curly">Wedding</span> With Us
             </p>

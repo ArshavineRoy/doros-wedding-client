@@ -72,7 +72,7 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  console.log(eventData)
     // post request
     try {
       const bearertoken = accessToken;
@@ -102,7 +102,7 @@ const CreateEventForm = () => {
           spouse_last_name: "",
           image_url: "",
         });
-        navigate("/dashboard");
+        navigate("/myevents");
       } else {
         throw new Error("Network response was not ok");
       }
@@ -111,6 +111,7 @@ const CreateEventForm = () => {
       setErrorMessage("Error creating event. Please try again.");
     }
   };
+  // console.log(eventData)
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center h-3/4 mt-20 ">

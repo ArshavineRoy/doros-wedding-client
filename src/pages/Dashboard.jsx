@@ -1,8 +1,7 @@
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import { GrTask } from "react-icons/gr";
 import { GiNotebook } from "react-icons/gi";
-import { MdStarRate } from "react-icons/md";
-import { BsFileEarmarkSpreadsheet, BsCalendarDate } from "react-icons/bs";
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 import venues from "../assests/gazebo.png";
 import banquet from "../assests/banquet.png";
 import camera from "../assests/camera.png";
@@ -10,34 +9,29 @@ import video from "../assests/video.png";
 import vinyl from "../assests/vinyl.png";
 import weddingarch from "../assests/wedding-arch.png";
 import gift from "../assests/gift-box.png";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
-import { getDates } from "../services/dates";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
 
-const fake_dates = [
-  { name: "Engagment Party", date: "December 25th, 2023" },
-  { name: "Bridal Shower", date: "December 13th, 2023" },
-  { name: "Bachelorete Party", date: "December 5th, 2023" },
-  { name: "Wedding", date: "December 27th, 2023" },
-  { name: "Honeymoon", date: "January 1st, 2024" },
-];
 
 function Dashboard() {
   const [data, setData] = useState([]);
   const { accessToken, refreshToken } = getTokensInCookies();
+  const { eventId } = useParams();
+
+  console.log("Event ID:", eventId);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const bearertoken = accessToken;
         const response = await fetch(
-          "https://doros-wedding-server.onrender.com/events/1",
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+              Authorization: `Bearer ${bearertoken}`,
             },
           }
         );
@@ -55,7 +49,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [eventId, accessToken, refreshToken]);
 
   return (
     <>
