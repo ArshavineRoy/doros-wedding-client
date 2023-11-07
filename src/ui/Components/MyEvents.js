@@ -4,7 +4,7 @@ import axios from "axios";
 import { getTokensInCookies } from "../features/auth/authCookies";
 import couple from "../../assests/couple.png";
 import favicon from "../../assests/favicon.png";
-
+import { formatDate } from "../../utilities/dateFormatter";
 
 const MyEvents = () => {
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const MyEvents = () => {
                     {event.name}
                   </h2>
                   <h2 className="mt-4 text-l font-medium sm:text-xl">
-                  {event.date}
+                  {formatDate(event.date)}
                   </h2>
                   <h2 className="mt-4 text-l font-medium sm:text-xl">
                   {event.location}
