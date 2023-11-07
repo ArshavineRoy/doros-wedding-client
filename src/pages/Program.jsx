@@ -196,61 +196,69 @@ function Program() {
             />
           )}
   
-          {categories.map((category, index) => (
-            <div key={category} className={index !== 0 ? 'mb-6' : ''}>
-              <h1 className="text-lg font-semibold">{category}</h1>
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Time
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Program Item
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Duration
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {programItems[category]?.map((programItem) => (
-                    <tr key={programItem.id}>
-                      <td className="px-6 py-3 whitespace-nowrap">{programItem.time}</td>
-                      <td className="px-6 py-3 whitespace-nowrap">{programItem.category}</td>
-                      <td className="px-6 py-3 whitespace-nowrap">{programItem.program_item}</td>
-                      <td className="px-6 py-3 whitespace-nowrap">{programItem.duration}</td>
-                      <td className="px-6 py-3 whitespace-nowrap">
-                        <div className="flex gap-2 text-gray-600">
-                          <AiOutlineEdit
-                            size={22}
-                            className="hover:text-black cursor-pointer"
-                            onClick={() => handleEditForm(programItem)}
-                          />
-                          <RiDeleteBin6Line
-                            size={22}
-                            className="hover:text-black cursor-pointer"
-                            onClick={() => deleteProgramItem(programItem.id)}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+  {categories.map((category, index) => (
+  <div key={category} className={index !== 0 ? '' : ''}>
+    <h1 className="text-lg font-semibold">{category}</h1>
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200 sm:table-auto md:table-fixed">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              Time
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              Category
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              Program Item
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              Duration
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {programItems[category]?.map((programItem) => (
+            <tr key={programItem.id}>
+              <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
+                {programItem.time}
+              </td>
+              <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
+                {programItem.category}
+              </td>
+              <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
+                {programItem.program_item}
+              </td>
+              <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
+                {programItem.duration}
+              </td>
+              <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
+                <div className="flex gap-2 text-gray-600">
+                  <AiOutlineEdit
+                    size={22}
+                    className="hover:text-black cursor-pointer"
+                    onClick={() => handleEditForm(programItem)}
+                  />
+                  <RiDeleteBin6Line
+                    size={22}
+                    className="hover:text-black cursor-pointer"
+                    onClick={() => deleteProgramItem(programItem.id)}
+                  />
+                </div>
+              </td>
+            </tr>
           ))}
-        </div>
-      </div>
-  );
-  
-  
+        </tbody>
+      </table>
+    </div>
+  </div>
+))}
+ </div>
+ </div>
+  );  
 }
 
 export default Program;
