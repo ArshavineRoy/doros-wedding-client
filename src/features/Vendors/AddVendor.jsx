@@ -2,8 +2,10 @@ import Modal from "../../ui/Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { vendor_categories } from "../../pages/Vendors";
+import { useParams } from "react-router-dom";
 
-function AddVendor({ close, onAddVendor }) {
+function AddVendor({ close, onAddVendor, addVendorToMyList }) {
+  const { event_id } = useParams();
   const [formData, setFormData] = useState({
     contact_person: "",
     company: "",
@@ -15,6 +17,7 @@ function AddVendor({ close, onAddVendor }) {
     city: "",
     country: "",
     category: "",
+    event_id: event_id,
   });
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,7 +38,9 @@ function AddVendor({ close, onAddVendor }) {
     console.log(formData);
 
     if (!formData) return;
-    onAddVendor(formData);
+    // onAddVendor(formData);
+
+    addVendorToMyList(formData);
     toast.success("Added your vendor successfully!");
     close();
   };

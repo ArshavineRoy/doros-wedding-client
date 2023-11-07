@@ -2,8 +2,11 @@ import Modal from "../../ui/Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
+import { getTokensInCookies } from "../../ui/features/auth/authCookies";
 
 function EditTask({ taskData, close, onSubmit }) {
+  const { accessToken, refreshToken } = getTokensInCookies();
+
   const [formData, setFormData] = useState({
     item: "",
     person: "",
@@ -21,7 +24,7 @@ function EditTask({ taskData, close, onSubmit }) {
         role: taskData.role,
         completed_status: taskData.completed_status,
         contact: taskData.contact,
-        edit_id: taskData.id, // Assuming 'id' is the identifier for the task
+        event_id: 1,
       });
     }
   }, [taskData]);
@@ -36,34 +39,45 @@ function EditTask({ taskData, close, onSubmit }) {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData) return;
-
+  const handleUpdateTask = async (updatedTask) => {
     try {
+      const bearertoken = accessToken; // Replace this with your actual bearer token
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/runsheets/${formData.edit_id}`,
+        `https://doros-wedding-server.onrender.com/runsheets/${taskData.id}`, // Assuming 'id' exists on the task data
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedTask),
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        onSubmit(data); // Update the state with the updated task
+        console.log("Task updated:", data);
+        onSubmit(data); // Update the task in the parent component
         toast.success("Task updated successfully!");
         close();
       } else {
+        console.error("Failed to update task:", response.status);
         toast.error("Failed to update the task");
       }
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred while updating the task");
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData) return;
+
+    handleUpdateTask(formData);
+    toast.success("Task updated successfully!");
+    console.log(formData);
+    close();
   };
 
   return (

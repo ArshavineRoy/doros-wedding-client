@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 
-function AddTask({ close, addTask }) {
+function AddTask({ close, addTask, event_id }) {
   const [formData, setFormData] = useState({
     item: "",
     person: "",
     role: "",
     completed_status: false,
     contact: "",
-    event_id: 1,
+    event_id: event_id,
   });
 
   const handleInputChange = (e) => {

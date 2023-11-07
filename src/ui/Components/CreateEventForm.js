@@ -46,7 +46,6 @@ const CreateEventForm = () => {
     );
   }, []);
 
-
   const [eventData, setEventData] = useState({
     name: "",
     type: "wedding",
@@ -72,7 +71,7 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  console.log(eventData)
+    console.log(eventData);
     // post request
     try {
       const bearertoken = accessToken;

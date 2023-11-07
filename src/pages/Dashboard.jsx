@@ -13,13 +13,24 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
+import ImportantDatesForm from "../ui/Components/ImportantDatesForm";
+import { date } from "yup";
 
 function Dashboard() {
   const [data, setData] = useState([]);
+  const [showDateForm, setFormDate] = useState(false);
   const { accessToken, refreshToken } = getTokensInCookies();
   const { eventId } = useParams();
 
   console.log("Event ID:", eventId);
+
+  function handleShowDateForm() {
+    setFormDate(true);
+  }
+
+  function handleHideDateForm() {
+    setFormDate(false);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +48,6 @@ function Dashboard() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Data:", data);
           setData(data);
         } else {
           console.log("Response not OK:", response.status);
@@ -48,7 +58,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, [eventId, accessToken, refreshToken]);
+  }, [eventId, accessToken, refreshToken, data]);
 
   return (
     <>
@@ -58,11 +68,32 @@ function Dashboard() {
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
-      <div className="px-32  grid grid-cols-3 gap-16 py-20">
-        <Dates date={data.date} event={"Wedding Date"} />
-        <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
-        <Dates date={data.engagement_party} event={"Engagement Party"} />
-        <Dates date={data.honeymoon} event={"Honeymoon"} />
+      <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-2 mt-6 mb-0 cursor-pointer hover:bg-[#49120d]">
+        <button className="text-[16px]" onClick={handleShowDateForm}>
+          Add Date
+        </button>
+      </div>
+
+      {showDateForm && <ImportantDatesForm close={handleHideDateForm} />}
+
+      <div className="px-32  grid grid-cols-3 gap-16 py-10">
+        {data.date && <Dates date={data.date} event={"Wedding Date"} />}
+        {data.bachelorette_party && (
+          <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
+        )}
+        {data.engagement_party && (
+          <Dates date={data.engagement_party} event={"Engagement Party"} />
+        )}
+        {data.honeymoon && <Dates date={data.honeymoon} event={"Honeymoon"} />}
+        {data.traditional_wedding && (
+          <Dates
+            date={data.traditional_wedding}
+            event={"Traditional Wedding"}
+          />
+        )}
+        {data.bachelor_party && (
+          <Dates date={data.bachelor_party} event={"Bachelor Party"} />
+        )}
       </div>
 
       <div className="flex items-center px-[110px]">
@@ -83,7 +114,7 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/checklist">
+          <Link to={`/dashboard/${eventId}/checklist`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GrTask size={30} />
               <div className="flex flex-col text-center">
@@ -93,7 +124,7 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/program">
+          <Link to={`/dashboard/${eventId}/programs`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <BsFileEarmarkSpreadsheet size={30} />
               <div className="flex flex-col text-center">
@@ -103,7 +134,7 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/runsheet">
+          <Link to={`/dashboard/${eventId}/runsheet`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GiNotebook size={30} />
               <div className="flex flex-col text-center">
@@ -123,14 +154,12 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-3 px-20 py-4 gap-20 place-items-center">
-              <Link to="/dashboard/vendors">
-                <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                  <img src={venues} alt="" className="width-[60px] h-[60px]" />
-                  <div className="flex flex-col text-center">
-                    <span className="font-bold">Events</span>
-                  </div>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={venues} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Events</span>
                 </div>
-              </Link>
+              </div>
 
               <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
                 <img src={banquet} alt="" className="width-[60px] h-[60px]" />
@@ -172,7 +201,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="flex justify-center items-center">
-              <Link to="/dashboard/vendors">
+              <Link to={`/dashboard/${eventId}/vendors`}>
                 <button className="text-2xl p-4">Full List &rarr;</button>
               </Link>
             </div>
