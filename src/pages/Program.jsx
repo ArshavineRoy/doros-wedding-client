@@ -8,13 +8,7 @@ import { HiOutlineDownload } from "react-icons/hi";
 import AddProgram from "../ui/Components/AddProgram";
 import EditProgram from "../ui/Components/EditProgram";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
-
-// Placeholder function for getting tokens from cookies
-// const getTokensInCookies = () => {
-//   return {
-//     accessToken: "accessToken",
-//   };
-// };
+import { useParams } from "react-router-dom";
 
 function Program() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -22,13 +16,13 @@ function Program() {
   const [selectedProgramItem, setSelectedProgramItem] = useState(null);
   const [programItems, setProgramItems] = useState({});
   const { accessToken, refreshToken } = getTokensInCookies();
-  const eventId = "yourEventId"; // Set this value based on the user's authentication
+  const { eventId } = useParams(); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const bearertoken = accessToken;
-        const response = await fetch(`https://doros-wedding-server.onrender.com/programs?eventId=${eventId}.`, {
+        const response = await fetch(`https://doros-wedding-server.onrender.com/programs/${eventId}.`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${bearertoken}`,
