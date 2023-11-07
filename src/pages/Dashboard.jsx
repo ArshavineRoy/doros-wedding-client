@@ -77,16 +77,21 @@ function Dashboard() {
         <div className="px-4 font-bold text-[30px] ">Planner</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
-
+      
+     
       <div>
         <div className="flex justify-between items-center px-[110px] py-16 w-full">
           <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
             <RiMoneyDollarBoxLine size={30} />
             <div className="flex flex-col text-center">
               <span>Budget</span>
-              <span>Calculator</span>
+              <span>Calculator</span>    
             </div>
-          </div>
+            </div>
+            
+            
+          
+          
 
           <Link to="/dashboard/checklist">
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
