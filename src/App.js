@@ -38,7 +38,7 @@ const App = () => {
         <Route path="/dashboard/:eventId/checklist" element={<Checklist />}></Route>
         <Route path="/dashboard/:eventId/vendors" element={<Vendors />}></Route>
         <Route path="/dashboard/:eventId/runsheet" element={<Runsheet />}></Route>
-        <Route path="/dashboard/budget/:event_id" element={<Budget />} />
+        <Route path="/dashboard/:event_id/budget" element={<Budget />} />
       </Route>
     </Routes>
   );
