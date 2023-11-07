@@ -5,6 +5,7 @@ import { VendorsList } from "../features/Vendors/VendorsList";
 import AddVendor from "../features/Vendors/AddVendor";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
 import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const vendor_categories = [
   { name: "Photographers" },
@@ -58,9 +59,9 @@ export const fake_vendors = [
 ];
 
 function Vendors() {
-  const [showWidget, setShowWidget] = useState(true);
+  const [showWidget, setShowWidget] = useState(false);
   const [showAddVendor, setShowAddVendor] = useState(false);
-  const [myVendors, setMyVendors] = useState(fake_vendors);
+  const [myVendors, setMyVendors] = useState([]);
 
   const { accessToken, refreshToken } = getTokensInCookies();
 
@@ -88,14 +89,23 @@ function Vendors() {
             estimate_cost: parseInt(newVendorData.estimate_cost), // Assuming the backend expects a number
             city: newVendorData.city,
             country: newVendorData.country,
-            event_id: eventId,
           }),
         }
       );
 
       if (response.ok) {
         const addedVendor = await response.json();
-        return addedVendor; // Return the added vendor
+        fetch(`https://doros-wedding-server.onrender.com/event_vendors`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify({
+            event_id: eventId,
+            vendor_id: addedVendor.id,
+          }),
+        });
       } else {
         console.log(
           "Error adding vendor. Server responded with status:",
@@ -108,48 +118,6 @@ function Vendors() {
       return null; // Return null for any errors
     }
   };
-
-  // Function to update the frontend state with the newly added vendor
-  function addVendorToMyList(vendor) {
-    console.log("In vendors list");
-
-    if (vendor) {
-      setMyVendors((myvends) => [vendor, ...myvends]);
-    }
-  }
-
-  const handleAddVendor = async (newVendorData) => {
-    const addedVendor = await addVendorToBackend(newVendorData);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bearertoken = accessToken;
-        const response = await fetch(
-          `https://doros-wedding-server.onrender.com/events/${eventId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Data:", data);
-          setMyVendors(data.vendors);
-        } else {
-          console.log("Response not OK:", response.status);
-        }
-      } catch (err) {
-        console.log("Error:", err);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   function handleShowAddVendorForm() {
     setShowAddVendor(true);
@@ -195,27 +163,66 @@ function Vendors() {
       {showWidget && (
         <YourVendors
           onAddvendor={handleShowAddVendorForm}
-          onAddVendor={handleAddVendor}
+          onAddVendor={addVendorToBackend}
           vendors={myVendors}
-          addVendorToMyList={addVendorToMyList}
+          setMyVendors={setMyVendors}
           event_id={eventId}
+          accessToken={accessToken}
         />
       )}
-      {!showWidget && <VendorsList />}
+
+      {!showWidget && <VendorsList event_id={eventId} />}
 
       {showAddVendor && (
         <AddVendor
           close={handleCloseAddVendor}
-          onAddVendor={handleAddVendor}
-          addVendorToMyList={addVendorToMyList}
-          event_id={eventId}
+          onAddVendor={addVendorToBackend}
         />
       )}
     </div>
   );
 }
 
-function YourVendors({ onAddvendor, onAddVendor, vendors, addVendorToMyList }) {
+function YourVendors({
+  onAddvendor,
+  onAddVendor,
+  vendors,
+  addVendorToMyList,
+  setMyVendors,
+  event_id,
+  accessToken,
+}) {
+  const handleDeleteVendor = (ven) => {
+    fetch(
+      `https://doros-wedding-server.onrender.com/event_vendors/${event_id}/${ven.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          toast.success("Successfully deleted vendor from your list");
+          return response.json();
+        } else {
+          throw new Error("Failed to delete vendor");
+        }
+      })
+      .then((data) => {
+        const updatedVendors = vendors.filter((vendor) => vendor.id !== ven.id);
+        setMyVendors(updatedVendors);
+        console.log(data); // if you need to process the response data
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error, show a notification, etc.
+        toast.error("An error occurred while deleting the vendor");
+      });
+  };
+
   return (
     <div>
       <span className="text-2xl font-semibold">Your Wallet</span>
@@ -254,19 +261,50 @@ function YourVendors({ onAddvendor, onAddVendor, vendors, addVendorToMyList }) {
         vendors={vendors}
         onAddVendor={onAddVendor}
         addVendorToMyList={addVendorToMyList}
+        onDelete={handleDeleteVendor}
+        eventId={event_id}
       />
     </div>
   );
 }
 
-function MyVendorsTable({
-  onAddvendor,
-  initialVendors,
-  onAddVendor,
-  addVendorToMyList,
-}) {
-  const [myVendors, setMyVendors] = useState(initialVendors);
+function MyVendorsTable({ onAddvendor, onDelete, eventId }) {
+  const [myVendors, setMyVendors] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken;
+        const response = await fetch(
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          // console.log("Data:", data.vendors);
+          setMyVendors(data.vendors);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, [eventId, accessToken, setMyVendors, myVendors]);
+
+  // useEffect(() => {
+  //   console.log(myVendors);
+  // }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -305,23 +343,15 @@ function MyVendorsTable({
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               Company
             </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Contact Person
-            </th>
+
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               Phone
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Email
+              Socials
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Instagram
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Website
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Estimated Cost
+              Category
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               City
@@ -344,26 +374,27 @@ function MyVendorsTable({
               </td>
 
               <td className="px-2 py-2 whitespace-nowrap">{vendor.company}</td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.contactPerson}
-              </td>
               <td className="px-2 py-2 whitespace-nowrap">{vendor.phone}</td>
-              <td className="px-2 py-2 whitespace-nowrap">{vendor.email}</td>
               <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.instagram_account}
+                <a
+                  href={vendor.website}
+                  className="text-blue-500"
+                  target="blank"
+                >
+                  {vendor.instagram_username === "-"
+                    ? vendor.website
+                    : vendor.instagram_username}
+                </a>
               </td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                <span className=" text-blue-600">{vendor.website}</span>
-              </td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.estimatedCost}
-              </td>
+              <td className="px-2 py-2 whitespace-nowrap">{vendor.category}</td>
+
               <td className="px-2 py-2 whitespace-nowrap">{vendor.city}</td>
               <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
                 <div className="flex gap-2 text-gray-600">
                   <RiDeleteBin6Line
                     size={22}
                     className="hover:text-black cursor-pointer"
+                    onClick={() => onDelete(vendor)}
                   />
                 </div>
               </td>

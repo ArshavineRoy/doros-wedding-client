@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { getTokensInCookies } from "../features/auth/authCookies";
 
-const ImportantDatesForm = ({ close, event_id }) => {
+const ImportantDatesForm = ({ close, eventData }) => {
   const [formData, setFormData] = useState({
     engagement_party: "",
     bachelor_party: "",
@@ -10,6 +10,18 @@ const ImportantDatesForm = ({ close, event_id }) => {
     traditional_wedding: "",
     honeymoon: "",
   });
+
+  useEffect(() => {
+    if (eventData) {
+      setFormData({
+        engagement_party: eventData.engagement_party,
+        bachelor_party: eventData.bachelor_party,
+        bachelorette_party: eventData.bachelorette_party,
+        traditional_wedding: eventData.traditional_wedding,
+        honeymoon: eventData.honeymoon,
+      });
+    }
+  }, []);
 
   const { accessToken, refreshToken } = getTokensInCookies();
 
@@ -63,7 +75,7 @@ const ImportantDatesForm = ({ close, event_id }) => {
         {eventData.errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {eventSuccess && <p>Event created successful!</p>} */}
         <section>
-          <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto md:h-screen lg:py-0">
+          <div className="flex flex-col items-center justify-center px-2 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-[#592727] md:text-2xl">
