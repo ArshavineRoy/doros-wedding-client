@@ -84,7 +84,7 @@ function Checklist() {
     try {
       const bearertoken = accessToken;
       const response = await fetch(
-        "https://doros-wedding-server.onrender.com/task",
+        "https://doros-wedding-server.onrender.com/tasks",
         {
           method: "POST",
           headers: {

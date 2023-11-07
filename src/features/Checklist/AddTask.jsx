@@ -49,11 +49,8 @@ function AddTask({ close, addTask, event_id }) {
       completed_status,
       contact,
       duration,
-      event_id: event_id,
-      time_left: "2 days",
+      event_id: parseInt(event_id),
     };
-
-    console.log(updatedFormData);
 
     toast.success("Added a wedding task successfully!");
     addTask(updatedFormData);
@@ -104,6 +101,7 @@ function AddTask({ close, addTask, event_id }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+          <option value="">Select</option>
             {task_categories.map((category) => (
               <option key={category.name} value={category.name}>
                 {category.name}

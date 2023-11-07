@@ -30,10 +30,13 @@ function AddTask({ close, addTask, event_id }) {
 
     addTask(formData);
     toast.success("Added a wedding task successfully!");
-    console.log(formData);
+    // console.log(formData);
+  console.log(`formData`, formData);
+
 
     close();
   };
+
 
   return (
     <Modal close={close}>
