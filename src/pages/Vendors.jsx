@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddCircleOutline, IoWalletOutline } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { VendorsList } from "../features/Vendors/VendorsList";
 import AddVendor from "../features/Vendors/AddVendor";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
+import { useParams } from "react-router-dom";
 
 export const vendor_categories = [
   { name: "Photographers" },
@@ -63,7 +64,9 @@ function Vendors() {
 
   const { accessToken, refreshToken } = getTokensInCookies();
 
-  const handleAddVendor = async (newVendorData) => {
+  const { eventId } = useParams();
+
+  const addVendorToBackend = async (newVendorData) => {
     try {
       const bearertoken = accessToken; // Replace this with your actual bearer token
       const response = await fetch(
@@ -85,25 +88,68 @@ function Vendors() {
             estimate_cost: parseInt(newVendorData.estimate_cost), // Assuming the backend expects a number
             city: newVendorData.city,
             country: newVendorData.country,
+            event_id: eventId,
           }),
         }
       );
 
       if (response.ok) {
-        // Only update the local state if the API response is successful (status code: 2xx)
         const addedVendor = await response.json();
-        setMyVendors([...myVendors, addedVendor]); // Update the local state with the added vendor
+        return addedVendor; // Return the added vendor
       } else {
         console.log(
           "Error adding vendor. Server responded with status:",
           response.status
         );
-        // Handle errors or other actions based on the response status
+        return null; // Return null if there's an error
       }
     } catch (error) {
       console.log("Error:", error);
+      return null; // Return null for any errors
     }
   };
+
+  // Function to update the frontend state with the newly added vendor
+  function addVendorToMyList(vendor) {
+    console.log("In vendors list");
+
+    if (vendor) {
+      setMyVendors((myvends) => [vendor, ...myvends]);
+    }
+  }
+
+  const handleAddVendor = async (newVendorData) => {
+    const addedVendor = await addVendorToBackend(newVendorData);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken;
+        const response = await fetch(
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Data:", data);
+          setMyVendors(data.vendors);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   function handleShowAddVendorForm() {
     setShowAddVendor(true);
@@ -150,19 +196,26 @@ function Vendors() {
         <YourVendors
           onAddvendor={handleShowAddVendorForm}
           onAddVendor={handleAddVendor}
-          vendors={myVendors} // Pass myVendors state to YourVendors component
+          vendors={myVendors}
+          addVendorToMyList={addVendorToMyList}
+          event_id={eventId}
         />
       )}
       {!showWidget && <VendorsList />}
 
       {showAddVendor && (
-        <AddVendor close={handleCloseAddVendor} onAddVendor={handleAddVendor} />
+        <AddVendor
+          close={handleCloseAddVendor}
+          onAddVendor={handleAddVendor}
+          addVendorToMyList={addVendorToMyList}
+          event_id={eventId}
+        />
       )}
     </div>
   );
 }
 
-function YourVendors({ onAddvendor, onAddVendor, vendors }) {
+function YourVendors({ onAddvendor, onAddVendor, vendors, addVendorToMyList }) {
   return (
     <div>
       <span className="text-2xl font-semibold">Your Wallet</span>
@@ -198,20 +251,26 @@ function YourVendors({ onAddvendor, onAddVendor, vendors }) {
 
       <MyVendorsTable
         onAddvendor={onAddvendor}
-        initialVendors={vendors}
+        vendors={vendors}
         onAddVendor={onAddVendor}
+        addVendorToMyList={addVendorToMyList}
       />
     </div>
   );
 }
 
-function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
+function MyVendorsTable({
+  onAddvendor,
+  initialVendors,
+  onAddVendor,
+  addVendorToMyList,
+}) {
   const [myVendors, setMyVendors] = useState(initialVendors);
   const [selectAll, setSelectAll] = useState(false);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    const updatedVendors = myVendors.map((vendor) => ({
+    const updatedVendors = myVendors?.map((vendor) => ({
       ...vendor,
       checked: !selectAll,
     }));
@@ -273,7 +332,7 @@ function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {myVendors.map((vendor) => (
+          {myVendors?.map((vendor) => (
             <tr key={vendor.id}>
               <td className="px-2 py-2 whitespace-nowrap">
                 <input

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 
-function AddTask({ close, addTask }) {
+function AddTask({ close, addTask, event_id }) {
   const [formData, setFormData] = useState({
     item: "",
     person: "",
@@ -49,11 +49,8 @@ function AddTask({ close, addTask }) {
       completed_status,
       contact,
       duration,
-      event_id: 1,
-      time_left: "2 days",
+      event_id: parseInt(event_id),
     };
-
-    console.log(updatedFormData);
 
     toast.success("Added a wedding task successfully!");
     addTask(updatedFormData);
@@ -104,6 +101,7 @@ function AddTask({ close, addTask }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+          <option value="">Select</option>
             {task_categories.map((category) => (
               <option key={category.name} value={category.name}>
                 {category.name}

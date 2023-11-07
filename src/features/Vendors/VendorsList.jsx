@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { BsFilter } from "react-icons/bs";
-import { fake_vendors, vendor_categories } from "../../pages/Vendors";
 import { AiOutlineClose } from "react-icons/ai";
 import logo from "../../assests/doros.png";
 import { getTokensInCookies } from "../../ui/features/auth/authCookies";
+import { vendor_categories } from "../../pages/Vendors";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 export function VendorsList() {
   const [vendors, setVendors] = useState([]);
@@ -95,18 +95,22 @@ export function VendorsList() {
                 Email
               </th>
               <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Instagram
+                Socials
               </th>
               <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Website
+                Country
               </th>
-              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                City
+              </th>
+
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
-              </th> */}
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {vendors.map((vendor) => (
+            {vendors?.map((vendor) => (
               <tr key={vendor.id}>
                 <td className="px-2 py-2 whitespace-nowrap">
                   {vendor.company}
@@ -114,22 +118,24 @@ export function VendorsList() {
                 <td className="px-2 py-2 whitespace-nowrap">{vendor.phone}</td>
                 <td className="px-2 py-2 whitespace-nowrap">{vendor.email}</td>
                 <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.instagram_username}
+                  <a href={vendor.website} className="text-blue-500">
+                    {vendor.instagram_username}
+                  </a>
                 </td>
+
                 <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.website}
+                  {vendor.country}
                 </td>
-                <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.estimatedCost}
-                </td>
-                {/* <td className="px-6 py-2 whitespace-nowrap ">
-                  <div className="flex gap-2 text-gray-600">
+                <td className="px-2 py-2 whitespace-nowrap">{vendor.city}</td>
+
+                <td className="px-6 py-2 whitespace-nowrap ">
+                  <div className="flex gap-2 text-gray-600 item-center justify-center">
                     <IoAddCircleOutline
                       size={22}
                       className="hover:text-black cursor-pointer"
                     />
                   </div>
-                </td> */}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -137,7 +143,10 @@ export function VendorsList() {
       </div>
 
       {showCategoryFilters && (
-        <div className="fixed left-0 top-0 z-10 h-screen w-full bg-black/70"></div>
+        <div
+          className="fixed left-0 top-0 z-10 h-screen w-full bg-black/70"
+          onClick={handleCloseCategoryFilter}
+        ></div>
       )}
 
       <div
@@ -157,7 +166,7 @@ export function VendorsList() {
 
         <div className="px-2 pb-6 text-lg mt-4 flex flex-col gap-2">
           <p>Select a category:</p>
-          {vendor_categories.map((category) => (
+          {vendor_categories?.map((category) => (
             <>
               <div className="flex gap-2 items-center">
                 <input

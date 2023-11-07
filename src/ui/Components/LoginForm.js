@@ -14,18 +14,19 @@ const Login = () => {
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
 
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (emailRef.current) {
-      emailRef.current.focus(); // check if ref exists before handling it
+      emailRef.current.focus(); 
     }
   }, []);
 
   useEffect(() => {
     setErrMsg("");
-    // console.log(email);
   }, [useremail, pwd]);
 
   const validateEmail = (useremail) => {
@@ -38,6 +39,10 @@ const Login = () => {
     return passwordpattern.test(password);
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevState) => !prevState);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,13 +51,16 @@ const Login = () => {
       const { email, accessToken, refreshToken } = userData;
 
       // set token in cookies
-      setTokensInCookies(userData.data['access-token'],userData.data['refresh-token']);
-    //   setTokensInCookies(userData.accessToken, userData.refreshToken);
+      setTokensInCookies(
+        userData.data["access-token"],
+        userData.data["refresh-token"]
+      );
+      //   setTokensInCookies(userData.accessToken, userData.refreshToken);
 
       dispatch(setCredentials({ email, accessToken, refreshToken }));
       setEmail("");
       setPwd("");
-      navigate("/dashboard");
+      navigate("/myevents");
     } catch (err) {
       if (!err?.originalStatus) {
         // isLoading: true until timeout occurs
@@ -99,12 +107,6 @@ const Login = () => {
       <div>
         <section className="bg-[#F7F2EE] items-center">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            {/* <a
-              href="/"
-              className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-            >
-              Login
-            </a> */}
             <div className="bg-red-600">
               <p
                 ref={errRef}
@@ -137,6 +139,7 @@ const Login = () => {
                       id="email"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       placeholder="name@company.com"
+                      autoComplete="username"
                       required=""
                       onChange={handleUserEmail}
                     />
@@ -148,19 +151,60 @@ const Login = () => {
                     >
                       Password
                     </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required=""
-                      onChange={handlePwdInput}
-                    />
+                    <div className="relative">
+                      <input
+                        type={passwordVisible ? "text" : "password"}
+                        name="password"
+                        id="password"
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        required=""
+                        onChange={handlePwdInput}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 px-3 flex items-center cursor-pointer"
+                      >
+                        {passwordVisible ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-[#592727]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 4c-4 0-7.5 4-7.5 4s3.5 4 7.5 4 7.5-4 7.5-4-3.5-4-7.5-4zm0 5c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm0 8c-2.33 0-4.474-.674-6.29-1.828-.17-.112-.37-.172-.578-.172a2 2 0 00-2 2 2 2 0 002 2c.175 0 .348-.03.508-.086.488.58 1.276 1.086 2.292 1.86 2.662 1.774 4.634 2.954 5.7 3.5a.7.7 0 00.6 0c1.066-.546 3.038-1.726 5.7-3.5a2.02 2.02 0 002.292-1.86c.16.057.333.086.508.086a2 2 0 002-2 2 2 0 00-2-2c-.207 0-.407.06-.578.172C16.474 16.326 14.33 17 12 17z"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-[#592727]"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 4a7.96 7.96 0 00-2 .267A7.968 7.968 0 005.773 5.77a.5.5 0 00-.14.28.5.5 0 00.138.28 7.963 7.963 0 004.158 2.632A2.992 2.992 0 008 11a3 3 0 102-5.77 7.968 7.968 0 001.773-1.503A7.96 7.96 0 0012 4zM2 12a10 10 0 0020 0H2z"
+                            />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
                   <div className="flex items-center justify-center">
                     <div className="flex items-start"></div>
-                    <Link to="/forgot-password"
+                    <Link
+                      to="/forgot-password"
                       className="text-sm font-medium text-blue-600 hover:underline dark:text-primary-500"
                     >
                       Forgot password?
