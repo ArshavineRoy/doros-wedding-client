@@ -37,7 +37,7 @@ function Checklist() {
   const [selectedRole, setSelectedRole] = useState("All");
   const [showCategoryFilters, setCategoryFilters] = useState(false);
 
-  const { event_id } = useParams();
+  const { eventId } = useParams();
 
   const handleRoleFilter = (role) => {
     setSelectedRole(role);
@@ -56,7 +56,7 @@ function Checklist() {
       try {
         const bearertoken = accessToken;
         const response = await fetch(
-          `https://doros-wedding-server.onrender.com/events/${event_id}`,
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -364,7 +364,7 @@ function Checklist() {
           <AddTask
             close={closeAddForm}
             addTask={handleAddTask}
-            event_id={event_id}
+            event_id={eventId}
           />
         )}
         {showEditModal && selectedTask && (

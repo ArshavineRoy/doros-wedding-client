@@ -36,7 +36,7 @@ function Runsheet() {
   const [selectedRole, setSelectedRole] = useState("All");
   const [showCategoryFilters, setCategoryFilters] = useState(false);
 
-  const { event_id } = useParams();
+  const { eventId } = useParams();
 
   const handleRoleFilter = (role) => {
     setSelectedRole(role);
@@ -55,7 +55,7 @@ function Runsheet() {
       try {
         const bearertoken = accessToken; // Replace this with your actual bearer token
         const response = await fetch(
-          `https://doros-wedding-server.onrender.com/events/${event_id}`,
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -341,7 +341,7 @@ function Runsheet() {
           <AddTask
             close={closeAddForm}
             addTask={handleAddTask}
-            event_id={event_id}
+            event_id={eventId}
           />
         )}
         {showEditModal && selectedTask && (

@@ -1,8 +1,7 @@
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import { GrTask } from "react-icons/gr";
 import { GiNotebook } from "react-icons/gi";
-import { MdStarRate } from "react-icons/md";
-import { BsFileEarmarkSpreadsheet, BsCalendarDate } from "react-icons/bs";
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 import venues from "../assests/gazebo.png";
 import banquet from "../assests/banquet.png";
 import camera from "../assests/camera.png";
@@ -13,23 +12,17 @@ import gift from "../assests/gift-box.png";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
-import { getDates } from "../services/dates";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
 import ImportantDatesForm from "../ui/Components/ImportantDatesForm";
 import { date } from "yup";
-
-const fake_dates = [
-  { name: "Engagment Party", date: "December 25th, 2023" },
-  { name: "Bridal Shower", date: "December 13th, 2023" },
-  { name: "Bachelorete Party", date: "December 5th, 2023" },
-  { name: "Wedding", date: "December 27th, 2023" },
-  { name: "Honeymoon", date: "January 1st, 2024" },
-];
 
 function Dashboard() {
   const [data, setData] = useState([]);
   const [showDateForm, setFormDate] = useState(false);
   const { accessToken, refreshToken } = getTokensInCookies();
+  const { eventId } = useParams();
+
+  console.log("Event ID:", eventId);
 
   function handleShowDateForm() {
     setFormDate(true);
@@ -42,13 +35,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const bearertoken = accessToken;
         const response = await fetch(
-          "https://doros-wedding-server.onrender.com/events/1",
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+              Authorization: `Bearer ${bearertoken}`,
             },
           }
         );
@@ -65,7 +58,7 @@ function Dashboard() {
     };
 
     fetchData();
-  }, [data]);
+  }, [eventId, accessToken, refreshToken, data]);
 
   return (
     <>
@@ -117,7 +110,7 @@ function Dashboard() {
             </div>
           </div>
 
-          <Link to="/dashboard/checklist">
+          <Link to={`/dashboard/${eventId}/checklist`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GrTask size={30} />
               <div className="flex flex-col text-center">
@@ -127,7 +120,7 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/program">
+          <Link to={`/dashboard/${eventId}/programs`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <BsFileEarmarkSpreadsheet size={30} />
               <div className="flex flex-col text-center">
@@ -137,7 +130,7 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/runsheet">
+          <Link to={`/dashboard/${eventId}/runsheet`}>
             <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GiNotebook size={30} />
               <div className="flex flex-col text-center">
@@ -206,7 +199,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="flex justify-center items-center">
-              <Link to="/dashboard/vendors">
+              <Link to={`/dashboard/${eventId}/runsheet`}>
                 <button className="text-2xl p-4">Full List &rarr;</button>
               </Link>
             </div>
@@ -222,65 +215,67 @@ function Dashboard() {
 
       <div>
         <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
-          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-            <img src={venues} alt="" className="h-[30px]" />
-            <div>
-              <p>Confirmed guests</p>
-              <span>250</span>
+          <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
+            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+              <img src={venues} alt="" className="h-[30px]" />
+              <div>
+                <p>Confirmed guests</p>
+                <span>250</span>
+              </div>
+            </div>
+
+            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+              <img src={venues} alt="" className="h-[30px]" />
+              <div>
+                <p>Confirmed guests</p>
+                <span>250</span>
+              </div>
+            </div>
+
+            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+              <img src={venues} alt="" className="h-[30px]" />
+              <div>
+                <p>Confirmed guests</p>
+                <span>250</span>
+              </div>
+            </div>
+
+            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+              <img src={venues} alt="" className="h-[30px]" />
+              <div>
+                <p>Confirmed guests</p>
+                <span>250</span>
+              </div>
             </div>
           </div>
 
-          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-            <img src={venues} alt="" className="h-[30px]" />
-            <div>
-              <p>Confirmed guests</p>
-              <span>250</span>
-            </div>
-          </div>
-
-          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-            <img src={venues} alt="" className="h-[30px]" />
-            <div>
-              <p>Confirmed guests</p>
-              <span>250</span>
-            </div>
-          </div>
-
-          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-            <img src={venues} alt="" className="h-[30px]" />
-            <div>
-              <p>Confirmed guests</p>
-              <span>250</span>
-            </div>
+          <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d]">
+            <button className="text-[20px]">START NOW</button>
           </div>
         </div>
 
-        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d]">
-          <button className="text-[20px]">START NOW</button>
+        <div className="flex items-center mt-14 px-[110px]">
+          <div className="flex-1 border-b-2 border-black"></div>
+          <div className="px-4 font-bold text-[30px] ">Registry</div>
+          <div className="flex-1 border-b-2 border-black"></div>
         </div>
-      </div>
 
-      <div className="flex items-center mt-14 px-[110px]">
-        <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Registry</div>
-        <div className="flex-1 border-b-2 border-black"></div>
-      </div>
-
-      <div className="px-32 mt-16">
-        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex justify-center items-center px-20 gap-20">
-          <img src={gift} alt="" className="h-[100px]" />
-          <div className=" text-lg">
-            <p>Lorem ipsum</p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-              beatae dicta repudiandae, expedita ab quas commodi non ipsam iusto
-              facere, totam nesciunt voluptate maiores ullam?
-            </p>
+        <div className="px-32 mt-16">
+          <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex justify-center items-center px-20 gap-20">
+            <img src={gift} alt="" className="h-[100px]" />
+            <div className=" text-lg">
+              <p>Lorem ipsum</p>
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+                beatae dicta repudiandae, expedita ab quas commodi non ipsam
+                iusto facere, totam nesciunt voluptate maiores ullam?
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2 cursor-pointer hover:bg-[#49120d] mt-12 mb-12">
-          <button className="text-[20px]">START HERE</button>
+          <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2 cursor-pointer hover:bg-[#49120d] mt-12 mb-12">
+            <button className="text-[20px]">START HERE</button>
+          </div>
         </div>
       </div>
     </>

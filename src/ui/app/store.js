@@ -1,8 +1,8 @@
 // store the fetched api and the reducers
 import { apiSlice } from "./api/apiSlice";
-import loginReducer from "../features/auth/authSlicerLogin";
 import signupReducer from "../features/auth/authSlicerRegister";
 import { configureStore } from "@reduxjs/toolkit";
+import loginReducer from "../features/auth/authSlicerLogin";
 
 // create the store
 

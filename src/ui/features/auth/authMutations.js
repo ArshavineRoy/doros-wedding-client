@@ -11,6 +11,7 @@ export const authMutations = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+
     signup: builder.mutation({
       query: (userData) => ({
         url: "/register",
@@ -18,6 +19,7 @@ export const authMutations = apiSlice.injectEndpoints({
         body: userData,
       }),
     }),
+
     event: builder.mutation({
       query: (eventData) => ({
         url: "/events",

@@ -64,7 +64,7 @@ function Vendors() {
 
   const { accessToken, refreshToken } = getTokensInCookies();
 
-  const { event_id } = useParams();
+  const { eventId } = useParams();
 
   const addVendorToBackend = async (newVendorData) => {
     try {
@@ -88,7 +88,7 @@ function Vendors() {
             estimate_cost: parseInt(newVendorData.estimate_cost), // Assuming the backend expects a number
             city: newVendorData.city,
             country: newVendorData.country,
-            event_id: event_id,
+            event_id: eventId,
           }),
         }
       );
@@ -127,7 +127,7 @@ function Vendors() {
       try {
         const bearertoken = accessToken;
         const response = await fetch(
-          `https://doros-wedding-server.onrender.com/events/${event_id}`,
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -198,7 +198,7 @@ function Vendors() {
           onAddVendor={handleAddVendor}
           vendors={myVendors}
           addVendorToMyList={addVendorToMyList}
-          event_id={event_id}
+          event_id={eventId}
         />
       )}
       {!showWidget && <VendorsList />}
@@ -208,7 +208,7 @@ function Vendors() {
           close={handleCloseAddVendor}
           onAddVendor={handleAddVendor}
           addVendorToMyList={addVendorToMyList}
-          event_id={event_id}
+          event_id={eventId}
         />
       )}
     </div>
