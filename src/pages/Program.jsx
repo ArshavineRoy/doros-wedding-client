@@ -22,7 +22,7 @@ function Program() {
     const fetchData = async () => {
       try {
         const bearertoken = accessToken;
-        const response = await fetch(`https://doros-wedding-server.onrender.com/programs/${eventId}.`, {
+        const response = await fetch(`https://doros-wedding-server.onrender.com/events/${eventId}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${bearertoken}`,
@@ -32,7 +32,7 @@ function Program() {
         if (response.ok) {
           const data = await response.json();
           console.log("Data:", data);
-          setProgramItems(data);
+          setProgramItems(data.programs);
         } else {
           console.log("Response not OK:", response.status);
         }
@@ -236,18 +236,19 @@ function Program() {
                 {programItem.duration}
               </td>
               <td className="px-6 py-3 whitespace-nowrap sm:w-1/6 md:w-1/5">
-                <div className="flex gap-2 text-gray-600">
-                  <AiOutlineEdit
-                    size={22}
-                    className="hover:text-black cursor-pointer"
-                    onClick={() => handleEditForm(programItem)}
-                  />
-                  <RiDeleteBin6Line
-                    size={22}
-                    className="hover:text-black cursor-pointer"
-                    onClick={() => deleteProgramItem(programItem.id)}
-                  />
-                </div>
+              <div className="flex gap-2 text-gray-600">
+  <AiOutlineEdit
+    size={22}
+    className="hover:text-black cursor-pointer bg-[#73332D] text-white rounded p-1"
+    onClick={() => handleEditForm(programItem)}
+  />
+  <RiDeleteBin6Line
+    size={22}
+    className="hover:text-black cursor-pointer bg-[#73332D] text-white rounded p-1"
+    onClick={() => deleteProgramItem(programItem.id)}
+  />
+</div>
+
               </td>
             </tr>
           ))}

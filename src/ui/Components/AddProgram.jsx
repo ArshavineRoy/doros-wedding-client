@@ -2,14 +2,16 @@ import Modal from "../Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
-function AddProgram({ close, addProgram, programCategories }) {
+function AddProgram({ close, addProgram, programCategories, eventId }) {
   const [formData, setFormData] = useState({
     time: "",
-    category: programCategories[0] || "", // Initialize with the first category or an empty string
+    category: programCategories[0] || "",
     program_item: "",
     duration: "",
-    event_id: 1 
+    event_id:1,
   });
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +27,12 @@ function AddProgram({ close, addProgram, programCategories }) {
 
     if (!formData) return;
 
+    // Add the eventId to the formData
+    // formData.event_id = eventId;
+
+    // Call the addProgram function with the formData
     addProgram(formData);
+    console.log(formData);
 
     toast.success("Added a wedding program successfully!");
     close();
