@@ -1,55 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { BiSolidPrinter } from "react-icons/bi";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
 import { HiOutlineDownload } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import AddTask from "../features/Runsheet/AddTask";
 import EditTask from "../features/Checklist/EditTask";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
-
-const fake_tasks = [
-  {
-    id: 1,
-    item: "Buy cake",
-    person: "Moses",
-    role: "Overall Coordinator",
-    completed_status: true,
-    contact: "7893810",
-    time_left: "4 Weeks",
-    due_date: "Dec 7th",
-  },
-  {
-    id: 2,
-    item: "Buy dress",
-    person: "Asharvin",
-    role: "Overall Coordinator",
-    completed_status: true,
-    contact: "222",
-    time_left: "4 Weeks",
-    due_date: "Dec 7th",
-  },
-  {
-    id: 3,
-    item: "Book a wedding venue",
-    person: "Martin",
-    role: "Secretary & Treasurer",
-    completed_status: false,
-    contact: "1111",
-    time_left: "8 Weeks",
-    due_date: "Jan 6",
-  },
-  {
-    id: 4,
-    item: "Book a photography vendor",
-    person: "Test",
-    role: "Bridesmaid's Coordinator",
-    completed_status: false,
-    contact: "1111",
-    time_left: "8 Weeks",
-    due_date: "Jan 6",
-  },
-];
+import { BsFilter } from "react-icons/bs";
+import { task_filter_categories } from "./Checklist";
+import Logo from "../features/Vendors/VendorsList";
+import { toast } from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 export const task_categories = [
   { name: "Overall Coordinator" },
@@ -71,12 +33,29 @@ function Runsheet() {
   const [selectedTask, setSelectedTask] = useState(null);
   const { accessToken, refreshToken } = getTokensInCookies();
 
+  const [selectedRole, setSelectedRole] = useState("All");
+  const [showCategoryFilters, setCategoryFilters] = useState(false);
+
+  const { event_id } = useParams();
+
+  const handleRoleFilter = (role) => {
+    setSelectedRole(role);
+  };
+
+  function handleShowCategoryFilter() {
+    setCategoryFilters(true);
+  }
+
+  function handleCloseCategoryFilter() {
+    setCategoryFilters(false);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const bearertoken = accessToken; // Replace this with your actual bearer token
         const response = await fetch(
-          "https://doros-wedding-server.onrender.com/runsheets",
+          `https://doros-wedding-server.onrender.com/events/${event_id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -87,8 +66,8 @@ function Runsheet() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Data:", data);
-          setTasks(data);
+          // console.log("Data:", data);
+          setTasks(data.run_sheets);
         } else {
           console.log("Response not OK:", response.status);
         }
@@ -123,8 +102,10 @@ function Runsheet() {
           const filteredTasks = tasks.filter((task) => task.id !== taskId);
           setTasks(filteredTasks);
           console.log("Task deleted successfully");
+          toast.success("Task deleted successfully");
         } else {
           console.error("Failed to delete the task:", response.status);
+          toast.success("Failed to delete the task!");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -180,13 +161,56 @@ function Runsheet() {
     setShowEditModal(false);
   };
 
-  const handleStatusChange = (taskId) => {
+  const handleStatusChange = async (taskId) => {
     const updatedTasks = tasks.map((task) =>
       task.id === taskId
         ? { ...task, completed_status: !task.completed_status }
         : task
     );
     setTasks(updatedTasks);
+
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/runsheets/${taskId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify({
+            completed_status: updatedTasks.find((task) => task.id === taskId)
+              .completed_status,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // Task status updated successfully on the backend
+        console.log("Task status updated on the server.");
+      } else {
+        // Revert the local state if the request fails
+        console.error("Failed to update the task status:", response.status);
+        setTasks(
+          tasks.map((task) =>
+            task.id === taskId
+              ? { ...task, completed_status: !task.completed_status }
+              : task
+          )
+        );
+      }
+    } catch (error) {
+      // Revert the local state if an error occurs
+      console.error("Error:", error);
+      setTasks(
+        tasks.map((task) =>
+          task.id === taskId
+            ? { ...task, completed_status: !task.completed_status }
+            : task
+        )
+      );
+    }
   };
 
   const handleTaskUpdate = (updatedTaskData) => {
@@ -197,7 +221,16 @@ function Runsheet() {
   };
 
   const renderTable = (role) => {
-    const roleTasks = tasks.filter((task) => task.role === role);
+    const filteredTasks =
+      selectedRole === "All"
+        ? tasks
+        : tasks.filter((task) => task.role === selectedRole);
+
+    if (selectedRole !== "All" && role !== selectedRole) {
+      return null;
+    }
+
+    const roleTasks = filteredTasks.filter((task) => task.role === role);
 
     return (
       <div className="mt-6 px-32">
@@ -268,7 +301,7 @@ function Runsheet() {
 
   return (
     <div className="py-20">
-      <div className="flex items-center">
+      <div className="flex items-center px-[126px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[30px] ">Wedding Day Run sheet</div>
         <div className="flex-1 border-b-2 border-black"></div>
@@ -283,6 +316,15 @@ function Runsheet() {
             <IoMdAddCircleOutline />
             Add Item
           </button>
+
+          <button
+            className="border-2 px-4 py-2 border-stone-300 flex gap-2 items-center justify-center"
+            onClick={handleShowCategoryFilter}
+          >
+            <BsFilter />
+            <span>Filter</span>
+          </button>
+
           <div className="flex gap-2">
             <BiSolidPrinter
               size={25}
@@ -296,7 +338,11 @@ function Runsheet() {
         </div>
 
         {showAddModal && (
-          <AddTask close={closeAddForm} addTask={handleAddTask} />
+          <AddTask
+            close={closeAddForm}
+            addTask={handleAddTask}
+            event_id={event_id}
+          />
         )}
         {showEditModal && selectedTask && (
           <EditTask
@@ -305,6 +351,45 @@ function Runsheet() {
             onSubmit={handleTaskUpdate}
           />
         )}
+
+        {showCategoryFilters && (
+          <div
+            className="fixed left-0 top-0 z-10 h-screen w-full bg-black/70"
+            onClick={handleCloseCategoryFilter}
+          ></div>
+        )}
+
+        <div
+          className={
+            showCategoryFilters
+              ? "fixed left-0 top-0 z-10 h-screen w-[300px] bg-white duration-300"
+              : "fixed left-[-100%] top-0 z-10 h-screen w-[300px] bg-white duration-300 "
+          }
+        >
+          <AiOutlineClose
+            size={28}
+            className="absolute right-4 top-4 cursor-pointer"
+            onClick={handleCloseCategoryFilter}
+          />
+
+          <Logo />
+
+          <div className="px-2 pb-6 text-lg mt-4 flex flex-col gap-2">
+            <p>Select a category:</p>
+            <div className="flex flex-col items-start ml-0 gap-4">
+              {task_filter_categories.map((category) => (
+                <>
+                  <button
+                    onClick={() => handleRoleFilter(category.name)}
+                    className="border-2 border-gray-200 px-2 py-2 text-sm"
+                  >
+                    {category.name}
+                  </button>
+                </>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {renderTable("Overall Coordinator")}
         {renderTable("Secretary & Treasurer")}

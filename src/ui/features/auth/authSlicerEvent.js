@@ -1,24 +1,24 @@
 // signupSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
-const authSliceRegister = createSlice({
-  name: "signup",
+const authSliceEvent = createSlice({
+  name: "event",
   initialState: {
     isLoading: false,
     isSuccess: false,
     errorMessage: null,
   },
   reducers: {
-    startSignup: (state) => {
+    startEvent: (state) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.errorMessage = null;
     },
-    signupSuccess: (state) => {
+    eventSuccess: (state) => {
       state.isLoading = false;
       state.isSuccess = true;
     },
-    signupFailure: (state, action) => {
+    eventFailure: (state, action) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.errorMessage = action.payload;
@@ -26,9 +26,9 @@ const authSliceRegister = createSlice({
   },
 });
 
-export const { startSignup, signupSuccess, signupFailure } =
-  authSliceRegister.actions;
+export const { startEvent, eventSuccess, eventFailure } =
+authSliceEvent.actions;
 // create a selector
-export const selectsignUp = (state) => state.signup;
+export const selectEvent = (state) => state.event;
 
-export default authSliceRegister.reducer;
+export default authSliceEvent.reducer;
