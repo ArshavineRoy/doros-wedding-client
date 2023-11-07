@@ -13,7 +13,7 @@ const MyEvents = () => {
 
 
   const handleNavigate = () => {
-    navigate("/myevents");
+    navigate("/events");
   };
 
 

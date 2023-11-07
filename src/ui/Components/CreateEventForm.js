@@ -102,7 +102,7 @@ const CreateEventForm = () => {
           spouse_last_name: "",
           image_url: "",
         });
-        navigate("/dashboard");
+        navigate("/myevents");
       } else {
         throw new Error("Network response was not ok");
       }
