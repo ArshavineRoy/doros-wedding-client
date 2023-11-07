@@ -142,7 +142,7 @@ export function VendorsList({ event_id }) {
                 City
               </th>
 
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
               </th>
             </tr>
@@ -156,7 +156,7 @@ export function VendorsList({ event_id }) {
                 <td className="px- py-2 whitespace-nowrap">
                   {vendor.category}
                 </td>
-                <td className="px-1 py-2 whitespace-nowrap">{vendor.phone}</td>
+                <td className="px-1 py-2">{vendor.phone}</td>
                 <td className="px-1 py-2 whitespace-nowrap">{vendor.email}</td>
                 <td className="px-1 py-2 whitespace-nowrap">
                   <a
@@ -169,9 +169,9 @@ export function VendorsList({ event_id }) {
                       : vendor.instagram_username}
                   </a>
                 </td>
-                <td className="px-2 py-1 whitespace-nowrap">{vendor.city}</td>
+                <td className="px-1 py-1 whitespace-nowrap">{vendor.city}</td>
 
-                <td className="px-6 py-1 whitespace-nowrap ">
+                <td className="px-1 py-1 whitespace-nowrap ">
                   <div className="flex gap-2 text-gray-600 item-center justify-center">
                     <IoAddCircleOutline
                       size={22}
