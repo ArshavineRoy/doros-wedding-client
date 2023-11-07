@@ -18,7 +18,7 @@ export function VendorsList() {
       try {
         const bearertoken = accessToken; // Replace this with your actual bearer token
         const response = await fetch(
-          "https://doros-wedding-server.onrender.com/events/1",
+          "https://doros-wedding-server.onrender.com/vendors",
           {
             headers: {
               "Content-Type": "application/json",
@@ -30,8 +30,8 @@ export function VendorsList() {
         if (response.ok) {
           const data = await response.json();
           console.log("Data:", data);
-          setVendors(data.vendors);
-          setAllVendors(data.vendors);
+          setVendors(data);
+          setAllVendors(data);
         } else {
           console.log("Response not OK:", response.status);
         }

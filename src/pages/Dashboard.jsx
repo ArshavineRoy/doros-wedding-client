@@ -68,13 +68,15 @@ function Dashboard() {
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
-      <div>
-        <button onClick={handleShowDateForm}>Add Date </button>
+      <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-2 mt-6 mb-0 cursor-pointer hover:bg-[#49120d]">
+        <button className="text-[16px]" onClick={handleShowDateForm}>
+          Add Date
+        </button>
       </div>
 
       {showDateForm && <ImportantDatesForm close={handleHideDateForm} />}
 
-      <div className="px-32  grid grid-cols-3 gap-16 py-20">
+      <div className="px-32  grid grid-cols-3 gap-16 py-10">
         {data.date && <Dates date={data.date} event={"Wedding Date"} />}
         {data.bachelorette_party && (
           <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
@@ -150,14 +152,12 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-3 px-20 py-4 gap-20 place-items-center">
-              <Link to="/dashboard/vendors">
-                <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                  <img src={venues} alt="" className="width-[60px] h-[60px]" />
-                  <div className="flex flex-col text-center">
-                    <span className="font-bold">Events</span>
-                  </div>
+              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img src={venues} alt="" className="width-[60px] h-[60px]" />
+                <div className="flex flex-col text-center">
+                  <span className="font-bold">Events</span>
                 </div>
-              </Link>
+              </div>
 
               <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
                 <img src={banquet} alt="" className="width-[60px] h-[60px]" />
@@ -199,7 +199,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="flex justify-center items-center">
-              <Link to={`/dashboard/${eventId}/runsheet`}>
+              <Link to={`/dashboard/${eventId}/vendors`}>
                 <button className="text-2xl p-4">Full List &rarr;</button>
               </Link>
             </div>
@@ -215,67 +215,65 @@ function Dashboard() {
 
       <div>
         <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
-          <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
-            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-              <img src={venues} alt="" className="h-[30px]" />
-              <div>
-                <p>Confirmed guests</p>
-                <span>250</span>
-              </div>
-            </div>
-
-            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-              <img src={venues} alt="" className="h-[30px]" />
-              <div>
-                <p>Confirmed guests</p>
-                <span>250</span>
-              </div>
-            </div>
-
-            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-              <img src={venues} alt="" className="h-[30px]" />
-              <div>
-                <p>Confirmed guests</p>
-                <span>250</span>
-              </div>
-            </div>
-
-            <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
-              <img src={venues} alt="" className="h-[30px]" />
-              <div>
-                <p>Confirmed guests</p>
-                <span>250</span>
-              </div>
+          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+            <img src={venues} alt="" className="h-[30px]" />
+            <div>
+              <p>Confirmed guests</p>
+              <span>250</span>
             </div>
           </div>
 
-          <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d]">
-            <button className="text-[20px]">START NOW</button>
+          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+            <img src={venues} alt="" className="h-[30px]" />
+            <div>
+              <p>Confirmed guests</p>
+              <span>250</span>
+            </div>
+          </div>
+
+          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+            <img src={venues} alt="" className="h-[30px]" />
+            <div>
+              <p>Confirmed guests</p>
+              <span>250</span>
+            </div>
+          </div>
+
+          <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
+            <img src={venues} alt="" className="h-[30px]" />
+            <div>
+              <p>Confirmed guests</p>
+              <span>250</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center mt-14 px-[110px]">
-          <div className="flex-1 border-b-2 border-black"></div>
-          <div className="px-4 font-bold text-[30px] ">Registry</div>
-          <div className="flex-1 border-b-2 border-black"></div>
+        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d]">
+          <button className="text-[20px]">START NOW</button>
+        </div>
+      </div>
+
+      <div className="flex items-center mt-14 px-[110px]">
+        <div className="flex-1 border-b-2 border-black"></div>
+        <div className="px-4 font-bold text-[30px] ">Registry</div>
+        <div className="flex-1 border-b-2 border-black"></div>
+      </div>
+
+      <div className="px-32 mt-16">
+        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex justify-center items-center px-20 gap-20">
+          <img src={gift} alt="" className="h-[100px]" />
+          <div className=" text-lg">
+            <p>Lorem ipsum</p>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
+              beatae dicta repudiandae, expedita ab quas commodi non ipsam iusto
+              facere, totam nesciunt voluptate maiores ullam?
+            </p>
+          </div>
         </div>
 
-        <div className="px-32 mt-16">
-          <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex justify-center items-center px-20 gap-20">
-            <img src={gift} alt="" className="h-[100px]" />
-            <div className=" text-lg">
-              <p>Lorem ipsum</p>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed
-                beatae dicta repudiandae, expedita ab quas commodi non ipsam
-                iusto facere, totam nesciunt voluptate maiores ullam?
-              </p>
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2 cursor-pointer hover:bg-[#49120d] mt-12 mb-12">
-            <button className="text-[20px]">START HERE</button>
-          </div>
+        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2 cursor-pointer hover:bg-[#49120d] mt-12 mb-12">
+          <button className="text-[20px]">START HERE</button>
         </div>
       </div>
     </>
