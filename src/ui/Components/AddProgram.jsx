@@ -8,6 +8,7 @@ function AddProgram({ close, addProgram, programCategories }) {
     category: programCategories[0] || "", // Initialize with the first category or an empty string
     program_item: "",
     duration: "",
+    event_id: 1 
   });
 
   const handleInputChange = (e) => {

@@ -7,13 +7,14 @@ import { BiSolidPrinter } from "react-icons/bi";
 import { HiOutlineDownload } from "react-icons/hi";
 import AddProgram from "../ui/Components/AddProgram";
 import EditProgram from "../ui/Components/EditProgram";
+import { getTokensInCookies } from "../ui/features/auth/authCookies";
 
 // Placeholder function for getting tokens from cookies
-const getTokensInCookies = () => {
-  return {
-    accessToken: "accessToken",
-  };
-};
+// const getTokensInCookies = () => {
+//   return {
+//     accessToken: "accessToken",
+//   };
+// };
 
 function Program() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -27,7 +28,7 @@ function Program() {
     const fetchData = async () => {
       try {
         const bearertoken = accessToken;
-        const response = await fetch(`https://doros-wedding-server.onrender.com/programs?eventId=${eventId}`, {
+        const response = await fetch(`https://doros-wedding-server.onrender.com/programs?eventId=${eventId}.`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${bearertoken}`,
@@ -52,7 +53,8 @@ function Program() {
   const addProgramItem = async (newProgramItem) => {
     try {
       const bearertoken = accessToken;
-      const response = await fetch(`https://doros-wedding-server.onrender.com/programs?eventId=${eventId}`, {
+      console.log(bearertoken)
+      const response = await fetch(`https://doros-wedding-server.onrender.com/programs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -155,102 +157,106 @@ function Program() {
   ];
 
   return (
-    <div className="py-20">
-      <div className="flex items-center px-[126px]">
-        <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px]">Event Program</div>
-        <div className="flex-1 border-b-2 border-black"></div>
-      </div>
-
-      <div>
-        <div className="flex justify-between items-center px-32 py-8">
-          <button
-            className="flex items-center justify-center gap-2 px-8 py-2 cursor-pointer border-2 border-gray-400 text-[20px] hover:bg-black hover:text-white"
-            onClick={() => setShowAddModal(true)}
-          >
-            <IoMdAddCircleOutline />
-            Add Item
-          </button>
-          <div className="flex gap-2">
-            <BiSolidPrinter
-              size={25}
-              className="cursor-pointer text-stone-700 hover:text-black"
-            />
-            <HiOutlineDownload
-              size={25}
-              className="cursor-pointer text-stone-700 hover:text-black"
-            />
-          </div>
+    <div className="mt-6 px-32">
+        <h1 className="text-2xl font-bold text-gray-800 mb-3"></h1>
+        <div className="flex items-center px-4">
+          <div className="flex-1 border-b-2 border-black"></div>
+          <div className="px-4 font-bold text-[30px]">Event Program</div>
+          <div className="flex-1 border-b-2 border-black"></div>
         </div>
-
-           {showAddModal && (
-          <AddProgram
-            close={() => setShowAddModal(false)}
-            addProgram={handleAddProgramItem}
-            programCategories={categories}
-          />
-        )}
-
-        {showEditModal && selectedProgramItem && (
-          <EditProgram
-            close={closeEditForm}
-            editProgram={handleProgramItemUpdate}
-            programToEdit={selectedProgramItem}
-          />
-        )}
-  {categories.map((category) => (
-          <div key={category}>
-            <h2 className="text-lg font-semibold">{category}</h2>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Time
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Category
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Program Item
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Duration
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {programItems[category]?.map((programItem) => (
-                  <tr key={programItem.id}>
-                    <td className="px-6 py-3 whitespace-nowrap">{programItem.time}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{programItem.category}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{programItem.program_item}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">{programItem.duration}</td>
-                    <td className="px-6 py-3 whitespace-nowrap">
-                      <div className="flex gap-2 text-gray-600">
-                        <AiOutlineEdit
-                          size={22}
-                          className="hover:text-black cursor-pointer"
-                          onClick={() => handleEditForm(programItem)}
-                        />
-                        <RiDeleteBin6Line
-                          size={22}
-                          className="hover:text-black cursor-pointer"
-                          onClick={() => deleteProgramItem(programItem.id)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+  
+        <div>
+          <div className="flex justify-between items-center px-4 py-8">
+            <button
+              className="flex items-center justify-center gap-2 px-8 py-2 bg-[#5f1b15] text-white  cursor-pointer border-2 border-gray-400 text-[20px] hover:bg-black hover:text-white"
+              onClick={() => setShowAddModal(true)}
+            >
+              <IoMdAddCircleOutline />
+              Add Item
+            </button>
+            <div className="flex gap-2">
+              <BiSolidPrinter
+                size={25}
+                className="cursor-pointer text-stone-700 hover:text-black"
+              />
+              <HiOutlineDownload
+                size={25}
+                className="cursor-pointer text-stone-700 hover:text-black"
+              />
+            </div>
           </div>
-        ))}
+  
+          {showAddModal && (
+            <AddProgram
+              close={() => setShowAddModal(false)}
+              addProgram={handleAddProgramItem}
+              programCategories={categories}
+            />
+          )}
+  
+          {showEditModal && selectedProgramItem && (
+            <EditProgram
+              close={closeEditForm}
+              editProgram={handleProgramItemUpdate}
+              programToEdit={selectedProgramItem}
+            />
+          )}
+  
+          {categories.map((category, index) => (
+            <div key={category} className={index !== 0 ? 'mb-6' : ''}>
+              <h1 className="text-lg font-semibold">{category}</h1>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Category
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Program Item
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Duration
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {programItems[category]?.map((programItem) => (
+                    <tr key={programItem.id}>
+                      <td className="px-6 py-3 whitespace-nowrap">{programItem.time}</td>
+                      <td className="px-6 py-3 whitespace-nowrap">{programItem.category}</td>
+                      <td className="px-6 py-3 whitespace-nowrap">{programItem.program_item}</td>
+                      <td className="px-6 py-3 whitespace-nowrap">{programItem.duration}</td>
+                      <td className="px-6 py-3 whitespace-nowrap">
+                        <div className="flex gap-2 text-gray-600">
+                          <AiOutlineEdit
+                            size={22}
+                            className="hover:text-black cursor-pointer"
+                            onClick={() => handleEditForm(programItem)}
+                          />
+                          <RiDeleteBin6Line
+                            size={22}
+                            className="hover:text-black cursor-pointer"
+                            onClick={() => deleteProgramItem(programItem.id)}
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
   );
+  
+  
 }
 
 export default Program;
