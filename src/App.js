@@ -27,9 +27,9 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/myevents" element={<MyEvents />} />
         <Route path="/events" element={<EventForm />} />
-        <Route path="/budget" element={<Budget />} />
         <Route path="/important" element={<ImportantDatesForm />} />{" "}
         {/*render in dashboard*/}
+        <Route path="/important" element={<ImportantDatesForm />} /> {/*render in dashboard*/}
         <Route path="/pay" element={<Paywall />} />
         {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
       </Route>
@@ -41,10 +41,8 @@ const App = () => {
           element={<Checklist />}
         ></Route>
         <Route path="/dashboard/:eventId/vendors" element={<Vendors />}></Route>
-        <Route
-          path="/dashboard/:eventId/runsheet"
-          element={<Runsheet />}
-        ></Route>
+        <Route path="/dashboard/:eventId/runsheet" element={<Runsheet />}></Route>
+        <Route path="/dashboard/:event_id/budget" element={<Budget />} />
       </Route>
     </Routes>
   );
