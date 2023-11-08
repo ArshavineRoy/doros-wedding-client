@@ -23,7 +23,7 @@ function EditTask({ taskData, close, onSubmit }) {
         completed_status: taskData.completed_status,
         contact: taskData.contact,
         time_left: "",
-        event_id: 1,
+        event_id: taskData.event_id,
         duration: taskData.duration,
       });
     }

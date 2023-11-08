@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { getTokensInCookies } from "../features/auth/authCookies";
+import { toast } from "react-hot-toast";
 
-const ImportantDatesForm = ({ close, event_id }) => {
+const ImportantDatesForm = ({ close, eventData, event_id }) => {
   const [formData, setFormData] = useState({
     engagement_party: "",
     bachelor_party: "",
@@ -11,6 +12,18 @@ const ImportantDatesForm = ({ close, event_id }) => {
     honeymoon: "",
   });
 
+  useEffect(() => {
+    if (eventData) {
+      setFormData({
+        engagement_party: eventData.engagement_party,
+        bachelor_party: eventData.bachelor_party,
+        bachelorette_party: eventData.bachelorette_party,
+        traditional_wedding: eventData.traditional_wedding,
+        honeymoon: eventData.honeymoon,
+      });
+    }
+  }, []);
+
   const { accessToken, refreshToken } = getTokensInCookies();
 
   async function updateWedding(updatedData) {
@@ -18,7 +31,7 @@ const ImportantDatesForm = ({ close, event_id }) => {
       const bearertoken = accessToken;
 
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/events/1`,
+        `https://doros-wedding-server.onrender.com/events/${event_id}`,
         {
           method: "PATCH",
           headers: {
@@ -31,7 +44,8 @@ const ImportantDatesForm = ({ close, event_id }) => {
 
       if (response.ok) {
         const updatedWedding = await response.json();
-        console.log("Wedding updated:", updatedWedding);
+        // console.log("Wedding updated:", updatedWedding);
+        toast.success("Successfullt updated the events dates!");
         return updatedWedding;
       } else {
         console.error(
@@ -63,7 +77,7 @@ const ImportantDatesForm = ({ close, event_id }) => {
         {eventData.errorMessage && <p className="text-red-500">{errorMessage}</p>}
         {eventSuccess && <p>Event created successful!</p>} */}
         <section>
-          <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto md:h-screen lg:py-0">
+          <div className="flex flex-col items-center justify-center px-2 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-[#592727] md:text-2xl">

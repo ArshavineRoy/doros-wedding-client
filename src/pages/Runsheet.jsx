@@ -5,7 +5,7 @@ import { HiOutlineDownload } from "react-icons/hi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import AddTask from "../features/Runsheet/AddTask";
-import EditTask from "../features/Checklist/EditTask";
+import EditTask from "../features/Runsheet/EditTask";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
 import { BsFilter } from "react-icons/bs";
 import { task_filter_categories } from "./Checklist";
@@ -40,6 +40,7 @@ function Runsheet() {
 
   const handleRoleFilter = (role) => {
     setSelectedRole(role);
+    setCategoryFilters(false);
   };
 
   function handleShowCategoryFilter() {

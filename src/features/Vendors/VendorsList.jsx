@@ -5,12 +5,14 @@ import logo from "../../assests/doros.png";
 import { getTokensInCookies } from "../../ui/features/auth/authCookies";
 import { vendor_categories } from "../../pages/Vendors";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { toast } from "react-hot-toast";
 
-export function VendorsList() {
+export function VendorsList({ event_id }) {
   const [vendors, setVendors] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [showCategoryFilters, setCategoryFilters] = useState(false);
   const [allVendors, setAllVendors] = useState([]);
+
   const { accessToken, refreshToken } = getTokensInCookies();
 
   useEffect(() => {
@@ -42,6 +44,42 @@ export function VendorsList() {
 
     fetchData();
   }, []);
+
+  const addVendorToMyList = (selectedVendor) => {
+    // console.log("selected vendor: ", selectedVendor.id);
+    // console.log("event id: ", parseInt(event_id));
+    const bearertoken = accessToken;
+    fetch(`https://doros-wedding-server.onrender.com/event_vendors`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearertoken}`,
+      },
+      body: JSON.stringify({
+        event_id: event_id,
+        vendor_id: selectedVendor.id,
+      }),
+    })
+      .then((response) => {
+        // console.log(response.json());
+        if (response.ok) {
+          // If response is okay (status in the 200-299 range)
+          return response; // Assuming the response is JSON
+        } else {
+          throw new Error("Network response was not ok");
+        }
+      })
+      .then((data) => {
+        console.log("Vendor added successfully", data); // You can display the data received in the response
+        toast.success("Vendor was successfully added to your list");
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the fetch
+        console.error("Error adding vendor:", error);
+        // Show an error message to the user
+        toast.error("Failed to add the vendor added to your list!");
+      });
+  };
 
   const handleCategoryChange = (category) => {
     let updatedCategories;
@@ -85,26 +123,26 @@ export function VendorsList() {
         <table className="min-w-full  divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Company
               </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                Category
+              </th>
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Phone
               </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Email
               </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Socials
               </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Country
-              </th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 City
               </th>
 
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+              <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Actions
               </th>
             </tr>
@@ -112,27 +150,33 @@ export function VendorsList() {
           <tbody className="bg-white divide-y divide-gray-200">
             {vendors?.map((vendor) => (
               <tr key={vendor.id}>
-                <td className="px-2 py-2 whitespace-nowrap">
+                <td className="px-1 py-2 whitespace-nowrap">
                   {vendor.company}
                 </td>
-                <td className="px-2 py-2 whitespace-nowrap">{vendor.phone}</td>
-                <td className="px-2 py-2 whitespace-nowrap">{vendor.email}</td>
-                <td className="px-2 py-2 whitespace-nowrap">
-                  <a href={vendor.website} className="text-blue-500">
-                    {vendor.instagram_username}
+                <td className="px- py-2 whitespace-nowrap">
+                  {vendor.category}
+                </td>
+                <td className="px-1 py-2">{vendor.phone}</td>
+                <td className="px-1 py-2 whitespace-nowrap">{vendor.email}</td>
+                <td className="px-1 py-2 whitespace-nowrap">
+                  <a
+                    href={vendor.website}
+                    className="text-blue-500"
+                    target="blank"
+                  >
+                    {vendor.instagram_username === ""
+                      ? vendor.website
+                      : vendor.instagram_username}
                   </a>
                 </td>
+                <td className="px-1 py-1 whitespace-nowrap">{vendor.city}</td>
 
-                <td className="px-2 py-2 whitespace-nowrap">
-                  {vendor.country}
-                </td>
-                <td className="px-2 py-2 whitespace-nowrap">{vendor.city}</td>
-
-                <td className="px-6 py-2 whitespace-nowrap ">
+                <td className="px-1 py-1 whitespace-nowrap ">
                   <div className="flex gap-2 text-gray-600 item-center justify-center">
                     <IoAddCircleOutline
                       size={22}
                       className="hover:text-black cursor-pointer"
+                      onClick={() => addVendorToMyList(vendor)}
                     />
                   </div>
                 </td>
