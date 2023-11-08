@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { getTokensInCookies } from "../features/auth/authCookies";
+import { toast } from "react-hot-toast";
 
-const ImportantDatesForm = ({ close, eventData }) => {
+const ImportantDatesForm = ({ close, eventData, event_id }) => {
   const [formData, setFormData] = useState({
     engagement_party: "",
     bachelor_party: "",
@@ -30,7 +31,7 @@ const ImportantDatesForm = ({ close, eventData }) => {
       const bearertoken = accessToken;
 
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/events/1`,
+        `https://doros-wedding-server.onrender.com/events/${event_id}`,
         {
           method: "PATCH",
           headers: {
@@ -43,7 +44,8 @@ const ImportantDatesForm = ({ close, eventData }) => {
 
       if (response.ok) {
         const updatedWedding = await response.json();
-        console.log("Wedding updated:", updatedWedding);
+        // console.log("Wedding updated:", updatedWedding);
+        toast.success("Successfullt updated the events dates!");
         return updatedWedding;
       } else {
         console.error(
