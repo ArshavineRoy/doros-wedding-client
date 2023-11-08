@@ -2,7 +2,7 @@ import Modal from "../Modal";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-function EditProgram({ close, programData, event_id, programCategories }) {
+function EditProgram({ close, programData, event_id, programCategories, editProgram }) {
   const [formData, setFormData] = useState({
     time: "",
     program_item: "",
@@ -36,17 +36,31 @@ function EditProgram({ close, programData, event_id, programCategories }) {
     }));
   };
 
+  const validateTime = (time) => {
+    // Regular expression to validate the time format with a space (e.g., 8:00 AM)
+    const timePattern = /^(0[1-9]|1[0-2]):[0-5][0-9]\s(?:AM|PM)$/i;
+
+    return timePattern.test(time);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!validateTime(formData.time)) {
+      // Display a toast message for incorrect time format
+      toast.error("Please enter a valid time format (e.g., 8:00 AM)");
+      return;
+    }
+
     if (!formData) return;
 
-    // editProgram(formData);
+    editProgram(formData);
     console.log(formData);
 
     toast.success("Edited the program successfully!");
     close();
   };
+  
 
   return (
     <Modal close={close}>
@@ -62,8 +76,31 @@ function EditProgram({ close, programData, event_id, programCategories }) {
             name="time"
             value={formData.time}
             onChange={handleInputChange}
+            placeholder="e.g., 8:00 AM"
             className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
           />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="category" className="block font-bold mb-1">
+            Category
+          </label>
+          <select
+            required
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleInputChange}
+            className="w-full border rounded-md p-2"
+          >
+            <option value="">Select</option>
+            {programCategories
+            .filter((category) => category.name !== "All")
+            .map((category) => (
+              <option key={category.name} value={category.name}>
+                {category.name}
+              </option>
+           ))}
+          </select>
         </div>
 
         <div className="mb-6">
@@ -81,40 +118,35 @@ function EditProgram({ close, programData, event_id, programCategories }) {
           />
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="category" className="block font-bold mb-1">
-            Category
-          </label>
-          <select
-            required
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="w-full border rounded-md p-2"
-          >
-            <option value="">Select</option> 
-            {programCategories.map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
 
         <div className="mb-6">
-          <label htmlFor="duration" className="block font-bold mb-1">
+          <label htmlFor="durationValue" className="block font-bold mb-1">
             Duration
           </label>
-          <input
-            required
-            type="text"
-            id="duration"
-            name="duration"
-            value={formData.duration}
-            onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
-          />
+          <div className="flex">
+            <input
+              required
+              type="text"
+              id="durationValue"
+              name="durationValue"
+              value={formData.durationValue}
+              onChange={handleInputChange}
+              placeholder="Enter duration value"
+              className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
+            />
+            <select
+              required
+              id="durationUnit"
+              name="durationUnit"
+              value={formData.durationUnit}
+              onChange={handleInputChange}
+              className="w-1/4 border rounded-md p-2 ml-2"
+            >
+              <option value="">Select</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+            </select>
+          </div>
         </div>
 
         <div className="flex justify-between">

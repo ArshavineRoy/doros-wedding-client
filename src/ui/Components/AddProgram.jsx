@@ -8,7 +8,7 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
     category: programCategories[0]?.name || "",
     program_item: "",
     durationValue: "",
-    durationUnit: "minutes", // Default unit
+    durationUnit: "",
     event_id: parseInt(eventId),
   });
 
@@ -22,8 +22,8 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
   };
 
   const validateTime = (time) => {
-    // Regular expression to validate the time format (e.g., 8:00 AM)
-    const timePattern = /^(0[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
+    // Regular expression to validate the time format with a space (e.g., 8:00 AM)
+    const timePattern = /^(0[1-9]|1[0-2]):[0-5][0-9]\s(?:AM|PM)$/i;
 
     return timePattern.test(time);
   };
@@ -33,21 +33,23 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
 
     const { time } = formData;
 
-    if (!validateTime(time)) {
-      // Display a popup or toast message for incorrect time format
-      toast.error("Please enter a valid time format (e.g., 8:00 AM)");
-      return;
-    }
+    // if (!validateTime(time)) {
+    //   // Display a toast message for incorrect time format
+    //   // toast.error("Please enter a valid time format (e.g., 8:00 AM)");
+    //   return;
+    // }
+
+    console.log(validateTime(time))
 
     if (!formData) return;
 
     // Call the addProgram function with the formData
-    addProgram(formData);
+    // addProgram(formData);
     console.log(formData);
 
     toast.success("Added a wedding program successfully!");
     close();
-  }
+  };
 
   return (
     <Modal close={close}>
@@ -63,7 +65,7 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
             name="time"
             value={formData.time}
             onChange={handleInputChange}
-            placeholder="e.g., 8:00 AM" // Placeholder for guidance
+            placeholder="e.g., 8:00 AM"
             className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
@@ -107,35 +109,34 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
         </div>
 
         <div className="mb-6">
-  <label htmlFor="durationValue" className="block font-bold mb-1">
-    Duration
-  </label>
-  <div className="flex">
-    <input
-      required
-      type="text"
-      id="durationValue"
-      name="durationValue"
-      value={formData.durationValue}
-      onChange={handleInputChange}
-      placeholder="Enter duration value"
-      className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
-    />
-    <select
-      required
-      id="durationUnit"
-      name="durationUnit"
-      value={formData.durationUnit}
-      onChange={handleInputChange}
-      className="w-1/4 border rounded-md p-2 ml-2"
-    >
-      <option value="">Select</option>
-      <option value="minutes">Minutes</option>
-      <option value="hours">Hours</option>
-    </select>
-  </div>
-</div>
-
+          <label htmlFor="durationValue" className="block font-bold mb-1">
+            Duration
+          </label>
+          <div className="flex">
+            <input
+              required
+              type="text"
+              id="durationValue"
+              name="durationValue"
+              value={formData.durationValue}
+              onChange={handleInputChange}
+              placeholder="Enter duration value"
+              className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
+            />
+            <select
+              required
+              id="durationUnit"
+              name="durationUnit"
+              value={formData.durationUnit}
+              onChange={handleInputChange}
+              className="w-1/4 border rounded-md p-2 ml-2"
+            >
+              <option value="">Select</option>
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+            </select>
+          </div>
+        </div>
 
         <div className="flex justify-between">
           <button

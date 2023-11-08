@@ -104,6 +104,37 @@ function Program() {
       toast.error("An error occurred while adding the program item");
     }
   };
+  
+  const handleEditProgram = async (updatedProgramData) => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/programs/${updatedProgramData.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify(updatedProgramData),
+        }
+      );
+
+      if (response.ok) {
+        const updatedPrograms = programs.map((program) =>
+          program.id === updatedProgramData.id ? { ...program, ...updatedProgramData } : program
+        );
+        setPrograms(updatedPrograms);
+        toast.success("Program item updated successfully!");
+      } else {
+        console.log("Failed to update program:", response.status);
+        toast.error("Failed to update program item");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while updating the program item");
+    }
+  };
 
   const handleAddProgram = (newProgram) => {
     addProgramBackend(newProgram);
@@ -280,6 +311,7 @@ function Program() {
             close={closeEditForm}
             event_id={eventId}
             programCategories={program_filter_categories}
+            editProgram={handleEditProgram}
 
           />
         )}
