@@ -31,22 +31,24 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const { time } = formData;
+    const { time, durationValue, durationUnit } = formData;
 
-    // if (!validateTime(time)) {
-    //   // Display a toast message for incorrect time format
-    //   // toast.error("Please enter a valid time format (e.g., 8:00 AM)");
-    //   return;
-    // }
+    if (!validateTime(time)) {
+      // Display a toast message for incorrect time format
+      toast.error("Please enter a valid time format (e.g., 8:00 AM)");
+      return;
+    }
 
-    console.log(validateTime(time))
+    if (!durationValue || !durationUnit) {
+      // Display a toast message for missing duration fields
+      toast.error("Please enter both duration value and select duration unit.");
+      return;
+    }
 
-    if (!formData) return;
+    const duration = `${durationValue} ${durationUnit}`;
 
     // Call the addProgram function with the formData
-    // addProgram(formData);
-    console.log(formData);
-
+    addProgram({ ...formData, duration });
     toast.success("Added a wedding program successfully!");
     close();
   };
