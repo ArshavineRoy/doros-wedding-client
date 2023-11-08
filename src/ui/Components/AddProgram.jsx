@@ -13,12 +13,13 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+  
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,20 +37,34 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
   return (
     <Modal close={close}>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 p-4">
-        <div className="mb-6">
-          <label htmlFor="time" className="block font-bold mb-1">
-            Time
-          </label>
-          <input
-            required
-            type="text"
-            id="time"
-            name="time"
-            value={formData.time}
-            onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-2 focus:outline-none"
-          />
-        </div>
+      <div className="mb-6">
+  <label htmlFor="time" className="block font-bold mb-1">
+    Time
+  </label>
+  <div className="flex">
+    <input
+      required
+      type="text"
+      id="time"
+      name="time"
+      value={formData.time}
+      onChange={handleInputChange}
+      className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
+    />
+    <select
+      required
+      id="timePeriod"
+      name="timePeriod"
+      value={formData.timePeriod}
+      onChange={handleInputChange}
+      className="w-1/4 border rounded-md p-2 ml-2"  // Add some margin to space the select
+    >
+      <option value="AM">AM</option>
+      <option value="PM">PM</option>
+    </select>
+  </div>
+</div>
+
 
         <div className="mb-6">
   <label htmlFor="category" className="block font-bold mb-1">
@@ -91,19 +106,35 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="duration" className="block font-bold mb-1">
-            Duration
-          </label>
-          <input
-            required
-            type="text"
-            id="duration"
-            name="duration"
-            value={formData.duration}
-            onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-2 focus:outline-none"
-          />
-        </div>
+  <label htmlFor="duration" className="block font-bold mb-1">
+    Duration
+  </label>
+  <div className="flex">
+    <input
+      required
+      type="text"
+      id="durationValue"
+      name="durationValue"
+      value={formData.durationValue}
+      onChange={handleInputChange}
+      className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
+    />
+    <select
+      required
+      id="durationUnit"
+      name="durationUnit"
+      value={formData.durationUnit}
+      onChange={handleInputChange}
+      className="w-1/4 border rounded-md p-2 ml-2"
+    >
+      <option value="">Select</option>
+      <option value="minutes">Minutes</option>
+      <option value="hours">Hours</option>
+    </select>
+  </div>
+</div>
+
+
 
         <div className="flex justify-between">
           <button
