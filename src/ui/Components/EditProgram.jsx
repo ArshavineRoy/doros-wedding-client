@@ -1,13 +1,14 @@
 import Modal from "../Modal";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 
 function EditProgram({ close, programData, event_id, programCategories, editProgram }) {
   const [formData, setFormData] = useState({
     time: "",
-    program_item: "",
-    duration: "",
     category: "",
+    program_item: "",
+    durationValue: "",
+    durationUnit: "",
     event_id: parseInt(event_id),
   });
 
@@ -17,12 +18,13 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
         program_item: programData.program_item,
         time: programData.time,
         category: programData.category,
-        duration: programData.duration,
+        durationValue: programData.durationValue,
+        durationUnit: programData.durationUnit,
       });
     }
   }, [programData]);
 
-  // Check if programToEdit is defined
+  // Check if programData is defined
   if (!programData) {
     return null;
   }
@@ -46,21 +48,28 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateTime(formData.time)) {
+    const { time, durationValue, durationUnit } = formData;
+
+    if (!validateTime(time)) {
       // Display a toast message for incorrect time format
       toast.error("Please enter a valid time format (e.g., 8:00 AM)");
       return;
     }
 
-    if (!formData) return;
+    if (!durationValue || !durationUnit) {
+      // Display a toast message for missing duration fields
+      toast.error("Please enter both duration value and select duration unit.");
+      return;
+    }
 
-    editProgram(formData);
-    console.log(formData);
+    // Combine durationValue and durationUnit into duration field
+    const duration = `${durationValue} ${durationUnit}`;
 
+    // Call the editProgram function with the formData
+    editProgram({ ...formData, duration });
     toast.success("Edited the program successfully!");
     close();
   };
-  
 
   return (
     <Modal close={close}>
@@ -77,9 +86,10 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             value={formData.time}
             onChange={handleInputChange}
             placeholder="e.g., 8:00 AM"
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
+
         <div className="mb-6">
           <label htmlFor="category" className="block font-bold mb-1">
             Category
@@ -94,12 +104,12 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
           >
             <option value="">Select</option>
             {programCategories
-            .filter((category) => category.name !== "All")
-            .map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
-           ))}
+              .filter((category) => category.name !== "All")
+              .map((category) => (
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -114,10 +124,9 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             name="program_item"
             value={formData.program_item}
             onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-full border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
-
 
         <div className="mb-6">
           <label htmlFor="durationValue" className="block font-bold mb-1">
@@ -148,6 +157,7 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             </select>
           </div>
         </div>
+
 
         <div className="flex justify-between">
           <button
