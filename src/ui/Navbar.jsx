@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useCurrentUser } from "../utilities/currentUser";
+import { useUser } from "../contexts/UserContext";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const user = useCurrentUser();
+  // const user = useCurrentUser();
+  const { user } = useUser();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -83,16 +84,15 @@ const NavBar = () => {
 
           {isLoggedIn ? (
             <>
-              {user && (
-                <li>
+              <li>
                 <div
                   to=""
                   className="text-base font leading-6 text-white hover:text-[#73332D]"
                 >
-                  Welcome, {user.first_name}
+                  Welcome, {user?.first_name}
                 </div>
               </li>
-              )}
+
               <button
                 onClick={handleLogout}
                 className="bg-white text-black text-center text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]"

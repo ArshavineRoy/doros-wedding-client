@@ -9,7 +9,7 @@ import video from "../assests/video.png";
 import vinyl from "../assests/vinyl.png";
 import weddingarch from "../assests/wedding-arch.png";
 import gift from "../assests/gift-box.png";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
@@ -22,6 +22,8 @@ function Dashboard() {
   const { accessToken, refreshToken } = getTokensInCookies();
   const { eventId } = useParams();
 
+  const navigate = useNavigate();
+
   console.log("Event ID:", eventId);
 
   function handleShowDateForm() {
@@ -30,6 +32,12 @@ function Dashboard() {
 
   function handleHideDateForm() {
     setFormDate(false);
+  }
+
+  function handleNavigation() {
+    if (data?.payment_status) {
+      navigate("/pay");
+    }
   }
 
   useEffect(() => {
@@ -84,7 +92,7 @@ function Dashboard() {
         />
       )}
 
-      <div className="flex flex-col space-y-4 px-[20px] md:px-32 md:grid md:grid-cols-3 gap-16 py-10">
+      <div className="flex flex-col px-[20px] md:grid md:grid-cols-2 md:px-12 lg:px-32 lg:grid lg:grid-cols-3 gap-16 py-8">
         {data.date && <Dates date={data.date} event={"Wedding Date"} />}
         {data.bachelorette_party && (
           <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
@@ -111,8 +119,10 @@ function Dashboard() {
       </div>
 
       <div>
-        <div className="grid grid-cols-2 gap-[50px] lg:flex lg:justify-between lg:gap-1 items-center pl-[20px] lg:px-[110px] py-16 w-full">
-          <Link to={`/dashboard/${eventId}/budget`}>
+        <div className="grid grid-cols-2 gap-[50px] md:grid md:grid-cols-2 md:px-40 lg:flex lg:justify-between lg:gap-1 items-center pl-[20px] lg:px-[110px] py-16 w-full">
+          <Link
+            to={data?.payment_status ? `/dashboard/${eventId}/budget` : "/pay"}
+          >
             <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <RiMoneyDollarBoxLine size={30} />
               <div className="flex flex-col text-center">
@@ -122,7 +132,11 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to={`/dashboard/${eventId}/checklist`}>
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/checklist` : "/pay"
+            }
+          >
             <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GrTask size={30} />
               <div className="flex flex-col text-center">
@@ -132,7 +146,11 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to={`/dashboard/${eventId}/programs`}>
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/programs` : "/pay"
+            }
+          >
             <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <BsFileEarmarkSpreadsheet size={30} />
               <div className="flex flex-col text-center">
@@ -142,7 +160,11 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to={`/dashboard/${eventId}/runsheet`}>
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/runsheet` : "/pay"
+            }
+          >
             <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GiNotebook size={30} />
               <div className="flex flex-col text-center">
@@ -169,7 +191,7 @@ function Dashboard() {
                   className=" max-w-[35%] lg:max-w-[50%]"
                 />
                 <div className="flex flex-col">
-                  <span className="font-bold text-sm md:text-lg">Events</span>
+                  <span className="font-bold text-sm lg:text-lg">Events</span>
                 </div>
               </div>
 
@@ -180,7 +202,7 @@ function Dashboard() {
                   className=" max-w-[35%] lg:max-w-[50%]"
                 />
                 <div className="flex flex-col lg:text-center">
-                  <span className="font-bold text-sm md:text-lg">Caterer</span>
+                  <span className="font-bold text-sm lg:text-lg">Caterer</span>
                 </div>
               </div>
 
@@ -191,7 +213,7 @@ function Dashboard() {
                   className=" max-w-[35%] lg:max-w-[50%]"
                 />
                 <div className="flex flex-col lg:text-center">
-                  <span className="font-bold text-sm md:text-lg">Events</span>
+                  <span className="font-bold text-sm lg:text-lg">Events</span>
                 </div>
               </div>
 
@@ -202,7 +224,7 @@ function Dashboard() {
                   className=" max-w-[35%] lg:max-w-[50%]"
                 />
                 <div className="flex flex-col lg:text-center">
-                  <span className="font-bold text-[12px] md:text-lg">
+                  <span className="font-bold text-[12px] lg:text-lg">
                     Photographer
                   </span>
                 </div>
@@ -215,7 +237,7 @@ function Dashboard() {
                   className=" max-w-[35%] lg:max-w-[50%]"
                 />
                 <div className="flex flex-col lg:text-center">
-                  <span className="font-bold text-[12px] md:text-lg">
+                  <span className="font-bold text-[12px] lg:text-lg">
                     Videographer
                   </span>
                 </div>
@@ -300,7 +322,7 @@ function Dashboard() {
       </div>
 
       <div className="px-8 lg:px-32 mt-16">
-        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex flex-col lg:flex-row gap-12 px-10 lg:justify-center lg:px-20 lg:gap-20">
+        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex flex-col md:flex-row gap-12 px-10 lg:justify-center lg:px-20 lg:gap-20">
           <img
             src={gift}
             alt=""
