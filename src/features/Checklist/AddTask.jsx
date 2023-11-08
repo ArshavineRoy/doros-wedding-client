@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 
-function AddTask({ close, addTask }) {
+function AddTask({ close, addTask, event_id }) {
   const [formData, setFormData] = useState({
     item: "",
     person: "",
@@ -49,13 +49,11 @@ function AddTask({ close, addTask }) {
       completed_status,
       contact,
       duration,
-      event_id: 1,
-      time_left: "2 days",
+      event_id: parseInt(event_id),
     };
 
-    console.log(updatedFormData);
-
-    toast.success("Added a wedding task successfully!");
+    // console.log(updatedFormData);
+    // toast.success("Added a wedding task successfully!");
     addTask(updatedFormData);
 
     close();
@@ -96,7 +94,7 @@ function AddTask({ close, addTask }) {
 
         <div className="mb-6">
           <label htmlFor="role" className="block font-bold mb-1">
-            Person Incharge
+            Role
           </label>
           <select
             name="role"
@@ -104,6 +102,7 @@ function AddTask({ close, addTask }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+            <option value="">Select</option>
             {task_categories.map((category) => (
               <option key={category.name} value={category.name}>
                 {category.name}
@@ -131,19 +130,17 @@ function AddTask({ close, addTask }) {
           <label htmlFor="duration" className="block font-bold mb-1">
             Duration
           </label>
-          <div className="flex">
-            <select
-              name="durationValue"
+          <div className="flex gap-2">
+            <input
+              required
+              type="number"
               id="durationValue"
-              className="w-1/2 border rounded-md p-2"
-              onChange={handleInputChange}
+              name="durationValue"
+              placeholder="Duration Value"
               value={formData.durationValue}
-            >
-              <option value="">Select</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              {/* Include other numeric values */}
-            </select>
+              onChange={handleInputChange}
+              className="w-[200px] border-b border-gray-400 p-[4px] focus:outline-none"
+            />
             <select
               name="durationType"
               id="durationType"
@@ -154,7 +151,6 @@ function AddTask({ close, addTask }) {
               <option value="">Select</option>
               <option value="Days">Days</option>
               <option value="Weeks">Weeks</option>
-              {/* Include other duration types */}
             </select>
           </div>
         </div>

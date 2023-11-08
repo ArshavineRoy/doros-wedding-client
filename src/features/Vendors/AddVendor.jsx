@@ -2,6 +2,7 @@ import Modal from "../../ui/Modal";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { vendor_categories } from "../../pages/Vendors";
+import { useParams } from "react-router-dom";
 
 function AddVendor({ close, onAddVendor }) {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ function AddVendor({ close, onAddVendor }) {
     country: "",
     category: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
@@ -36,6 +38,7 @@ function AddVendor({ close, onAddVendor }) {
 
     if (!formData) return;
     onAddVendor(formData);
+
     toast.success("Added your vendor successfully!");
     close();
   };
@@ -188,6 +191,7 @@ function AddVendor({ close, onAddVendor }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+            <option value="">Select</option>
             {vendor_categories.map((category) => (
               <>
                 <option value={category.name}>{category.name}</option>

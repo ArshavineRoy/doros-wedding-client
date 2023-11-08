@@ -16,7 +16,7 @@ const Budget = () => {
   const [editedItem, setEditedItem] = useState({});
   const [editItemId, setEditItemId] = useState(null);
   const { accessToken } = getTokensInCookies();
-  const { event_id } = useParams();
+  const { eventId } = useParams();
 
   //  calculate total amount that is inside the table
   const totalAmount = data.reduce(
@@ -27,17 +27,17 @@ const Budget = () => {
   // calculate maximum budget percentage
   const calculateMaxBudgetPercentage = () => {
     if (totalAmount > maxBudget) {
-      return 100; // if total amount exeeds max budget show 100
+      return 100; // If total amount exceeds max budget, show 100%
     } else {
-      return (totalAmount / maxBudget) * 100; // percentage calculation
+      return (totalAmount / maxBudget) * 100; // Calculate the percentage
     }
   };
 
   // Function to calculate the budget percentage
 
   const calculateBudgetPercentage = (item) => {
-    const estimateCost = parseFloat(item.estimate_cost);
-    const amountPaid = parseFloat(item.amount_paid);
+    const estimateCost = parseInt(item.estimate_cost);
+    const amountPaid = parseInt(item.amount_paid);
 
     if (isNaN(estimateCost) || isNaN(amountPaid) || estimateCost === 0) {
       return 0; // Not dividing by 0
@@ -52,7 +52,7 @@ const Budget = () => {
     try {
       const bearertoken = accessToken;
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/events/${event_id}`,
+        `https://doros-wedding-server.onrender.com/events/${eventId}`,
         {
           method: "GET",
           headers: {
@@ -78,7 +78,7 @@ const Budget = () => {
     try {
       const bearertoken = accessToken;
       const response = await fetch(
-        `https://doros-wedding-server.onrender.com/budgets?event_id=${event_id}`,
+        `https://doros-wedding-server.onrender.com/events/${eventId}`,
         {
           method: "GET",
           headers: {
@@ -91,7 +91,7 @@ const Budget = () => {
         throw new Error("Network Response Not Okay");
       }
       const result = await response.json();
-      setData(result);
+      setData(result.budgets);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -180,7 +180,6 @@ const Budget = () => {
     try {
       const bearertoken = accessToken;
       newItem.amount_paid = parseFloat(newItem.amount_paid);
-      newItem.contract_signed = newItem.contract_signed === "yes";
       const response = await fetch(
         "https://doros-wedding-server.onrender.com/budgets",
         {
@@ -205,18 +204,18 @@ const Budget = () => {
   // Function to handle form submission in the "Add Budget" modal
   const handleSubmitAddBudget = (event) => {
     event.preventDefault();
-    const newItem = {
+    const newItem2 = {
       priority: event.target.priority.value,
       item: event.target.item.value,
       person_in_charge: event.target.person_in_charge.value,
+      contract_signed: event.target.contract_signed.value === "yes",
       estimate_cost: event.target.estimate_cost.value,
       amount_paid: event.target.amount_paid.value,
-      contract_signed: event.target.contract_signed.value === "yes",
-      event_id: event_id,
+      event_id: eventId,
       notes: event.target.notes.value,
     };
-    console.log(newItem);
-    handleCreateItem(newItem);
+    console.log(newItem2);
+    handleCreateItem(newItem2);
   };
 
   // Function to open the edit modal
@@ -242,9 +241,14 @@ const Budget = () => {
   };
 
   return (
-    // circular bars
     <div>
-      <div className="flex justify-start gap-4 mt-40 ml-40">
+      <div className="flex items-center px-[110px]">
+        <div className="flex-1 border-b-2 border-black"></div>
+        <div className="px-4 font-bold text-[30px] ">Budget</div>
+        <div className="flex-1 border-b-2 border-black"></div>
+      </div>
+
+      <div className="flex justify-start gap-4 mt-8 ml-40">
         <div className="relative">
           <h1 className="bg-white p-4 absolute top-0 left-0 text-4xl font-bold">
             Your Budget
@@ -263,7 +267,7 @@ const Budget = () => {
                   pathColor:
                     totalAmount > maxBudget
                       ? "red"
-                      : `rgba(0,255, 0 ${
+                      : `rgba(0, 255, 0, ${
                           calculateMaxBudgetPercentage() / 100
                         })`,
                 })}
@@ -288,7 +292,7 @@ const Budget = () => {
                 styles={buildStyles({
                   textSize: "16px",
                   pathTransitionDuration: 1,
-                  pathColor: `rgba(37, 41, 88, ${
+                  pathColor: `rgba(62, 152, 199, ${
                     calculateBudgetPercentage({
                       estimate_cost: maxBudget,
                       amount_paid: totalAmount,
@@ -296,7 +300,7 @@ const Budget = () => {
                   })`,
                 })}
               />
-               <div className="mt-2 ml-4">Total Cost: {totalAmount}</div>
+              <div className="mt-2 ml-4">Total Cost: {totalAmount}</div>
             </div>
           </div>
         </div>
@@ -309,7 +313,7 @@ const Budget = () => {
       </div>
       <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-20"></hr>
 
-     {/* budget Table */}
+      {/* Budget Table */}
       <div className=" p-6 mt-18">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
@@ -343,7 +347,7 @@ const Budget = () => {
                     </td>
                     <td className="border px-4 py-2">{item.estimate_cost}</td>
                     <td className="border px-4 py-2">{item.amount_paid}</td>
-                    <td className="border px-4 py-2">{item.signed_contract}</td>
+                    <td className="border px-4 py-2">{item.contract_signed}</td>
                     <td className="border px-4 py-2">{item.notes}</td>
                     <td className="border px-4 py-2 ">
                       <button
@@ -493,13 +497,13 @@ const Budget = () => {
 
               <div className="flex justify-start mt-4">
                 <button
-                  className=" text-white p-2 rounded mr-2 bg-[#73332D]"
+                  className=" bg-[#73332D]text-white p-2 rounded mr-2"
                   onClick={handleUpdateItem}
                 >
                   Save
                 </button>
                 <button
-                  className="text-white p-2 rounded bg-[#73332D]"
+                  className="bg-[#73332D] text-white p-2 rounded"
                   onClick={closeModal}
                 >
                   Cancel
@@ -577,6 +581,7 @@ const Budget = () => {
                   name="contract_signed"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
+                  <option value="">Choose an option</option>
                   <option value="yes">yes</option>
                   <option value="no">no</option>
                 </select>
@@ -595,16 +600,16 @@ const Budget = () => {
                   placeholder="Write your thoughts here..."
                 ></textarea>
 
-                {/* Added Fields */}
+                {/* Fields Added */}
                 <div className="flex justify-start mt-4">
                   <button
                     type="submit"
-                    className=" text-white p-2 rounded mr-2 bg-[#73332D]"
+                    className=" bg-[#73332D]text-white p-2 rounded mr-2"
                   >
                     Save
                   </button>
                   <button
-                    className=" text-white p-2 rounded bg-[#73332D]"
+                    className=" bg-[#73332D] text-white p-2 rounded"
                     onClick={closeAddBudgetModal}
                   >
                     Cancel
@@ -618,7 +623,5 @@ const Budget = () => {
     </div>
   );
 };
-
-
 
 export default Budget;

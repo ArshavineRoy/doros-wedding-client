@@ -46,7 +46,6 @@ const CreateEventForm = () => {
     );
   }, []);
 
-
   const [eventData, setEventData] = useState({
     name: "",
     type: "wedding",
@@ -72,7 +71,7 @@ const CreateEventForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  console.log(eventData)
+    console.log(eventData);
     // post request
     try {
       const bearertoken = accessToken;
@@ -102,7 +101,7 @@ const CreateEventForm = () => {
           spouse_last_name: "",
           image_url: "",
         });
-        navigate("/dashboard");
+        navigate("/myevents");
       } else {
         throw new Error("Network response was not ok");
       }
