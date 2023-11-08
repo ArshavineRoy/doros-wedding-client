@@ -3,37 +3,32 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { getTokensInCookies } from "../features/auth/authCookies";
 import couple from "../../assests/couple.png";
-import favicon from "../../assests/favicon.png";
 import { formatDate } from "../../utilities/dateFormatter";
+
 
 const MyEvents = () => {
   const navigate = useNavigate();
   const [userEvents, setUserEvents] = useState([]);
   const { accessToken, refreshToken } = getTokensInCookies();
 
-
   const handleNavigate = () => {
     navigate("/events");
   };
 
-
   useEffect(() => {
     const bearertoken = accessToken;
     axios
-      .get("https://doros-wedding-server.onrender.com/events",
-        {
-          headers: {
-            Authorization: `Bearer ${bearertoken}`,
-          }
-        }
-      )
+      .get("https://doros-wedding-server.onrender.com/events", {
+        headers: {
+          Authorization: `Bearer ${bearertoken}`,
+        },
+      })
       .then((response) => {
         setUserEvents(response.data);
       })
       .catch((error) => {
         console.error("Error fetching user events:", error);
       });
-      
   }, [accessToken, refreshToken]);
 
   return (
@@ -41,59 +36,39 @@ const MyEvents = () => {
       <div className="w-full bg-white-200 p-6 text-2xl flex mt-20">
         <h1 className="text-left text-[#592727] text-2xl">My Events</h1>
         <button
-            className="rounded-lg ml-auto bg-[#73332d] text-white w-40 h-12 text-base"
-            onClick={handleNavigate}
-          >
-            Create Event
-          </button>
+          className="rounded-lg ml-auto bg-[#73332d] text-white w-40 h-12 text-base"
+          onClick={handleNavigate}
+        >
+          Create Event
+        </button>
       </div>
       <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
 
       {userEvents.length > 0 ? (
-        <div className="mx-auto p-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {userEvents.map((event) => (
-            <Link to={`/dashboard/${event.id}`} key={event.id} className="group relative block h-64 sm:h-80 lg:h-96">
-              <span className="absolute inset-0 border-2 border-dashed border-black"></span>
-
-              <div className="relative flex h-full transform items-end border-2 border-black bg-[#F7F2EE] transition-transform group-hover:-translate-x-2 group-hover:-translate-y-2">
-                <div className="p-4 !pt-0 transition-opacity group-hover:absolute group-hover:opacity-0 sm:p-6 lg:p-8">
-                  <img
-                    src={couple}
-                    alt=""
-                    className="h-24 w-24 sm:h-28 sm:w-28"
-                  />
-
-                  <h2 className="mt-4 text-xl font-medium sm:text-2xl">
-                    {event.name}
-                  </h2>
-                  <h2 className="mt-4 text-l font-medium sm:text-xl">
-                  {formatDate(event.date)}
-                  </h2>
-                  <h2 className="mt-4 text-l font-medium sm:text-xl">
-                  {event.location}
-                  </h2>
-                </div>
-                <div className="absolute p-4 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-6 lg:p-8">
-                  <img
-                    src={favicon}
-                    alt=""
-                    className="h-24 w-24 sm:h-28 sm:w-28"
-                  />
-                  <h3 className="mt-4 text-xl font-medium sm:text-2xl">
-                    {event.name}
-                  </h3>
-
-                  <p className="mt-4 text-sm sm:text-base">
-                    Click to view event planning details.
-                  </p>
-
-                  <p className="mt-8 font-bold">More details...</p>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-  
+        <>
+          <div className="mt-12 items-center mx-auto p-6 flex flex-col md:items-center lg:flex-row lg:flex lg:justify-center lg:items-center lg:flex-wrap lg:gap-20">
+            {userEvents.map((event) => (
+              <>
+                <Link
+                  to={`/dashboard/${event.id}`}
+                  key={event.id}
+                  className="card mb-20 lg:mb-4"
+                >
+                  <div className="content">
+                    <img className="max-w-[80%]" src={couple} alt=""></img>
+                    <div className="description">
+                      <p className="title">
+                        <strong>{event.name}</strong>
+                      </p>
+                      <p className="info">{formatDate(event.date)}</p>
+                      <p className="location">{event.location}</p>
+                    </div>
+                  </div>
+                </Link>
+              </>
+            ))}
+          </div>
+        </>
       ) : (
         <div className="grid pt-20 bg-white place-content-center pb-2">
           <div className="text-center">

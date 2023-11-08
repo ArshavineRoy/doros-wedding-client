@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useCurrentUser } from "../utilities/currentUser";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const user = useCurrentUser();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -78,24 +81,27 @@ const NavBar = () => {
             Registry
           </li>
 
-          <li>
-            <Link
-              to="/dashboard/vendors"
-              className="text-base font leading-6 text-white hover:text-[#73332D]"
-            >
-              Vendors
-            </Link>
-          </li>
-
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-white text-black text-center text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]"
-            >
-              <Link to="/" className="text-black">
-                LOGOUT
-              </Link>
-            </button>
+            <>
+              {user && (
+                <li>
+                <div
+                  to=""
+                  className="text-base font leading-6 text-white hover:text-[#73332D]"
+                >
+                  Welcome, {user.first_name}
+                </div>
+              </li>
+              )}
+              <button
+                onClick={handleLogout}
+                className="bg-white text-black text-center text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]"
+              >
+                <Link to="/" className="text-black">
+                  LOGOUT
+                </Link>
+              </button>
+            </>
           ) : (
             <button className="bg-white text-black text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]">
               <Link to="/login" className="text-black">
