@@ -68,13 +68,15 @@ function Dashboard() {
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
-      <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-2 mt-6 mb-0 cursor-pointer hover:bg-[#49120d]">
+      <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-0 cursor-pointer hover:bg-[#49120d]">
         <button className="text-[16px]" onClick={handleShowDateForm}>
           Add Date
         </button>
       </div>
 
-      {showDateForm && <ImportantDatesForm close={handleHideDateForm} />}
+      {showDateForm && (
+        <ImportantDatesForm close={handleHideDateForm} eventData={data} />
+      )}
 
       <div className="px-32  grid grid-cols-3 gap-16 py-10">
         {data.date && <Dates date={data.date} event={"Wedding Date"} />}

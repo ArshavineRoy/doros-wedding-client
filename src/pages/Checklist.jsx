@@ -9,7 +9,7 @@ import EditTask from "../features/Checklist/EditTask";
 import { dateCalculator } from "../utilities/datecalc";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
 import { toast } from "react-hot-toast";
-import { BsFilter } from "react-icons/bs";
+import { BsDownload, BsFilter } from "react-icons/bs";
 import Logo from "../features/Vendors/VendorsList";
 import { useParams } from "react-router-dom";
 
@@ -29,6 +29,7 @@ export const task_filter_categories = [
 
 function Checklist() {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [data, setData] = useState();
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]); // Assuming 'fake_tasks' is your initial data
@@ -41,6 +42,7 @@ function Checklist() {
 
   const handleRoleFilter = (role) => {
     setSelectedRole(role);
+    setCategoryFilters(false);
   };
 
   function handleShowCategoryFilter() {
@@ -69,6 +71,7 @@ function Checklist() {
           const data = await response.json();
           console.log("Data:", data);
           setTasks(data.tasks);
+          setData(data);
         } else {
           console.log("Response not OK:", response.status);
         }
@@ -234,7 +237,7 @@ function Checklist() {
     const roleTasks = filteredTasks.filter((task) => task.role === role);
 
     function timeLeft(duration) {
-      const { timeToAccomplish } = dateCalculator("2023-11-11", duration);
+      const { timeToAccomplish } = dateCalculator(data.date, duration);
       return timeToAccomplish;
     }
 
@@ -372,6 +375,7 @@ function Checklist() {
             taskData={selectedTask}
             close={closeEditForm}
             onSubmit={handleTaskUpdate}
+            event_id={eventId}
           />
         )}
 
@@ -401,14 +405,14 @@ function Checklist() {
             <p>Select a category:</p>
             <div className="flex flex-col items-start ml-0 gap-4">
               {task_filter_categories.map((category) => (
-                <>
+                <div key={category.name}>
                   <button
                     onClick={() => handleRoleFilter(category.name)}
                     className="border-2 border-gray-200 px-2 py-2 text-sm"
                   >
                     {category.name}
                   </button>
-                </>
+                </div>
               ))}
             </div>
           </div>
