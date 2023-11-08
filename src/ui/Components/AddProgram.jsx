@@ -107,21 +107,21 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="durationValue" className="block font-bold mb-1">
-            Duration
-          </label>
-          <div className="flex">
-            <input
-              required
-              type="text"
-              id="durationValue"
-              name="durationValue"
-              value={formData.durationValue}
-              onChange={handleInputChange}
-              placeholder="Enter duration value"
-              className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
-            />
-            <select
+  <label htmlFor="durationValue" className="block font-bold mb-1">
+    Duration
+  </label>
+  <div className="flex">
+    <input
+      required
+      type="text"
+      id="durationValue"
+      name="durationValue"
+      value={formData.durationValue}
+      onChange={handleInputChange}
+      placeholder="Enter duration value"
+      className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
+    />
+    <select
       required
       id="durationUnit"
       name="durationUnit"
@@ -129,11 +129,13 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
       onChange={handleInputChange}
       className="w-1/4 border rounded-md p-2 ml-2"
     >
+      <option value="">Select</option>
       <option value="minutes">Minutes</option>
       <option value="hours">Hours</option>
     </select>
-          </div>
-        </div>
+  </div>
+</div>
+
 
         <div className="flex justify-between">
           <button
