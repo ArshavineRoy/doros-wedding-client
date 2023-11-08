@@ -1,18 +1,29 @@
 import Modal from "../Modal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-function EditProgram({ close, editProgram, programToEdit }) {
+function EditProgram({ close, programData, event_id, programCategories }) {
   const [formData, setFormData] = useState({
-    id: programToEdit.id,
-    time: programToEdit.time,
-    program_item: programToEdit.program_item,
-    duration: programToEdit.duration,
-    event_id: programToEdit.event_id,
+    time: "",
+    program_item: "",
+    duration: "",
+    category: "",
+    event_id: parseInt(event_id),
   });
 
+  useEffect(() => {
+    if (programData) {
+      setFormData({
+        program_item: programData.program_item,
+        time: programData.time,
+        category: programData.category,
+        duration: programData.duration,
+      });
+    }
+  }, [programData]);
+
   // Check if programToEdit is defined
-  if (!programToEdit) {
+  if (!programData) {
     return null;
   }
 
@@ -30,7 +41,8 @@ function EditProgram({ close, editProgram, programToEdit }) {
 
     if (!formData) return;
 
-    editProgram(formData);
+    // editProgram(formData);
+    console.log(formData);
 
     toast.success("Edited the program successfully!");
     close();
@@ -67,6 +79,27 @@ function EditProgram({ close, editProgram, programToEdit }) {
             onChange={handleInputChange}
             className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
           />
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="category" className="block font-bold mb-1">
+            Category
+          </label>
+          <select
+            required
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleInputChange}
+            className="w-full border rounded-md p-2"
+          >
+            <option value="">Select</option> 
+            {programCategories.map((category) => (
+              <option key={category.name} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-6">

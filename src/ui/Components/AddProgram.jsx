@@ -5,13 +5,11 @@ import { toast } from "react-hot-toast";
 function AddProgram({ close, addProgram, programCategories, eventId }) {
   const [formData, setFormData] = useState({
     time: "",
-    category: programCategories[0] || "",
+    category: programCategories[0]?.name || "", 
     program_item: "",
     duration: "",
-    event_id:1,
+    event_id: parseInt(eventId),
   });
-
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -27,16 +25,13 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
 
     if (!formData) return;
 
-    // Add the eventId to the formData
-    // formData.event_id = eventId;
-
     // Call the addProgram function with the formData
     addProgram(formData);
     console.log(formData);
 
     toast.success("Added a wedding program successfully!");
     close();
-  };
+  }
 
   return (
     <Modal close={close}>
@@ -57,24 +52,28 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="category" className="block font-bold mb-1">
-            Category
-          </label>
-          <select
-            required
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            className="w-full border rounded-md p-2"
-          >
-            {programCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div>
+  <label htmlFor="category" className="block font-bold mb-1">
+    Category
+  </label>
+  <select
+    required
+    id="category"
+    name="category"
+    value={formData.category}
+    onChange={handleInputChange}
+    className="w-full border rounded-md p-2"
+  >
+    <option value="">Select</option> 
+    {programCategories
+      .filter((category) => category.name !== "All")
+      .map((category) => (
+        <option key={category.name} value={category.name}>
+          {category.name}
+        </option>
+      ))}
+  </select>
+</div>
+
 
         <div className="mb-6">
           <label htmlFor="program_item" className="block font-bold mb-1">
