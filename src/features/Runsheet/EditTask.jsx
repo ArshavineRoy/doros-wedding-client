@@ -1,5 +1,5 @@
 import Modal from "../../ui/Modal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { task_categories } from "../../pages/Runsheet";
 import { getTokensInCookies } from "../../ui/features/auth/authCookies";
@@ -13,7 +13,6 @@ function EditTask({ taskData, close, onSubmit }) {
     role: "",
     completed_status: false,
     contact: "",
-    edit_id: 1,
   });
 
   useEffect(() => {
@@ -24,7 +23,7 @@ function EditTask({ taskData, close, onSubmit }) {
         role: taskData.role,
         completed_status: taskData.completed_status,
         contact: taskData.contact,
-        event_id: 1,
+        event_id: taskData.event_id,
       });
     }
   }, [taskData]);

@@ -4,8 +4,7 @@ import { toast } from "react-hot-toast";
 import { vendor_categories } from "../../pages/Vendors";
 import { useParams } from "react-router-dom";
 
-function AddVendor({ close, onAddVendor, addVendorToMyList }) {
-  const { event_id } = useParams();
+function AddVendor({ close, onAddVendor }) {
   const [formData, setFormData] = useState({
     contact_person: "",
     company: "",
@@ -17,8 +16,8 @@ function AddVendor({ close, onAddVendor, addVendorToMyList }) {
     city: "",
     country: "",
     category: "",
-    event_id: event_id,
   });
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
@@ -38,9 +37,8 @@ function AddVendor({ close, onAddVendor, addVendorToMyList }) {
     console.log(formData);
 
     if (!formData) return;
-    // onAddVendor(formData);
+    onAddVendor(formData);
 
-    addVendorToMyList(formData);
     toast.success("Added your vendor successfully!");
     close();
   };
@@ -193,6 +191,7 @@ function AddVendor({ close, onAddVendor, addVendorToMyList }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+            <option value="">Select</option>
             {vendor_categories.map((category) => (
               <>
                 <option value={category.name}>{category.name}</option>

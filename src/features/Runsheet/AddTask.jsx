@@ -31,12 +31,10 @@ function AddTask({ close, addTask, event_id }) {
     addTask(formData);
     toast.success("Added a wedding task successfully!");
     // console.log(formData);
-  console.log(`formData`, formData);
-
+    console.log(`formData`, formData);
 
     close();
   };
-
 
   return (
     <Modal close={close}>
@@ -81,6 +79,7 @@ function AddTask({ close, addTask, event_id }) {
             className="w-full border rounded-md p-2"
             onChange={handleInputChange}
           >
+            <option value="">Select</option>
             {task_categories.map((category) => (
               <>
                 <option value={category.name}>{category.name}</option>

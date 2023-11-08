@@ -8,7 +8,6 @@ function DashboardHero() {
   const { accessToken, refreshToken } = getTokensInCookies();
   const { eventId } = useParams();
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,8 +38,8 @@ function DashboardHero() {
   }, [eventId, accessToken, refreshToken]);
 
   return (
-    <div className="w-full flex px-36 pt-40 mb-[] pb-20 h-[550px] ">
-      <div className="text-[90px] italic basis-3/4 flex flex-row gap-6 space-y-0 font-curly">
+    <div className="w-full flex flex-col px-12 pt-36 md:flex-row md:justify-between md:px-44 md:pt-40 pb-20 h-full md:h-[550px] ">
+      <div className="text-[40px] font-bold md:text-[90px] italic basis-3/4 flex flex-row gap-6 space-y-0 font-curly">
         <span className="">{data.name?.split(" ")[0]}</span>
         <span className="py-[60px]">+</span>
         <span className="py-[120px]">{data.spouse_first_name}</span>
