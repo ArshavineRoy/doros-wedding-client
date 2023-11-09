@@ -66,10 +66,17 @@ function EditProgram({ close, programData, event_id, programCategories, onSubmit
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === "durationValue" && !(/^\d+$/.test(value))) {
-      // Display a toast message for non-numeric input
-      toast.error("Please enter a valid number for duration value.");
+  
+    if (name === "durationValue" && !(/^\d*$/.test(value))) {
+      // Display a toast message for non-numeric input only once
+      toast.error("Please enter a valid number for duration value.", {
+        toastId: "nonNumericDuration",
+      });
+      
+      // Clear the input value for non-numeric input
+      // This allows the user to delete incorrect input
+      e.target.value = "";
+    
       return;
     }
 
