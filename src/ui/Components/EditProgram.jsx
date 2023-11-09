@@ -1,15 +1,21 @@
 import Modal from "../Modal";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { getTokensInCookies } from "../features/auth/authCookies";
 
-function EditProgram({ close, programData, event_id, programCategories, editProgram }) {
+
+function EditProgram({ close, programData, event_id, programCategories, onSubmit }) {
   const [formData, setFormData] = useState({
     time: "",
-    program_item: "",
-    duration: "",
     category: "",
+    program_item: "",
+    durationValue: "",
+    durationUnit: "",
     event_id: parseInt(event_id),
   });
+
+  const { accessToken, refreshToken } = getTokensInCookies();
+
 
   useEffect(() => {
     if (programData) {
@@ -17,18 +23,55 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
         program_item: programData.program_item,
         time: programData.time,
         category: programData.category,
-        duration: programData.duration,
+        durationValue: programData.durationValue,
+        durationUnit: programData.durationUnit,
       });
     }
   }, [programData]);
 
-  // Check if programToEdit is defined
+  const onEditProgram = async (updatedProgramData) => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/programs/${programData.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify(updatedProgramData),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json()
+        onSubmit(data)
+        toast.success("Program item updated successfully!");
+      } else {
+        console.log("Failed to update program:", response.status);
+        toast.error("Failed to update program item");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while updating the program item");
+    }
+  };
+
+
+  // Check if programData is defined
   if (!programData) {
     return null;
   }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "durationValue" && !(/^\d+$/.test(value))) {
+      // Display a toast message for non-numeric input
+      toast.error("Please enter a valid number for duration value.");
+      return;
+    }
 
     setFormData((prevData) => ({
       ...prevData,
@@ -46,21 +89,28 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validateTime(formData.time)) {
+    const { time, durationValue, durationUnit } = formData;
+
+    if (!validateTime(time)) {
       // Display a toast message for incorrect time format
       toast.error("Please enter a valid time format (e.g., 8:00 AM)");
       return;
     }
 
-    if (!formData) return;
+    if (!durationValue || !durationUnit) {
+      // Display a toast message for missing duration fields
+      toast.error("Please enter both duration value and select duration unit.");
+      return;
+    }
 
-    editProgram(formData);
-    console.log(formData);
+    // Combine durationValue and durationUnit into duration field
+    const duration = `${durationValue} ${durationUnit}`;
 
+    // Call the editProgram function with the formData
+    onEditProgram({ ...formData, duration });
     toast.success("Edited the program successfully!");
     close();
   };
-  
 
   return (
     <Modal close={close}>
@@ -77,9 +127,10 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             value={formData.time}
             onChange={handleInputChange}
             placeholder="e.g., 8:00 AM"
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-3/4 border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
+
         <div className="mb-6">
           <label htmlFor="category" className="block font-bold mb-1">
             Category
@@ -94,12 +145,12 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
           >
             <option value="">Select</option>
             {programCategories
-            .filter((category) => category.name !== "All")
-            .map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
-           ))}
+              .filter((category) => category.name !== "All")
+              .map((category) => (
+                <option key={category.name} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -114,10 +165,9 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             name="program_item"
             value={formData.program_item}
             onChange={handleInputChange}
-            className="w-full border-b border-gray-400 p-[4px] focus:outline-none"
+            className="w-full border-b border-gray-400 p-2 focus:outline-none"
           />
         </div>
-
 
         <div className="mb-6">
           <label htmlFor="durationValue" className="block font-bold mb-1">
@@ -148,6 +198,7 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
             </select>
           </div>
         </div>
+
 
         <div className="flex justify-between">
           <button

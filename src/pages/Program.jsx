@@ -136,6 +136,13 @@ function Program() {
     }
   };
 
+  function handleProgramEdit (updatedProgramData){
+    const updatedPrograms = programs.map((program) =>
+          program.id === updatedProgramData.id ? { ...program, ...updatedProgramData } : program
+        );
+        setPrograms(updatedPrograms);
+  }
+
   const handleAddProgram = (newProgram) => {
     addProgramBackend(newProgram);
     // setShowAddModal(false);
@@ -201,13 +208,14 @@ function Program() {
         : programs.filter((program) => program.category === selectedCategory);
   
         
-        const roleprograms = filteredPrograms.filter((prog) => prog.category === categoryName);
-        // console.log(filteredPrograms)
+        const roleprograms = programs.filter((prog) => prog.category === categoryName);
+        console.log(filteredPrograms)
         
         if (selectedCategory !== "All" && categoryName !== selectedCategory) {
           return null;
         }
-    // console.log(roleprograms)
+        console.log(programs)
+    console.log(roleprograms)
 
   
     return (
@@ -231,39 +239,46 @@ function Program() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {roleprograms?.map((program) => (
-              <tr key={program.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{program.time}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{program.program_item}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{program.duration}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex gap-2 text-gray-600">
-                    <AiOutlineEdit
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleEditForm(program)}
-                    />
-                    <RiDeleteBin6Line
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleDelete(program.id)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {roleprograms?.map((program) => (
+    <tr key={program.id} className="bg-gray-100 transition-all">
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.time}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.program_item}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.duration}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap">
+        <div className="flex items-center gap-2 text-gray-600">
+          <AiOutlineEdit
+            size={22}
+            className="hover:text-black cursor-pointer"
+            onClick={() => handleEditForm(program)}
+          />
+          <RiDeleteBin6Line
+            size={22}
+            className="hover:text-black cursor-pointer"
+            onClick={() => handleDelete(program.id)}
+          />
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
     );
   };
 
   return (
-      <div className="py-20">
-      <div className="flex items-center px-[126px]">
-        <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Event Program</div>
-        <div className="flex-1 border-b-2 border-black"></div>
+    <div className="py-10 md:py-20">
+    <div className="flex items-center px-4 md:px-8 lg:px-16">
+      <div className="flex-1 border-b-2 border-black"></div>
+      <div className="px-4 font-bold text-lg md:text-xl lg:text-2xl">Event Program</div>
+      <div className="flex-1 border-b-2 border-black"></div>
       </div>
       <div>
         <div className="flex justify-between items-center px-32 py-8">
@@ -312,6 +327,7 @@ function Program() {
             event_id={eventId}
             programCategories={program_filter_categories}
             editProgram={handleEditProgram}
+            onSubmit={handleProgramEdit}
 
           />
         )}
@@ -356,11 +372,25 @@ function Program() {
         </div>
         
 
-  {renderTable("Bride & Bridesmaids' Preparation")}
+<div className="overflow-x-auto">
+  {renderTable("Brides & Bridesmaids' Preparation")}
+</div>
+
+<div className="overflow-x-auto">
   {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
+</div>
+
+<div className="overflow-x-auto">
   {renderTable("Groom & Groomsmen's Preparation")}
+</div>
+
+<div className="overflow-x-auto">
   {renderTable("Wedding Ceremony")}
+</div>
+
+<div className="overflow-x-auto">
   {renderTable("Wedding Reception")}
+</div>
 
       </div>
     </div>
