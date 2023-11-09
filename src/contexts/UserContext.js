@@ -1,23 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { getTokensInCookies } from "../ui/features/auth/authCookies";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import axios from "axios";
 
 const UserContext = createContext();
 
-function UserProvider({ children }) {
+const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const { accessToken } = getTokensInCookies();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bearertoken = accessToken;
+        const accessToken = localStorage.getItem("access_token");
         const response = await axios.get(
-          `https://doros-wedding-server.onrender.com/user`,
+          "https://doros-wedding-server.onrender.com/user",
           {
             headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
@@ -33,24 +30,32 @@ function UserProvider({ children }) {
     };
 
     fetchData();
-  }, [accessToken]);
+  }, []);
 
-  // console.log(`user: `, user ? user.first_name : "Loading");
+  const updateUser = (callback) => {
+    setUser((prevState) => {
+      const updatedUser = callback(prevState);
+      return updatedUser;
+    });
+  };
 
   return (
     <UserContext.Provider
       value={{
-        user: user,
+        user,
+        updateUser,
       }}
     >
       {children}
     </UserContext.Provider>
   );
-}
+};
+
 function useUser() {
   const context = useContext(UserContext);
-  if (context === undefined)
-    throw new Error("PostContext was used outside of the PostProvider");
+  if (context === undefined) {
+    throw new Error("UserContext was used outside of the UserProvider");
+  }
   return context;
 }
 

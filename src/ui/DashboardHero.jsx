@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { getTokensInCookies } from "./features/auth/authCookies";
 import { useParams } from "react-router-dom";
-import { useUser } from "../contexts/UserContext";
+import { useCurrentUser } from "../utilities/currentUser";
 
 function DashboardHero() {
   const [data, setData] = useState([]);
   const { accessToken, refreshToken } = getTokensInCookies();
   const { eventId } = useParams();
-  const { user } = useUser();
+  // const { user } = useUser();
+
+  const user = useCurrentUser();
 
   useEffect(() => {
     const fetchData = async () => {
