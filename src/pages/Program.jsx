@@ -267,11 +267,11 @@ function Program() {
   };
 
   return (
-      <div className="py-20">
-      <div className="flex items-center px-[126px]">
-        <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Event Program</div>
-        <div className="flex-1 border-b-2 border-black"></div>
+    <div className="py-10 md:py-20">
+    <div className="flex items-center px-4 md:px-8 lg:px-16">
+      <div className="flex-1 border-b-2 border-black"></div>
+      <div className="px-4 font-bold text-lg md:text-xl lg:text-2xl">Event Program</div>
+      <div className="flex-1 border-b-2 border-black"></div>
       </div>
       <div>
         <div className="flex justify-between items-center px-32 py-8">
@@ -365,11 +365,30 @@ function Program() {
         </div>
         
 
+ {/* Add this wrapper div around each renderTable call */}
+<div className="overflow-x-auto">
   {renderTable("Brides & Bridesmaids' Preparation")}
+</div>
+
+{/* Repeat for other renderTable calls */}
+<div className="overflow-x-auto">
   {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
+</div>
+
+{/* Repeat for other renderTable calls */}
+<div className="overflow-x-auto">
   {renderTable("Groom & Groomsmen's Preparation")}
+</div>
+
+{/* Repeat for other renderTable calls */}
+<div className="overflow-x-auto">
   {renderTable("Wedding Ceremony")}
+</div>
+
+{/* Repeat for other renderTable calls */}
+<div className="overflow-x-auto">
   {renderTable("Wedding Reception")}
+</div>
 
       </div>
     </div>
