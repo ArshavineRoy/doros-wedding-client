@@ -24,7 +24,7 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
-  console.log("Event ID:", eventId);
+  // console.log("Event ID:", eventId);
 
   function handleShowDateForm() {
     setFormDate(true);
@@ -77,6 +77,8 @@ function Dashboard() {
         </div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
+
+      <button>Invite people</button>
 
       <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-0 cursor-pointer hover:bg-[#49120d]">
         <button className="text-[16px]" onClick={handleShowDateForm}>

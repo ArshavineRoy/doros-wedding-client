@@ -8,32 +8,30 @@ function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const { accessToken } = getTokensInCookies();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const bearertoken = accessToken;
-        const response = await axios.get(
-          `https://doros-wedding-server.onrender.com/user`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          setUser(response.data);
-        } else {
-          console.log("Response not OK:", response.status);
+  const fetchData = async () => {
+    try {
+      const bearertoken = accessToken;
+      const response = await axios.get(
+        `https://doros-wedding-server.onrender.com/user`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
         }
-      } catch (err) {
-        console.log("Error:", err);
-      }
-    };
+      );
 
-    fetchData();
-  }, [accessToken]);
+      if (response.status === 200) {
+        setUser(response.data);
+      } else {
+        console.log("Response not OK:", response.status);
+      }
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  };
+
+  fetchData();
 
   // console.log(`user: `, user ? user.first_name : "Loading");
 
@@ -47,6 +45,7 @@ function UserProvider({ children }) {
     </UserContext.Provider>
   );
 }
+
 function useUser() {
   const context = useContext(UserContext);
   if (context === undefined)
