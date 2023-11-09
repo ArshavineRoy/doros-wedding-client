@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { getTokensInCookies } from "../features/auth/authCookies";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -247,6 +247,10 @@ const Budget = () => {
         <div className="px-4 font-bold text-[30px] ">Budget</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
+
+      <Link to={`/dashboard/${eventId}`} className="px-32 text-stone-400">
+        Back to dashboard &larr;
+      </Link>
 
       <div className="flex justify-start gap-4 mt-8 ml-40">
         <div className="relative">

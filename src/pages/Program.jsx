@@ -10,7 +10,7 @@ import { toast } from "react-hot-toast";
 import AddProgram from "../ui/Components/AddProgram";
 import EditProgram from "../ui/Components/EditProgram";
 import Logo from "../features/Vendors/VendorsList";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const program_filter_categories = [
   { name: "All" },
@@ -20,7 +20,6 @@ export const program_filter_categories = [
   { name: "Wedding Ceremony" },
   { name: "Wedding Reception" },
 ];
-
 
 function Program() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -59,7 +58,6 @@ function Program() {
             },
           }
         );
-        
 
         if (response.ok) {
           const data = await response.json();
@@ -104,7 +102,7 @@ function Program() {
       toast.error("An error occurred while adding the program item");
     }
   };
-  
+
   const handleEditProgram = async (updatedProgramData) => {
     try {
       const bearertoken = accessToken;
@@ -122,7 +120,9 @@ function Program() {
 
       if (response.ok) {
         const updatedPrograms = programs.map((program) =>
-          program.id === updatedProgramData.id ? { ...program, ...updatedProgramData } : program
+          program.id === updatedProgramData.id
+            ? { ...program, ...updatedProgramData }
+            : program
         );
         setPrograms(updatedPrograms);
         toast.success("Program item updated successfully!");
@@ -136,11 +136,13 @@ function Program() {
     }
   };
 
-  function handleProgramEdit (updatedProgramData){
+  function handleProgramEdit(updatedProgramData) {
     const updatedPrograms = programs.map((program) =>
-          program.id === updatedProgramData.id ? { ...program, ...updatedProgramData } : program
-        );
-        setPrograms(updatedPrograms);
+      program.id === updatedProgramData.id
+        ? { ...program, ...updatedProgramData }
+        : program
+    );
+    setPrograms(updatedPrograms);
   }
 
   const handleAddProgram = (newProgram) => {
@@ -150,7 +152,7 @@ function Program() {
 
   const handleAddForm = () => {
     setShowAddModal(true);
-    console.log('ckkbvk')
+    console.log("ckkbvk");
   };
 
   const handleEditForm = (program) => {
@@ -206,21 +208,23 @@ function Program() {
       selectedCategory === "All"
         ? programs
         : programs.filter((program) => program.category === selectedCategory);
-  
-        
-        const roleprograms = programs.filter((prog) => prog.category === categoryName);
-        console.log(filteredPrograms)
-        
-        if (selectedCategory !== "All" && categoryName !== selectedCategory) {
-          return null;
-        }
-        console.log(programs)
-    console.log(roleprograms)
 
-  
+    const roleprograms = programs.filter(
+      (prog) => prog.category === categoryName
+    );
+    console.log(filteredPrograms);
+
+    if (selectedCategory !== "All" && categoryName !== selectedCategory) {
+      return null;
+    }
+    console.log(programs);
+    console.log(roleprograms);
+
     return (
       <div className="mt-6 px-32">
-        <h1 className="text-2xl font-bold text-gray-800 mb-3">{categoryName}</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-3">
+          {categoryName}
+        </h1>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -239,35 +243,34 @@ function Program() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-  {roleprograms?.map((program) => (
-    <tr key={program.id} className="bg-gray-100 transition-all">
-      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
-        {program.time}
-      </td>
-      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
-        {program.program_item}
-      </td>
-      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
-        {program.duration}
-      </td>
-      <td className="px-6 py-3 whitespace-nowrap">
-        <div className="flex items-center gap-2 text-gray-600">
-          <AiOutlineEdit
-            size={22}
-            className="hover:text-black cursor-pointer"
-            onClick={() => handleEditForm(program)}
-          />
-          <RiDeleteBin6Line
-            size={22}
-            className="hover:text-black cursor-pointer"
-            onClick={() => handleDelete(program.id)}
-          />
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+            {roleprograms?.map((program) => (
+              <tr key={program.id} className="bg-gray-100 transition-all">
+                <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+                  {program.time}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+                  {program.program_item}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+                  {program.duration}
+                </td>
+                <td className="px-6 py-3 whitespace-nowrap">
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <AiOutlineEdit
+                      size={22}
+                      className="hover:text-black cursor-pointer"
+                      onClick={() => handleEditForm(program)}
+                    />
+                    <RiDeleteBin6Line
+                      size={22}
+                      className="hover:text-black cursor-pointer"
+                      onClick={() => handleDelete(program.id)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     );
@@ -275,11 +278,18 @@ function Program() {
 
   return (
     <div className="py-10 md:py-20">
-    <div className="flex items-center px-4 md:px-8 lg:px-16">
-      <div className="flex-1 border-b-2 border-black"></div>
-      <div className="px-4 font-bold text-lg md:text-xl lg:text-2xl">Event Program</div>
-      <div className="flex-1 border-b-2 border-black"></div>
+      <div className="flex items-center px-4 md:px-8 lg:px-16">
+        <div className="flex-1 border-b-2 border-black"></div>
+        <div className="px-4 font-bold text-lg md:text-xl lg:text-2xl">
+          Event Program
+        </div>
+        <div className="flex-1 border-b-2 border-black"></div>
       </div>
+
+      <Link to={`/dashboard/${eventId}`} className="px-32 text-stone-400">
+        Back to dashboard &larr;
+      </Link>
+
       <div>
         <div className="flex justify-between items-center px-32 py-8">
           <button
@@ -308,7 +318,6 @@ function Program() {
               className="cursor-pointer text-stone-700 hover:text-black"
             />
           </div>
-          
         </div>
 
         {showAddModal && (
@@ -328,7 +337,6 @@ function Program() {
             programCategories={program_filter_categories}
             editProgram={handleEditProgram}
             onSubmit={handleProgramEdit}
-
           />
         )}
 
@@ -357,46 +365,39 @@ function Program() {
           <div className="px-2 pb-6 text-lg mt-4 flex flex-col gap-2">
             <p>Select a category:</p>
             <div className="flex flex-col items-start ml-0 gap-4">
-            {program_filter_categories.map((category) => (
-  <button
-    onClick={() => handleCategoryFilter(category.name)}
-    className="border-2 border-gray-200 px-2 py-2 text-sm"
-    key={category.name}
-  >
-    {category.name}
-  </button>
-))}
-              </div>
+              {program_filter_categories.map((category) => (
+                <button
+                  onClick={() => handleCategoryFilter(category.name)}
+                  className="border-2 border-gray-200 px-2 py-2 text-sm"
+                  key={category.name}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
           </div>
-          
         </div>
-        
 
-<div className="overflow-x-auto">
-  {renderTable("Brides & Bridesmaids' Preparation")}
-</div>
+        <div className="overflow-x-auto">
+          {renderTable("Brides & Bridesmaids' Preparation")}
+        </div>
 
-<div className="overflow-x-auto">
-  {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
-</div>
+        <div className="overflow-x-auto">
+          {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
+        </div>
 
-<div className="overflow-x-auto">
-  {renderTable("Groom & Groomsmen's Preparation")}
-</div>
+        <div className="overflow-x-auto">
+          {renderTable("Groom & Groomsmen's Preparation")}
+        </div>
 
-<div className="overflow-x-auto">
-  {renderTable("Wedding Ceremony")}
-</div>
+        <div className="overflow-x-auto">{renderTable("Wedding Ceremony")}</div>
 
-<div className="overflow-x-auto">
-  {renderTable("Wedding Reception")}
-</div>
-
+        <div className="overflow-x-auto">
+          {renderTable("Wedding Reception")}
+        </div>
       </div>
     </div>
   );
-
-
 }
 
 export default Program;
