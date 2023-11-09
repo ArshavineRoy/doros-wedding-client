@@ -22,9 +22,11 @@ function Dashboard() {
   const { accessToken, refreshToken } = getTokensInCookies();
   const { eventId } = useParams();
 
+
   const navigate = useNavigate();
 
-  console.log("Event ID:", eventId);
+  // console.log("Event ID:", eventId);
+
 
   function handleShowDateForm() {
     setFormDate(true);
@@ -85,12 +87,7 @@ function Dashboard() {
       </div>
 
       {showDateForm && (
-        <ImportantDatesForm
-          close={handleHideDateForm}
-          eventData={data}
-          event_id={eventId}
-        />
-      )}
+        <ImportantDatesForm close={handleHideDateForm} eventData={data} event_id={eventId}/>
 
       <div className="flex flex-col px-[20px] md:grid md:grid-cols-2 md:px-12 lg:px-32 lg:grid lg:grid-cols-3 gap-16 py-8">
         {data.date && <Dates date={data.date} event={"Wedding Date"} />}
@@ -117,7 +114,8 @@ function Dashboard() {
         <div className="px-4 font-bold text-[24px] md:text-[30px]">Planner</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
-
+      
+     
       <div>
         <div className="grid grid-cols-2 gap-[50px] md:grid md:grid-cols-2 md:px-40 lg:flex lg:justify-between lg:gap-1 items-center pl-[20px] lg:px-[110px] py-16 w-full">
           <Link
