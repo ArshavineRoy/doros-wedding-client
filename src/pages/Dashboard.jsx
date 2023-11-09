@@ -77,7 +77,7 @@ function Dashboard() {
       </div>
 
       {showDateForm && (
-        <ImportantDatesForm close={handleHideDateForm} eventData={data} event_id={eventId}/>
+        <ImportantDatesForm close={handleHideDateForm} eventData={data} event_id={eventId}/>)}
 
       <div className="flex flex-col space-y-4 px-[20px] md:px-32 md:grid md:grid-cols-3 gap-16 py-10">
         {data.date && <Dates date={data.date} event={"Wedding Date"} />}
