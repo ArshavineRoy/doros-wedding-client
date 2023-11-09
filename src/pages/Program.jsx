@@ -136,6 +136,13 @@ function Program() {
     }
   };
 
+  function handleProgramEdit (updatedProgramData){
+    const updatedPrograms = programs.map((program) =>
+          program.id === updatedProgramData.id ? { ...program, ...updatedProgramData } : program
+        );
+        setPrograms(updatedPrograms);
+  }
+
   const handleAddProgram = (newProgram) => {
     addProgramBackend(newProgram);
     // setShowAddModal(false);
@@ -201,13 +208,14 @@ function Program() {
         : programs.filter((program) => program.category === selectedCategory);
   
         
-        const roleprograms = filteredPrograms.filter((prog) => prog.category === categoryName);
-        // console.log(filteredPrograms)
+        const roleprograms = programs.filter((prog) => prog.category === categoryName);
+        console.log(filteredPrograms)
         
         if (selectedCategory !== "All" && categoryName !== selectedCategory) {
           return null;
         }
-    // console.log(roleprograms)
+        console.log(programs)
+    console.log(roleprograms)
 
   
     return (
@@ -312,6 +320,7 @@ function Program() {
             event_id={eventId}
             programCategories={program_filter_categories}
             editProgram={handleEditProgram}
+            onSubmit={handleProgramEdit}
 
           />
         )}
@@ -356,7 +365,7 @@ function Program() {
         </div>
         
 
-  {renderTable("Bride & Bridesmaids' Preparation")}
+  {renderTable("Brides & Bridesmaids' Preparation")}
   {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
   {renderTable("Groom & Groomsmen's Preparation")}
   {renderTable("Wedding Ceremony")}

@@ -15,6 +15,14 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    if (name === "durationValue" && !(/^\d+$/.test(value))) {
+      // Display a toast message for non-numeric input
+      toast.error("Please enter a valid number for duration value.");
+      return;
+    }
+  
+    
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -35,7 +43,7 @@ function AddProgram({ close, addProgram, programCategories, eventId }) {
 
     if (!validateTime(time)) {
       // Display a toast message for incorrect time format
-      toast.error("Please enter a valid time format (e.g., 8:00 AM)");
+      toast.error("Please enter a valid time format (e.g., 08:00 AM)");
       return;
     }
 

@@ -1,8 +1,10 @@
 import Modal from "../Modal";
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { getTokensInCookies } from "../features/auth/authCookies";
 
-function EditProgram({ close, programData, event_id, programCategories, editProgram }) {
+
+function EditProgram({ close, programData, event_id, programCategories, onSubmit }) {
   const [formData, setFormData] = useState({
     time: "",
     category: "",
@@ -11,6 +13,9 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
     durationUnit: "",
     event_id: parseInt(event_id),
   });
+
+  const { accessToken, refreshToken } = getTokensInCookies();
+
 
   useEffect(() => {
     if (programData) {
@@ -24,6 +29,36 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
     }
   }, [programData]);
 
+  const onEditProgram = async (updatedProgramData) => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/programs/${programData.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify(updatedProgramData),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json()
+        onSubmit(data)
+        toast.success("Program item updated successfully!");
+      } else {
+        console.log("Failed to update program:", response.status);
+        toast.error("Failed to update program item");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred while updating the program item");
+    }
+  };
+
+
   // Check if programData is defined
   if (!programData) {
     return null;
@@ -31,6 +66,12 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "durationValue" && !(/^\d+$/.test(value))) {
+      // Display a toast message for non-numeric input
+      toast.error("Please enter a valid number for duration value.");
+      return;
+    }
 
     setFormData((prevData) => ({
       ...prevData,
@@ -66,7 +107,7 @@ function EditProgram({ close, programData, event_id, programCategories, editProg
     const duration = `${durationValue} ${durationUnit}`;
 
     // Call the editProgram function with the formData
-    editProgram({ ...formData, duration });
+    onEditProgram({ ...formData, duration });
     toast.success("Edited the program successfully!");
     close();
   };
