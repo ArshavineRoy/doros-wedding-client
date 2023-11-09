@@ -12,6 +12,8 @@ function EditTask({ taskData, close, onSubmit }) {
     role: "",
     completed_status: false,
     contact: "",
+    durationType: "",
+    durationValue: "",
   });
 
   useEffect(() => {
@@ -22,8 +24,7 @@ function EditTask({ taskData, close, onSubmit }) {
         role: taskData.role,
         completed_status: taskData.completed_status,
         contact: taskData.contact,
-        time_left: "",
-        event_id: 1,
+        event_id: taskData.event_id,
         duration: taskData.duration,
       });
     }
@@ -31,17 +32,22 @@ function EditTask({ taskData, close, onSubmit }) {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const inputValue = type === "checkbox" ? checked : value;
+
+    const newValue = type === "checkbox" ? checked : value;
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: inputValue,
+      [name]: name === "completed_status" ? newValue : value,
+      duration:
+        prevData.durationType && prevData.durationValue
+          ? `${prevData.durationValue} ${prevData.durationType}`
+          : prevData.duration,
     }));
   };
 
   const handleUpdateTask = async (updatedTask) => {
     try {
-      const bearertoken = accessToken; // Replace this with your actual bearer token
+      const bearertoken = accessToken;
       const response = await fetch(
         `https://doros-wedding-server.onrender.com/tasks/${taskData.id}`, // Assuming 'id' exists on the task data
         {
@@ -57,7 +63,7 @@ function EditTask({ taskData, close, onSubmit }) {
       if (response.ok) {
         const data = await response.json();
         console.log("Task updated:", data);
-        onSubmit(data); // Update the task in the parent component
+        onSubmit(data);
         toast.success("Task updated successfully!");
         close();
       } else {
@@ -74,9 +80,11 @@ function EditTask({ taskData, close, onSubmit }) {
     e.preventDefault();
     if (!formData) return;
 
-    handleUpdateTask(formData);
-    toast.success("Task updated successfully!");
-    console.log(formData);
+    const { durationValue, durationType, ...updatedFormData } = formData; // Destructuring to exclude durationValue and durationType
+
+    handleUpdateTask(updatedFormData);
+    console.log(updatedFormData);
+    // toast.success("Task updated successfully!");
     close();
   };
 
@@ -143,6 +151,37 @@ function EditTask({ taskData, close, onSubmit }) {
                 <option value={category.name}>{category.name}</option>
               </>
             ))}
+          </select>
+        </div>
+
+        <div className="mb-6 flex gap-4">
+          <div>
+            <label htmlFor="durationValue" className="block font-bold mb-1">
+              Duration
+            </label>
+            <input
+              required
+              type="number"
+              id="durationValue"
+              min={0}
+              max={30}
+              name="durationValue"
+              placeholder="Duration Value"
+              onChange={handleInputChange}
+              className="w-[200px] border-b border-gray-400 p-[4px] focus:outline-none"
+            />
+          </div>
+
+          <select
+            name="durationType"
+            id="durationType"
+            onChange={handleInputChange}
+            value={formData.durationType}
+            className="w-1/2 border rounded-md"
+          >
+            <option value="">Select</option>
+            <option value="days">Days</option>
+            <option value="weeks">Weeks</option>
           </select>
         </div>
 

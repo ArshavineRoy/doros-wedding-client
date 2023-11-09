@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
-import { getTokensInCookies } from "./features/auth/authCookies";
 import Cookies from "js-cookie";
-// import { set } from "date-fns";
+import { useUser } from "../contexts/UserContext";
+import { useCurrentUser } from "../utilities/currentUser";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const user = useCurrentUser();
+  // const { user } = useUser();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -15,23 +17,13 @@ const NavBar = () => {
 
   const navigate = useNavigate();
 
-  // const handleLogout = () => {
-  //   deleteTokensInCookies();
-  // }
-
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("refresh_token");
     navigate("/");
   };
 
-  useEffect(() => {
-    if (getTokensInCookies().refreshToken !== undefined) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  // const isLoggedIn = Cookies.get("refresh_token");
+  const isLoggedIn = Cookies.get("refresh_token");
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -47,7 +39,7 @@ const NavBar = () => {
         <div className="flex lg:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
             onClick={toggleMenu}
             id="openMenuButton"
           >
@@ -70,15 +62,16 @@ const NavBar = () => {
         </div>
 
         <ul className="lg:flex lg:gap-x-8 mt-2 hidden">
-          <li>
-            <Link
-              to="/dashboard"
-              className="text-base font leading-6 text-white hover:text-[#73332D]"
-            >
-              Planning Tools
-            </Link>
-          </li>
-
+          {isLoggedIn && (
+            <li>
+              <Link
+                to="/myevents"
+                className="text-base font leading-6 text-white hover:text-[#73332D]"
+              >
+                My Events
+              </Link>
+            </li>
+          )}
           <li className="text-base font leading-6 text-white hover:text-[#73332D]">
             E-vite
           </li>
@@ -90,19 +83,26 @@ const NavBar = () => {
             Registry
           </li>
 
-          <li className="text-base font leading-6 text-white hover:text-[#73332D]">
-            Vendors
-          </li>
-
           {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="bg-white text-black text-center text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]"
-            >
-              <Link to="/" className="text-black">
-                LOGOUT
-              </Link>
-            </button>
+            <>
+              <li>
+                <div
+                  to=""
+                  className="text-base font leading-6 text-white hover:text-[#73332D]"
+                >
+                  Welcome, {user?.first_name}
+                </div>
+              </li>
+
+              <button
+                onClick={handleLogout}
+                className="bg-white text-black text-center text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]"
+              >
+                <Link to="/" className="text-black">
+                  LOGOUT
+                </Link>
+              </button>
+            </>
           ) : (
             <button className="bg-white text-black text-base font-semibold leading-6 py-0.5 w-20 mb-1 rounded hover:bg-[#73332D]">
               <Link to="/login" className="text-black">
@@ -124,7 +124,6 @@ const NavBar = () => {
         <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-black px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="/" className="-m-1.5 p-1.5">
-              {/* <span className="sr-only">Easel Emporium</span> */}
               <Logo />
             </a>
             <button
@@ -183,12 +182,6 @@ const NavBar = () => {
                 >
                   Vendors
                 </a>
-                {/* <button className="bg-white text-white text-base font-semibold leading-6 p-2 rounded hover:bg-[#73332D]">
-                  <Link to="/login" className="text-black">
-                    Login
-                  </Link>
-                </button>
-                # -------- */}
                 {isLoggedIn ? (
                   <button
                     onClick={handleLogout}

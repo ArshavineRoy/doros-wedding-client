@@ -1,8 +1,7 @@
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import { GrTask } from "react-icons/gr";
 import { GiNotebook } from "react-icons/gi";
-import { MdStarRate } from "react-icons/md";
-import { BsFileEarmarkSpreadsheet, BsCalendarDate } from "react-icons/bs";
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 import venues from "../assests/gazebo.png";
 import banquet from "../assests/banquet.png";
 import camera from "../assests/camera.png";
@@ -10,41 +9,49 @@ import video from "../assests/video.png";
 import vinyl from "../assests/vinyl.png";
 import weddingarch from "../assests/wedding-arch.png";
 import gift from "../assests/gift-box.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Dates from "../ui/Dates";
-import { getDates } from "../services/dates";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
-
-const fake_dates = [
-  { name: "Engagment Party", date: "December 25th, 2023" },
-  { name: "Bridal Shower", date: "December 13th, 2023" },
-  { name: "Bachelorete Party", date: "December 5th, 2023" },
-  { name: "Wedding", date: "December 27th, 2023" },
-  { name: "Honeymoon", date: "January 1st, 2024" },
-];
+import ImportantDatesForm from "../ui/Components/ImportantDatesForm";
+import { date } from "yup";
 
 function Dashboard() {
   const [data, setData] = useState([]);
+  const [showDateForm, setFormDate] = useState(false);
   const { accessToken, refreshToken } = getTokensInCookies();
+  const { eventId } = useParams();
+
+
+  const navigate = useNavigate();
+
+  // console.log("Event ID:", eventId);
+
+
+  function handleShowDateForm() {
+    setFormDate(true);
+  }
+
+  function handleHideDateForm() {
+    setFormDate(false);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bearertoken = accessToken; // Replace this with your actual bearer token
+        const bearertoken = accessToken;
         const response = await fetch(
-          "https://doros-wedding-server.onrender.com/events/1",
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${bearertoken}`, // Fixed the Authorization header format
+              Authorization: `Bearer ${bearertoken}`,
             },
           }
         );
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Data:", data);
           setData(data);
         } else {
           console.log("Response not OK:", response.status);
@@ -55,41 +62,80 @@ function Dashboard() {
     };
 
     fetchData();
-  }, []);
+  }, [eventId, accessToken, refreshToken, data]);
 
   return (
     <>
-      <div className="flex items-center px-[110px]">
+      <Link
+        className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-8 cursor-pointer hover:bg-[#49120d]"
+        to={`/invite/${eventId}`}
+      >
+        Invite people
+      </Link>
+      <div className="flex items-center px-0 md:px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Important Dates</div>
-        <div className="flex-1 border-b-2 border-black"></div>
-      </div>
-
-      <div className="px-32  grid grid-cols-3 gap-16 py-20">
-        <Dates date={data.date} event={"Wedding Date"} />
-        <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
-        <Dates date={data.engagement_party} event={"Engagement Party"} />
-        <Dates date={data.honeymoon} event={"Honeymoon"} />
-      </div>
-
-      <div className="flex items-center px-[110px]">
-        <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Planner</div>
+        <div className="px-4 font-bold text-[24px] md:text-[30px]">
+          Important dates
+        </div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
+      <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-0 cursor-pointer hover:bg-[#49120d]">
+        <button className="text-[16px]" onClick={handleShowDateForm}>
+          Add Date
+        </button>
+      </div>
+
+      {showDateForm && (
+        <ImportantDatesForm close={handleHideDateForm} eventData={data} event_id={eventId}/>)}
+
+      <div className="flex flex-col px-[20px] md:grid md:grid-cols-2 md:px-12 lg:px-32 lg:grid lg:grid-cols-3 gap-16 py-8">
+        {data.date && <Dates date={data.date} event={"Wedding Date"} />}
+        {data.bachelorette_party && (
+          <Dates date={data.bachelorette_party} event={"Bachelorette Party"} />
+        )}
+        {data.engagement_party && (
+          <Dates date={data.engagement_party} event={"Engagement Party"} />
+        )}
+        {data.honeymoon && <Dates date={data.honeymoon} event={"Honeymoon"} />}
+        {data.traditional_wedding && (
+          <Dates
+            date={data.traditional_wedding}
+            event={"Traditional Wedding"}
+          />
+        )}
+        {data.bachelor_party && (
+          <Dates date={data.bachelor_party} event={"Bachelor Party"} />
+        )}
+      </div>
+
+      <div className="flex items-center px-0 md:px-[110px]">
+        <div className="flex-1 border-b-2 border-black"></div>
+        <div className="px-4 font-bold text-[24px] md:text-[30px]">Planner</div>
+        <div className="flex-1 border-b-2 border-black"></div>
+      </div>
+      
+     
       <div>
-        <div className="flex justify-between items-center px-[110px] py-16 w-full">
-          <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
-            <RiMoneyDollarBoxLine size={30} />
-            <div className="flex flex-col text-center">
-              <span>Budget</span>
-              <span>Calculator</span>
+        <div className="grid grid-cols-2 gap-[50px] md:grid md:grid-cols-2 md:px-40 lg:flex lg:justify-between lg:gap-1 items-center pl-[20px] lg:px-[110px] py-16 w-full">
+          <Link
+            to={data?.payment_status ? `/dashboard/${eventId}/budget` : "/pay"}
+          >
+            <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
+              <RiMoneyDollarBoxLine size={30} />
+              <div className="flex flex-col text-center">
+                <span>Budget</span>
+                <span>Calculator</span>
+              </div>
             </div>
-          </div>
+          </Link>
 
-          <Link to="/dashboard/checklist">
-            <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/checklist` : "/pay"
+            }
+          >
+            <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GrTask size={30} />
               <div className="flex flex-col text-center">
                 <span>Wedding</span>
@@ -98,8 +144,12 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/program">
-            <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/programs` : "/pay"
+            }
+          >
+            <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <BsFileEarmarkSpreadsheet size={30} />
               <div className="flex flex-col text-center">
                 <span>Event</span>
@@ -108,8 +158,12 @@ function Dashboard() {
             </div>
           </Link>
 
-          <Link to="/dashboard/runsheet">
-            <div className="border-2 border-[#73332D] w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-md shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
+          <Link
+            to={
+              data?.payment_status ? `/dashboard/${eventId}/runsheet` : "/pay"
+            }
+          >
+            <div className="w-[140px] h-[140px] border-2 border-[#73332D] lg:w-[180px] lg:h-[180px] flex flex-col gap-[18px] items-center justify-center shadow-lg shadow-[#73332D] hover:shadow-none cursor-pointer hover:translate-y-[-5px] transition-all">
               <GiNotebook size={30} />
               <div className="flex flex-col text-center">
                 <span>Wedding</span>
@@ -119,80 +173,106 @@ function Dashboard() {
           </Link>
         </div>
 
-        <div className="px-28">
+        <div className="p-2 ml-2 lg:ml-0 lg:px-28">
           <div className="bg-[#e7c3a6] w-full grid pb-12 pt-4 mt-6">
             <div className="">
-              <h1 className="text-center pt-4 pb-8 text-[28px] font-semibold">
+              <h1 className="text-center pt-4 pb-8 text-[22px] lg:text-[28px] font-semibold">
                 Manage Vendors
               </h1>
             </div>
 
-            <div className="grid grid-cols-3 px-20 py-4 gap-20 place-items-center">
-              <Link to="/dashboard/vendors">
-                <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                  <img src={venues} alt="" className="width-[60px] h-[60px]" />
-                  <div className="flex flex-col text-center">
-                    <span className="font-bold">Events</span>
-                  </div>
-                </div>
-              </Link>
-
-              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                <img src={banquet} alt="" className="width-[60px] h-[60px]" />
-                <div className="flex flex-col text-center">
-                  <span className="font-bold">Caterer</span>
+            <div className="grid grid-cols-3 px-10 py-4 gap-12 lg:px-20 lg:py-4 lg:gap-20 place-items-center">
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={venues}
+                  alt=""
+                  className=" max-w-[35%] lg:max-w-[50%]"
+                />
+                <div className="flex flex-col">
+                  <span className="font-bold text-sm lg:text-lg">Events</span>
                 </div>
               </div>
 
-              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={banquet}
+                  alt=""
+                  className=" max-w-[35%] lg:max-w-[50%]"
+                />
+                <div className="flex flex-col lg:text-center">
+                  <span className="font-bold text-sm lg:text-lg">Caterer</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
                 <img
                   src={weddingarch}
                   alt=""
-                  className="width-[60px] h-[60px]"
+                  className=" max-w-[35%] lg:max-w-[50%]"
                 />
-                <div className="flex flex-col text-center">
-                  <span className="font-bold">Events</span>
+                <div className="flex flex-col lg:text-center">
+                  <span className="font-bold text-sm lg:text-lg">Events</span>
                 </div>
               </div>
 
-              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                <img src={camera} alt="" className="width-[60px] h-[60px]" />
-                <div className="flex flex-col text-center">
-                  <span className="font-bold">Photographer</span>
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={camera}
+                  alt=""
+                  className=" max-w-[35%] lg:max-w-[50%]"
+                />
+                <div className="flex flex-col lg:text-center">
+                  <span className="font-bold text-[12px] lg:text-lg">
+                    Photographer
+                  </span>
                 </div>
               </div>
 
-              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                <img src={video} alt="" className="width-[60px] h-[60px]" />
-                <div className="flex flex-col text-center">
-                  <span className="font-bold">Videographer</span>
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={video}
+                  alt=""
+                  className=" max-w-[35%] lg:max-w-[50%]"
+                />
+                <div className="flex flex-col lg:text-center">
+                  <span className="font-bold text-[12px] lg:text-lg">
+                    Videographer
+                  </span>
                 </div>
               </div>
 
-              <div className="border-2 border-gray-300 bg-white w-[180px] h-[180px] flex flex-col gap-[18px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-                <img src={vinyl} alt="" className="width-[60px] h-[60px]" />
-                <div className="flex flex-col text-center">
-                  <span className="font-bold">MC</span>
+              <div className="flex flex-col border-2 border-gray-300 bg-white w-[100px] h-[100px] lg:w-[180px] lg:h-[180px] gap-[10px] items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
+                <img
+                  src={vinyl}
+                  alt=""
+                  className=" max-w-[35%] lg:max-w-[50%]"
+                />
+                <div className="flex flex-col lg:text-center">
+                  <span className="font-bold text-sm md:text-lg">MC</span>
                 </div>
               </div>
             </div>
             <div className="flex justify-center items-center">
-              <Link to="/dashboard/vendors">
-                <button className="text-2xl p-4">Full List &rarr;</button>
+              <Link to={`/dashboard/${eventId}/vendors`}>
+                <button className="text-xl lg:text-2xl p-4">
+                  Full List &rarr;
+                </button>
               </Link>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center mt-14 px-[110px]">
+      <div className="flex items-center mt-8 md:mt-2 px-0 md:px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Guests & RSVP</div>
+        <div className="px-4 font-bold text-[24px] md:text-[30px]">
+          Guests & RSVP
+        </div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
       <div>
-        <div className="flex justify-between px-32 py-12 gap-[90px] w-full">
+        <div className="flex flex-col gap-[30px] px-4 lg:flex-row lg:justify-between lg:px-32 py-12 lg:gap-[90px] w-full">
           <div className="border-2 border-gray-400 py-4 px-4 flex gap-4">
             <img src={venues} alt="" className="h-[30px]" />
             <div>
@@ -226,21 +306,27 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d]">
+        <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[200px] mx-auto py-2  cursor-pointer hover:bg-[#49120d] mb-12">
           <button className="text-[20px]">START NOW</button>
         </div>
       </div>
 
-      <div className="flex items-center mt-14 px-[110px]">
+      <div className="flex items-center px-0 md:px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
-        <div className="px-4 font-bold text-[30px] ">Registry</div>
+        <div className="px-4 font-bold text-[24px] md:text-[30px]">
+          Registry
+        </div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
-      <div className="px-32 mt-16">
-        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex justify-center items-center px-20 gap-20">
-          <img src={gift} alt="" className="h-[100px]" />
-          <div className=" text-lg">
+      <div className="px-8 lg:px-32 mt-16">
+        <div className="bg-[#6d889e] w-full pb-12 p-20 mt-6 flex flex-col md:flex-row gap-12 px-10 lg:justify-center lg:px-20 lg:gap-20">
+          <img
+            src={gift}
+            alt=""
+            className="h-[100px] lg:h-[100px] items-start object-contain"
+          />
+          <div className=" text-[16px] lg:text-lg">
             <p>Lorem ipsum</p>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoAddCircleOutline, IoWalletOutline } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { VendorsList } from "../features/Vendors/VendorsList";
 import AddVendor from "../features/Vendors/AddVendor";
 import { getTokensInCookies } from "../ui/features/auth/authCookies";
+import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export const vendor_categories = [
   { name: "Photographers" },
@@ -57,13 +59,15 @@ export const fake_vendors = [
 ];
 
 function Vendors() {
-  const [showWidget, setShowWidget] = useState(true);
+  const [showWidget, setShowWidget] = useState(false);
   const [showAddVendor, setShowAddVendor] = useState(false);
-  const [myVendors, setMyVendors] = useState(fake_vendors);
+  const [myVendors, setMyVendors] = useState([]);
 
   const { accessToken, refreshToken } = getTokensInCookies();
 
-  const handleAddVendor = async (newVendorData) => {
+  const { eventId } = useParams();
+
+  const addVendorToBackend = async (newVendorData) => {
     try {
       const bearertoken = accessToken; // Replace this with your actual bearer token
       const response = await fetch(
@@ -90,18 +94,28 @@ function Vendors() {
       );
 
       if (response.ok) {
-        // Only update the local state if the API response is successful (status code: 2xx)
         const addedVendor = await response.json();
-        setMyVendors([...myVendors, addedVendor]); // Update the local state with the added vendor
+        fetch(`https://doros-wedding-server.onrender.com/event_vendors`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify({
+            event_id: eventId,
+            vendor_id: addedVendor.id,
+          }),
+        });
       } else {
         console.log(
           "Error adding vendor. Server responded with status:",
           response.status
         );
-        // Handle errors or other actions based on the response status
+        return null; // Return null if there's an error
       }
     } catch (error) {
       console.log("Error:", error);
+      return null; // Return null for any errors
     }
   };
 
@@ -123,7 +137,7 @@ function Vendors() {
 
   return (
     <div className="border border-gray-300 w-[1300px] mx-auto mb-20 p-4">
-      <div className="w-full flex justify-between gap-8 mb-8">
+      <div className="w-full flex flex-col lg:flex-row justify-between gap-8 mb-8">
         <di
           className={
             showWidget
@@ -149,25 +163,71 @@ function Vendors() {
       {showWidget && (
         <YourVendors
           onAddvendor={handleShowAddVendorForm}
-          onAddVendor={handleAddVendor}
-          vendors={myVendors} // Pass myVendors state to YourVendors component
+          onAddVendor={addVendorToBackend}
+          vendors={myVendors}
+          setMyVendors={setMyVendors}
+          event_id={eventId}
+          accessToken={accessToken}
         />
       )}
-      {!showWidget && <VendorsList />}
+
+      {!showWidget && <VendorsList event_id={eventId} />}
 
       {showAddVendor && (
-        <AddVendor close={handleCloseAddVendor} onAddVendor={handleAddVendor} />
+        <AddVendor
+          close={handleCloseAddVendor}
+          onAddVendor={addVendorToBackend}
+        />
       )}
     </div>
   );
 }
 
-function YourVendors({ onAddvendor, onAddVendor, vendors }) {
+function YourVendors({
+  onAddvendor,
+  onAddVendor,
+  vendors,
+  addVendorToMyList,
+  setMyVendors,
+  event_id,
+  accessToken,
+}) {
+  const handleDeleteVendor = (ven) => {
+    fetch(
+      `https://doros-wedding-server.onrender.com/event_vendors/${event_id}/${ven.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          toast.success("Successfully deleted vendor from your list");
+          return response.json();
+        } else {
+          throw new Error("Failed to delete vendor");
+        }
+      })
+      .then((data) => {
+        const updatedVendors = vendors.filter((vendor) => vendor.id !== ven.id);
+        setMyVendors(updatedVendors);
+        console.log(data); // if you need to process the response data
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // Handle the error, show a notification, etc.
+        toast.error("An error occurred while deleting the vendor");
+      });
+  };
+
   return (
     <div>
       <span className="text-2xl font-semibold">Your Wallet</span>
 
-      <div className="flex justify-between mt-8">
+      <div className="flex flex-col gap-[40px] md:flex-row lg:justify-between mt-8">
         <div className="w-[500px] border border-stone-300 flex gap-6 p-4">
           <IoWalletOutline size={100} />
           <div className="flex flex-col">
@@ -183,13 +243,13 @@ function YourVendors({ onAddvendor, onAddVendor, vendors }) {
         <div className="flex flex-col justify-evenly">
           <span className="text-lg">Payment Details</span>
           <span className="text-lg">Buy Goods: 580392</span>
-          <button className="flex justify-center items-center px-10 py-2 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white">
+          <button className="flex justify-center items-center px-4 py-2 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white w-[200px] md:w-[150px]">
             Fill Wallet
           </button>
         </div>
 
         <div className="flex flex-col justify-evenly">
-          <button className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white">
+          <button className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white w-[250px] md:w-[200px]">
             Pay Vendors
           </button>
           <span className="text-lg">Pay your vendor in one click</span>
@@ -198,20 +258,57 @@ function YourVendors({ onAddvendor, onAddVendor, vendors }) {
 
       <MyVendorsTable
         onAddvendor={onAddvendor}
-        initialVendors={vendors}
+        vendors={vendors}
         onAddVendor={onAddVendor}
+        addVendorToMyList={addVendorToMyList}
+        onDelete={handleDeleteVendor}
+        eventId={event_id}
       />
     </div>
   );
 }
 
-function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
-  const [myVendors, setMyVendors] = useState(initialVendors);
+function MyVendorsTable({ onAddvendor, onDelete, eventId }) {
+  const [myVendors, setMyVendors] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const { accessToken, refreshToken } = getTokensInCookies();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bearertoken = accessToken;
+        const response = await fetch(
+          `https://doros-wedding-server.onrender.com/events/${eventId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearertoken}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          // console.log("Data:", data.vendors);
+          setMyVendors(data.vendors);
+        } else {
+          console.log("Response not OK:", response.status);
+        }
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+
+    fetchData();
+  }, [eventId, accessToken, setMyVendors, myVendors]);
+
+  // useEffect(() => {
+  //   console.log(myVendors);
+  // }, []);
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    const updatedVendors = myVendors.map((vendor) => ({
+    const updatedVendors = myVendors?.map((vendor) => ({
       ...vendor,
       checked: !selectAll,
     }));
@@ -246,23 +343,15 @@ function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               Company
             </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Contact Person
-            </th>
+
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               Phone
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Email
+              Socials
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Instagram
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Website
-            </th>
-            <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-              Estimated Cost
+              Category
             </th>
             <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">
               City
@@ -273,7 +362,7 @@ function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {myVendors.map((vendor) => (
+          {myVendors?.map((vendor) => (
             <tr key={vendor.id}>
               <td className="px-2 py-2 whitespace-nowrap">
                 <input
@@ -285,26 +374,27 @@ function MyVendorsTable({ onAddvendor, initialVendors, onAddVendor }) {
               </td>
 
               <td className="px-2 py-2 whitespace-nowrap">{vendor.company}</td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.contactPerson}
-              </td>
               <td className="px-2 py-2 whitespace-nowrap">{vendor.phone}</td>
-              <td className="px-2 py-2 whitespace-nowrap">{vendor.email}</td>
               <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.instagram_account}
+                <a
+                  href={vendor.website}
+                  className="text-blue-500"
+                  target="blank"
+                >
+                  {vendor.instagram_username === "-"
+                    ? vendor.website
+                    : vendor.instagram_username}
+                </a>
               </td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                <span className=" text-blue-600">{vendor.website}</span>
-              </td>
-              <td className="px-2 py-2 whitespace-nowrap">
-                {vendor.estimatedCost}
-              </td>
+              <td className="px-2 py-2 whitespace-nowrap">{vendor.category}</td>
+
               <td className="px-2 py-2 whitespace-nowrap">{vendor.city}</td>
               <td className="px-6 py-4 whitespace-nowrap flex justify-center items-center">
                 <div className="flex gap-2 text-gray-600">
                   <RiDeleteBin6Line
                     size={22}
                     className="hover:text-black cursor-pointer"
+                    onClick={() => onDelete(vendor)}
                   />
                 </div>
               </td>
