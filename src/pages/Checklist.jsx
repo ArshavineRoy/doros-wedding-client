@@ -244,7 +244,7 @@ function Checklist() {
     return (
       <div className="mt-6 px-32">
         <h1 className="text-2xl font-bold text-gray-800 mb-3">{role}</h1>
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 table-auto">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">

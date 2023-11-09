@@ -137,7 +137,7 @@ function Vendors() {
 
   return (
     <div className="border border-gray-300 w-[1300px] mx-auto mb-20 p-4">
-      <div className="w-full flex justify-between gap-8 mb-8">
+      <div className="w-full flex flex-col lg:flex-row justify-between gap-8 mb-8">
         <di
           className={
             showWidget
@@ -227,7 +227,7 @@ function YourVendors({
     <div>
       <span className="text-2xl font-semibold">Your Wallet</span>
 
-      <div className="flex justify-between mt-8">
+      <div className="flex flex-col gap-[40px] md:flex-row lg:justify-between mt-8">
         <div className="w-[500px] border border-stone-300 flex gap-6 p-4">
           <IoWalletOutline size={100} />
           <div className="flex flex-col">
@@ -243,13 +243,13 @@ function YourVendors({
         <div className="flex flex-col justify-evenly">
           <span className="text-lg">Payment Details</span>
           <span className="text-lg">Buy Goods: 580392</span>
-          <button className="flex justify-center items-center px-10 py-2 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white">
+          <button className="flex justify-center items-center px-4 py-2 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white w-[200px] md:w-[150px]">
             Fill Wallet
           </button>
         </div>
 
         <div className="flex flex-col justify-evenly">
-          <button className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white">
+          <button className="flex justify-center items-center px-8 py-4 text-white cursor-pointer border-2 bg-[#5f1b15] text-[18px] hover:bg-[#49120d] transition-all hover:text-white w-[250px] md:w-[200px]">
             Pay Vendors
           </button>
           <span className="text-lg">Pay your vendor in one click</span>
