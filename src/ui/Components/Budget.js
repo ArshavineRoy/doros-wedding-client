@@ -267,7 +267,7 @@ const Budget = () => {
                   pathColor:
                     totalAmount > maxBudget
                       ? "red"
-                      : `rgba(0, 255, 0, ${
+                      : `rgba(0, 100, 0, ${
                           calculateMaxBudgetPercentage() / 100
                         })`,
                 })}
@@ -311,7 +311,9 @@ const Budget = () => {
           Add Budget
         </button>
       </div>
-      <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-20"></hr>
+      {/* <hr class="h-px px-[110px] my-8 bg-gray-200 border-0 dark:bg-gray-700 mt-20"></hr> */}
+
+      <div className="flex items-center mx-auto w-[85%] py-12 border-b-2 border-gray-200"></div>
 
       {/* Budget Table */}
       <div className=" p-6 mt-18">
@@ -372,7 +374,7 @@ const Budget = () => {
         </div>
 
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-end z-50">
+          <div className="fixed inset-0 flex items-center justify-end z-50 bg-black/70">
             <div className="modal-overlay" onClick={closeModal}></div>
             <div className="modal-container bg-white w-full h-full md:w-1/2 lg:w-1/3 md:max-h-screen lg:max-h-screen rounded shadow-lg p-4 right-0">
               {/* Modal content */}
@@ -497,7 +499,7 @@ const Budget = () => {
 
               <div className="flex justify-start mt-4">
                 <button
-                  className=" bg-[#73332D]text-white p-2 rounded mr-2"
+                  className=" bg-[#73332D] text-white p-2 rounded mr-2"
                   onClick={handleUpdateItem}
                 >
                   Save
@@ -514,7 +516,7 @@ const Budget = () => {
         )}
 
         {isAddBudgetModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-end z-50">
+          <div className="fixed inset-0 flex items-center justify-end z-50 bg-black/70">
             <div className="modal-overlay" onClick={closeAddBudgetModal}></div>
             <div className="modal-container bg-white w-full h-full md:w-1/2 lg:w-1/3 md:max-h-screen lg:max-h-screen rounded shadow-lg p-4 right-0">
               {/* Add budget Modal */}
@@ -604,7 +606,7 @@ const Budget = () => {
                 <div className="flex justify-start mt-4">
                   <button
                     type="submit"
-                    className=" bg-[#73332D]text-white p-2 rounded mr-2"
+                    className=" bg-[#73332D] text-white p-2 rounded mr-2"
                   >
                     Save
                   </button>
