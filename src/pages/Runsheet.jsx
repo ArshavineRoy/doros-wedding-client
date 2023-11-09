@@ -280,11 +280,13 @@ function Runsheet() {
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2 text-gray-600">
-                    <AiOutlineEdit
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleEditForm(task)}
-                    />
+                    {!task.completed_status && (
+                      <AiOutlineEdit
+                        size={22}
+                        className="hover:text-black cursor-pointer"
+                        onClick={() => handleEditForm(task)}
+                      />
+                    )}
                     <RiDeleteBin6Line
                       size={22}
                       className="hover:text-black cursor-pointer"
