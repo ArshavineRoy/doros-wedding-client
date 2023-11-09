@@ -36,7 +36,7 @@ const Budget = () => {
   // Function to calculate the budget percentage
 
   const calculateBudgetPercentage = (item) => {
-    // console.log("item:",item)
+    
     
     const estimateCost = item.estimate_cost;
     
@@ -46,7 +46,6 @@ const Budget = () => {
     }
 
     const percentage = ((estimateCost / maxBudget) * 100);
-    console.log("percentage:", percentage)
     return percentage;
   };
 
