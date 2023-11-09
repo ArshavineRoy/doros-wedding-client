@@ -45,7 +45,7 @@ const ImportantDatesForm = ({ close, eventData, event_id }) => {
       if (response.ok) {
         const updatedWedding = await response.json();
         // console.log("Wedding updated:", updatedWedding);
-        toast.success("Successfullt updated the events dates!");
+        toast.success("Updated dates successfully!");
         return updatedWedding;
       } else {
         console.error(
