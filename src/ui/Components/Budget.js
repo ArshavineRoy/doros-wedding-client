@@ -36,14 +36,17 @@ const Budget = () => {
   // Function to calculate the budget percentage
 
   const calculateBudgetPercentage = (item) => {
-    const estimateCost = parseInt(item.estimate_cost);
-    const amountPaid = parseInt(item.amount_paid);
+    // console.log("item:",item)
+    
+    const estimateCost = item.estimate_cost;
+    
 
-    if (isNaN(estimateCost) || isNaN(amountPaid) || estimateCost === 0) {
+    if (isNaN(estimateCost) || maxBudget === 0) {
       return 0; // Not dividing by 0
     }
 
-    const percentage = ((amountPaid / estimateCost) * 100).toFixed(2);
+    const percentage = ((estimateCost / maxBudget) * 100);
+    console.log("percentage:", percentage)
     return percentage;
   };
 
@@ -300,7 +303,7 @@ const Budget = () => {
                   })`,
                 })}
               />
-              <div className="mt-2 ml-4">Total Cost: {totalAmount}</div>
+              <div className="mt-2 ml-4">Budget Used: {totalAmount}</div>
             </div>
           </div>
         </div>
