@@ -295,7 +295,7 @@ const Budget = () => {
                   })`,
                 })}
               />
-               <div className="mt-2 ml-4">Total Cost: {totalAmount}</div>
+              <div className="mt-2 ml-4">Total Cost: {totalAmount}</div>
             </div>
           </div>
         </div>
