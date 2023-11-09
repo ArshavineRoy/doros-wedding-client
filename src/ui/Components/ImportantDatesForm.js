@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../Modal";
 import { getTokensInCookies } from "../features/auth/authCookies";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const ImportantDatesForm = ({ close, eventData, event_id }) => {
   const [formData, setFormData] = useState({

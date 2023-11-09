@@ -36,7 +36,7 @@ const App = () => {
       </Route>
       <Route element={<Dashboardlayout />}>
         <Route path="/dashboard/:eventId" element={<Dashboard />}></Route>
-        <Route path="/dashboard/:eventId/program" element={<Program />} />
+        <Route path="/dashboard/:eventId/programs" element={<Program />} />
         <Route
           path="/dashboard/:eventId/checklist"
           element={<Checklist />}
