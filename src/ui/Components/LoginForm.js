@@ -21,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     if (emailRef.current) {
-      emailRef.current.focus(); 
+      emailRef.current.focus();
     }
   }, []);
 
@@ -105,8 +105,8 @@ const Login = () => {
   ) : (
     <section className="login">
       <div>
-        <section className="bg-[#F7F2EE] items-center">
-          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <section className="bg-[#F7F2EE] items-center h-full">
+          <div className="flex flex-col items-center justify-center py-32 px-6 mx-auto md:h-screen lg:py-0">
             <div className="bg-red-600">
               <p
                 ref={errRef}

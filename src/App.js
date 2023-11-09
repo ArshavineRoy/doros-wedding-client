@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 import MyEvents from "./ui/Components/MyEvents";
 import Budget from "./ui/Components/Budget";
 import Paywall from "./ui/Paywall";
+import Invite from "./pages/Invite";
 // import ForgotPassword from "./ui/Components/ForgotPassword";
 
 const App = () => {
@@ -27,7 +28,8 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/myevents" element={<MyEvents />} />
         <Route path="/events" element={<EventForm />} />
-        <Route path="/important" element={<ImportantDatesForm />} />{" "}
+        <Route path="/important" element={<ImportantDatesForm />} />
+        <Route path="/invite/:eventId" element={<Invite />} />
         {/*render in dashboard*/}
         <Route path="/important" element={<ImportantDatesForm />} />{" "}
         {/*render in dashboard*/}

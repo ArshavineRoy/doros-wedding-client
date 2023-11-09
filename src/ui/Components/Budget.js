@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { getTokensInCookies } from "../features/auth/authCookies";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -77,7 +77,6 @@ const Budget = () => {
     } catch (error) {
       console.error("Error updating maximum budget", error);
     }
-    
   };
 
   // fetch the events to get the users budget
@@ -100,7 +99,7 @@ const Budget = () => {
       const eventData = await response.json();
 
       const maximumBudget = eventData.budget;
-      setMaxBudget(maximumBudget);
+      setMaxBudget(maximumBudget.toLocaleString());
     } catch (error) {
       console.error("Error fetching event details", error);
     }
@@ -281,6 +280,10 @@ const Budget = () => {
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
 
+      <Link to={`/dashboard/${eventId}`} className="px-32 text-stone-400">
+        Back to dashboard &larr;
+      </Link>
+
       <div className="flex justify-start gap-4 mt-8 ml-40">
         <div className="relative">
           <h1 className="bg-white p-4 absolute top-0 left-0 text-4xl font-bold">
@@ -339,7 +342,7 @@ const Budget = () => {
                   })`,
                 })}
               />
-              <div className="mt-2 ml-4">Budget Used: {totalAmount}</div>
+              <div className="mt-2 ml-4">Budget Used: {totalAmount.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -386,8 +389,8 @@ const Budget = () => {
                     <td className="border px-4 py-2">
                       {calculateBudgetPercentage(item)}%
                     </td>
-                    <td className="border px-4 py-2">{item.estimate_cost}</td>
-                    <td className="border px-4 py-2">{item.amount_paid}</td>
+                    <td className="border px-4 py-2">{item.estimate_cost.toLocaleString()}</td>
+                    <td className="border px-4 py-2">{item.amount_paid.toLocaleString()}</td>
                     <td className="border px-4 py-2">{item.contract_signed}</td>
                     <td className="border px-4 py-2">{item.notes}</td>
                     <td className="border px-4 py-2 ">
@@ -499,7 +502,7 @@ const Budget = () => {
               </div>
               <label
                 htmlFor="contract_signed"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-gray-900"
               >
                 Contract Signed
               </label>
@@ -513,14 +516,14 @@ const Budget = () => {
                     contract_signed: e.target.value === "yes",
                   })
                 }
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
               >
                 <option value="yes">yes</option>
                 <option value="no">no</option>
               </select>
               <label
                 for="message"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4"
+                class="block mb-2 text-gray-900 mt-4"
               >
                 Notes
               </label>
@@ -532,7 +535,7 @@ const Budget = () => {
                   setEditedItem({ ...editedItem, notes: e.target.value })
                 }
                 rows="4"
-                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Write your thoughts here..."
               ></textarea>
 
@@ -613,31 +616,28 @@ const Budget = () => {
                 </div>
                 <label
                   htmlFor="contract_signed"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-gray-900"
                 >
                   Contract Signed
                 </label>
                 <select
                   id="contract_signed"
                   name="contract_signed"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
                   <option value="">Choose an option</option>
                   <option value="yes">yes</option>
                   <option value="no">no</option>
                 </select>
 
-                <label
-                  for="message"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4"
-                >
+                <label for="message" class="block mb-2 text-gray-900 mt-4">
                   Notes
                 </label>
                 <textarea
                   id="notes"
                   name="notes"
                   rows="4"
-                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write your thoughts here..."
                 ></textarea>
 

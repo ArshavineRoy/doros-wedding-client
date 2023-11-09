@@ -11,7 +11,7 @@ import { BsFilter } from "react-icons/bs";
 import { task_filter_categories } from "./Checklist";
 import Logo from "../features/Vendors/VendorsList";
 import { toast } from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const task_categories = [
   { name: "Overall Coordinator" },
@@ -236,7 +236,7 @@ function Runsheet() {
     return (
       <div className="mt-6 px-32">
         <h1 className="text-2xl font-bold text-gray-800 mb-3">{role}</h1>
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 table-auto">
           <thead className="bg-gray-50">
             <tr>
               <th className="px-1 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -280,11 +280,13 @@ function Runsheet() {
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex gap-2 text-gray-600">
-                    <AiOutlineEdit
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleEditForm(task)}
-                    />
+                    {!task.completed_status && (
+                      <AiOutlineEdit
+                        size={22}
+                        className="hover:text-black cursor-pointer"
+                        onClick={() => handleEditForm(task)}
+                      />
+                    )}
                     <RiDeleteBin6Line
                       size={22}
                       className="hover:text-black cursor-pointer"
@@ -307,6 +309,10 @@ function Runsheet() {
         <div className="px-4 font-bold text-[30px] ">Wedding Day Run sheet</div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
+
+      <Link to={`/dashboard/${eventId}`} className="px-32 text-stone-400">
+        Back to dashboard &larr;
+      </Link>
 
       <div>
         <div className="flex justify-between items-center px-32 py-8">
