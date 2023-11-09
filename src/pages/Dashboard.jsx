@@ -34,12 +34,6 @@ function Dashboard() {
     setFormDate(false);
   }
 
-  function handleNavigation() {
-    if (data?.payment_status) {
-      navigate("/pay");
-    }
-  }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,6 +64,12 @@ function Dashboard() {
 
   return (
     <>
+      <Link
+        className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-8 cursor-pointer hover:bg-[#49120d]"
+        to={`/invite/${eventId}`}
+      >
+        Invite people
+      </Link>
       <div className="flex items-center px-0 md:px-[110px]">
         <div className="flex-1 border-b-2 border-black"></div>
         <div className="px-4 font-bold text-[24px] md:text-[30px]">
@@ -77,8 +77,6 @@ function Dashboard() {
         </div>
         <div className="flex-1 border-b-2 border-black"></div>
       </div>
-
-      <button>Invite people</button>
 
       <div className="flex justify-center items-center bg-[#5f1b15] text-white w-[170px] mx-auto py-[12px] mt-8 mb-0 cursor-pointer hover:bg-[#49120d]">
         <button className="text-[16px]" onClick={handleShowDateForm}>
