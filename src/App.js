@@ -16,39 +16,45 @@ import Home from "./pages/Home";
 import MyEvents from "./ui/Components/MyEvents";
 import Budget from "./ui/Components/Budget";
 import Paywall from "./ui/Paywall";
+import { UserProvider } from "./contexts/UserContext";
 // import ForgotPassword from "./ui/Components/ForgotPassword";
 
 const App = () => {
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<RegistrationForm />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/myevents" element={<MyEvents />} />
-        <Route path="/events" element={<EventForm />} />
-        <Route path="/important" element={<ImportantDatesForm />} />{" "}
-        {/*render in dashboard*/}
-        <Route path="/important" element={<ImportantDatesForm />} />{" "}
-        {/*render in dashboard*/}
-        <Route path="/pay" element={<Paywall />} />
-        {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
-      </Route>
-      <Route element={<Dashboardlayout />}>
-        <Route path="/dashboard/:eventId" element={<Dashboard />}></Route>
-        <Route path="/dashboard/:eventId/programs" element={<Program />} />
-        <Route
-          path="/dashboard/:eventId/checklist"
-          element={<Checklist />}
-        ></Route>
-        <Route path="/dashboard/:eventId/vendors" element={<Vendors />}></Route>
-        <Route
-          path="/dashboard/:eventId/runsheet"
-          element={<Runsheet />}
-        ></Route>
-        <Route path="/dashboard/:eventId/budget" element={<Budget />} />
-      </Route>
-    </Routes>
+    <UserProvider>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/myevents" element={<MyEvents />} />
+          <Route path="/events" element={<EventForm />} />
+          <Route path="/important" element={<ImportantDatesForm />} />{" "}
+          {/*render in dashboard*/}
+          <Route path="/important" element={<ImportantDatesForm />} />{" "}
+          {/*render in dashboard*/}
+          <Route path="/pay" element={<Paywall />} />
+          {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+        </Route>
+        <Route element={<Dashboardlayout />}>
+          <Route path="/dashboard/:eventId" element={<Dashboard />}></Route>
+          <Route path="/dashboard/:eventId/programs" element={<Program />} />
+          <Route
+            path="/dashboard/:eventId/checklist"
+            element={<Checklist />}
+          ></Route>
+          <Route
+            path="/dashboard/:eventId/vendors"
+            element={<Vendors />}
+          ></Route>
+          <Route
+            path="/dashboard/:eventId/runsheet"
+            element={<Runsheet />}
+          ></Route>
+          <Route path="/dashboard/:eventId/budget" element={<Budget />} />
+        </Route>
+      </Routes>
+    </UserProvider>
   );
 };
 

@@ -135,6 +135,8 @@ function AddTask({ close, addTask, event_id }) {
               required
               type="number"
               id="durationValue"
+              min={0}
+              max={30}
               name="durationValue"
               placeholder="Duration Value"
               value={formData.durationValue}
