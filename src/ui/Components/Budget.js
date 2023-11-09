@@ -75,7 +75,7 @@ const Budget = () => {
       const eventData = await response.json();
 
       const maximumBudget = eventData.budget;
-      setMaxBudget(maximumBudget);
+      setMaxBudget(maximumBudget.toLocaleString());
     } catch (error) {
       console.error("Error fetching event details", error);
     }
@@ -312,7 +312,7 @@ const Budget = () => {
                   })`,
                 })}
               />
-              <div className="mt-2 ml-4">Budget Used: {totalAmount}</div>
+              <div className="mt-2 ml-4">Budget Used: {totalAmount.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -359,8 +359,8 @@ const Budget = () => {
                     <td className="border px-4 py-2">
                       {calculateBudgetPercentage(item)}%
                     </td>
-                    <td className="border px-4 py-2">{item.estimate_cost}</td>
-                    <td className="border px-4 py-2">{item.amount_paid}</td>
+                    <td className="border px-4 py-2">{item.estimate_cost.toLocaleString()}</td>
+                    <td className="border px-4 py-2">{item.amount_paid.toLocaleString()}</td>
                     <td className="border px-4 py-2">{item.contract_signed}</td>
                     <td className="border px-4 py-2">{item.notes}</td>
                     <td className="border px-4 py-2 ">
