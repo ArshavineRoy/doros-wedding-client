@@ -239,28 +239,35 @@ function Program() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {roleprograms?.map((program) => (
-              <tr key={program.id}>
-                <td className="px-6 py-4 whitespace-nowrap">{program.time}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{program.program_item}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{program.duration}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex gap-2 text-gray-600">
-                    <AiOutlineEdit
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleEditForm(program)}
-                    />
-                    <RiDeleteBin6Line
-                      size={22}
-                      className="hover:text-black cursor-pointer"
-                      onClick={() => handleDelete(program.id)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  {roleprograms?.map((program) => (
+    <tr key={program.id} className="bg-gray-100 transition-all">
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.time}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.program_item}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap text-sm md:text-base lg:text-lg">
+        {program.duration}
+      </td>
+      <td className="px-6 py-3 whitespace-nowrap">
+        <div className="flex items-center gap-2 text-gray-600">
+          <AiOutlineEdit
+            size={22}
+            className="hover:text-black cursor-pointer"
+            onClick={() => handleEditForm(program)}
+          />
+          <RiDeleteBin6Line
+            size={22}
+            className="hover:text-black cursor-pointer"
+            onClick={() => handleDelete(program.id)}
+          />
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
     );
@@ -365,27 +372,22 @@ function Program() {
         </div>
         
 
- {/* Add this wrapper div around each renderTable call */}
 <div className="overflow-x-auto">
   {renderTable("Brides & Bridesmaids' Preparation")}
 </div>
 
-{/* Repeat for other renderTable calls */}
 <div className="overflow-x-auto">
   {renderTable("Bride & Bridesmaids' Breakfast & Photoshoot")}
 </div>
 
-{/* Repeat for other renderTable calls */}
 <div className="overflow-x-auto">
   {renderTable("Groom & Groomsmen's Preparation")}
 </div>
 
-{/* Repeat for other renderTable calls */}
 <div className="overflow-x-auto">
   {renderTable("Wedding Ceremony")}
 </div>
 
-{/* Repeat for other renderTable calls */}
 <div className="overflow-x-auto">
   {renderTable("Wedding Reception")}
 </div>
