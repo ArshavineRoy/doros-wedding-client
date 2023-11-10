@@ -36,17 +36,42 @@ const Budget = () => {
   // Function to calculate the budget percentage
 
   const calculateBudgetPercentage = (item) => {
-    
-    
     const estimateCost = item.estimate_cost;
-    
 
     if (isNaN(estimateCost) || maxBudget === 0) {
       return 0; // Not dividing by 0
     }
 
-    const percentage = ((estimateCost / maxBudget) * 100);
+    const percentage = (estimateCost / maxBudget) * 100;
     return percentage;
+  };
+
+  // update the maximum budget
+  const handleUpdateMaxBudget = async () => {
+    try {
+      const bearertoken = accessToken;
+      const response = await fetch(
+        `https://doros-wedding-server.onrender.com/events/${eventId}`,
+        {
+          method: "PATCH", // use patch to update the maximum budget
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearertoken}`,
+          },
+          body: JSON.stringify({ budget: maxBudget }), // sending updated maximum budget
+          
+        }
+        
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      fetchEventDetails(); // update the events details where we were fetching for the maximum budget
+      // console.log(response)
+    } catch (error) {
+      console.error("Error updating maximum budget", error);
+    }
+    
   };
 
   // fetch the events to get the users budget
@@ -211,8 +236,8 @@ const Budget = () => {
       item: event.target.item.value,
       person_in_charge: event.target.person_in_charge.value,
       contract_signed: event.target.contract_signed.value === "yes",
-      estimate_cost: event.target.estimate_cost.value,
-      amount_paid: event.target.amount_paid.value,
+      estimate_cost: event.target.estimate_cost.value || 0,
+      amount_paid: event.target.amount_paid.value || 0,
       event_id: eventId,
       notes: event.target.notes.value,
     };
@@ -283,8 +308,14 @@ const Budget = () => {
                   placeholder="Maximum Budget"
                   value={maxBudget}
                   onChange={(e) => setMaxBudget(parseFloat(e.target.value))}
-                  className="border rounded p-2 w-28 mt-2"
+                  className="rounded p-2 w-28 mt-2"
                 />
+                <button
+                  onClick={handleUpdateMaxBudget}
+                  className=" text-[#73332D] p-2 mr-6"
+                >
+                  Update
+                </button>
               </div>
             </div>
             <div className="max-budget-bar w-32 h-32">
