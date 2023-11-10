@@ -24,12 +24,18 @@ const Budget = () => {
     0
   );
 
+  const totalEstimate = data.reduce(
+    (acc, item) => acc + parseFloat(item.estimate_cost),
+    0
+  );
+
+
   // calculate maximum budget percentage
   const calculateMaxBudgetPercentage = () => {
-    if (totalAmount > maxBudget) {
+    if (totalEstimate > maxBudget) {
       return 100; // If total amount exceeds max budget, show 100%
     } else {
-      return (totalAmount / maxBudget) * 100; // Calculate the percentage
+      return (totalEstimate / maxBudget) * 100; // Calculate the percentage
     }
   };
 
@@ -43,7 +49,7 @@ const Budget = () => {
     }
 
     const percentage = (estimateCost / maxBudget) * 100;
-    return percentage;
+    return percentage.toFixed(2);
   };
 
   // update the maximum budget
