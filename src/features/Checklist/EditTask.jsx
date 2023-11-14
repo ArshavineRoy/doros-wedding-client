@@ -32,17 +32,24 @@ function EditTask({ taskData, close, onSubmit }) {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-
+  
     const newValue = type === "checkbox" ? checked : value;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "completed_status" ? newValue : value,
-      duration:
-        prevData.durationType && prevData.durationValue
-          ? `${prevData.durationValue} ${prevData.durationType}`
-          : prevData.duration,
-    }));
+  
+    setFormData((prevData) => {
+      const updatedData = {
+        ...prevData,
+        [name]: name === "completed_status" ? newValue : value,
+      };
+  
+      // Update duration based on durationValue and durationType
+      if (name === "durationValue" || name === "durationType") {
+        const { durationValue, durationType, ...rest } = updatedData;
+        updatedData.duration = durationValue && durationType ? `${durationValue} ${durationType}` : '';
+        return { ...rest, ...updatedData };
+      }
+  
+      return updatedData;
+    });
   };
 
   const handleUpdateTask = async (updatedTask) => {
